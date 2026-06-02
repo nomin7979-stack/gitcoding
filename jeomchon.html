@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>점촌 횟집 검색</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 24px 28px;
+    }
+
+    /* Header */
+    .header-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .header-left p {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 3px;
+    }
+
+    .time-badge { text-align: right; }
+
+    .time-display {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4f46e5;
+      letter-spacing: 1px;
+    }
+
+    .date-display {
+      font-size: 0.78rem;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* Search */
+    .search-row { display: flex; gap: 8px; align-items: center; }
+
+    .search-input {
+      flex: 1;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .search-input:focus { border-color: #4f46e5; }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: #555;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .filter-label input[type="checkbox"] {
+      accent-color: #4f46e5;
+      width: 15px;
+      height: 15px;
+    }
+
+    .search-meta { font-size: 0.8rem; color: #888; }
+    .search-meta strong { color: #1a1a2e; }
+
+    .btn {
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover { background: #4338ca; }
+    .btn:disabled { background: #a5b4fc; cursor: not-allowed; }
+
+    .btn-gray { background: #f0f2f5; color: #555; }
+    .btn-gray:hover { background: #e0e0e0; }
+
+    .btn-naver {
+      background: #03c75a;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.15s;
+    }
+
+    .btn-naver:hover { background: #02a84b; }
+
+    /* Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 370px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .map-card { padding: 0; overflow: hidden; height: 540px; }
+
+    #map { width: 100%; height: 100%; }
+
+    /* Results */
+    .results-card {
+      padding: 16px;
+      height: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .results-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #555;
+      flex-shrink: 0;
+    }
+
+    .results-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 2px;
+    }
+
+    .results-list::-webkit-scrollbar { width: 5px; }
+    .results-list::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
+
+    .result-item {
+      background: #f8f7ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .result-item:hover { background: #ede9fe; border-color: #c4b5fd; }
+    .result-item.active { background: #ede9fe; border-color: #4f46e5; }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .item-num {
+      background: #4f46e5;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .item-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .badge-open { background: #dcfce7; color: #15803d; }
+    .badge-closed { background: #fee2e2; color: #b91c1c; }
+    .badge-unknown { background: #f3f4f6; color: #9ca3af; }
+
+    .item-sub {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 4px;
+      padding-left: 27px;
+      line-height: 1.6;
+    }
+
+    .item-hours {
+      font-size: 0.72rem;
+      color: #4f46e5;
+      padding-left: 27px;
+      margin-top: 2px;
+    }
+
+    .item-links {
+      display: flex;
+      gap: 6px;
+      padding-left: 27px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .item-link {
+      font-size: 0.72rem;
+      color: #888;
+      text-decoration: none;
+      background: #e8e8e8;
+      padding: 2px 9px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .item-link:hover { background: #4f46e5; color: #fff; }
+    .item-link.naver-link:hover { background: #03c75a; color: #fff; }
+
+    /* State */
+    .state-msg {
+      text-align: center;
+      padding: 30px 0;
+      color: #bbb;
+      font-size: 0.85rem;
+      line-height: 2.2;
+    }
+
+    .state-msg a { color: #4f46e5; text-decoration: none; }
+    .state-msg a:hover { text-decoration: underline; }
+
+    .loading-msg { color: #4f46e5; }
+
+    /* Info banner */
+    .info-banner {
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.78rem;
+      color: #0369a1;
+      line-height: 1.7;
+    }
+
+    .info-banner a { color: #4f46e5; }
+
+    @media (max-width: 800px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .map-card { height: 320px; }
+      .results-card { height: auto; max-height: 420px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="card header-card">
+    <div class="header-left">
+      <h1>점촌 횟집 검색</h1>
+      <p>OpenStreetMap 기반 · API키 불필요 · 완전 무료</p>
+    </div>
+    <div class="time-badge">
+      <div class="time-display" id="timeDisplay">--:--:--</div>
+      <div class="date-display" id="dateDisplay"></div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="card">
+    <div class="search-row">
+      <input class="search-input" id="searchInput" type="text" value="횟집" placeholder="검색어 입력 (예: 횟집, 생선회)"/>
+      <button class="btn" id="searchBtn" onclick="doSearch()">검색</button>
+      <button class="btn btn-gray" onclick="resetSearch()">초기화</button>
+      <a id="naverLink" class="btn-naver" href="https://map.naver.com/v5/search/점촌+횟집" target="_blank">네이버지도</a>
+    </div>
+    <div class="filter-row">
+      <label class="filter-label">
+        <input type="checkbox" id="openFilter" />
+        지금 영업 중만 보기
+      </label>
+      <span class="search-meta" id="searchMeta"></span>
+    </div>
+  </div>
+
+  <!-- Map + Results -->
+  <div class="main-grid">
+
+    <div class="card map-card">
+      <div id="map"></div>
+    </div>
+
+    <div class="card results-card">
+      <div class="results-title" id="resultsTitle">검색 결과</div>
+      <div class="results-list" id="resultsList">
+        <div class="state-msg">검색 버튼을 눌러 점촌 주변 횟집을 찾아보세요.<br>
+          <a href="https://map.naver.com/v5/search/점촌+횟집" target="_blank">네이버지도에서 바로 보기</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Info -->
+  <div class="info-banner">
+    OpenStreetMap 오픈 데이터를 사용합니다. 등록되지 않은 식당은 결과에 없을 수 있습니다.
+    더 많은 결과는 <a href="https://map.naver.com/v5/search/점촌+횟집" target="_blank">네이버지도</a> 또는
+    <a href="https://map.kakao.com/?q=점촌+횟집" target="_blank">카카오맵</a>을 이용해주세요.
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  // ─── 시계 ─────────────────────────────────────────────
+  (function clock() {
+    const days = ['일','월','화','수','목','금','토'];
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      document.getElementById('timeDisplay').textContent = `${h}:${m}:${s}`;
+      document.getElementById('dateDisplay').textContent =
+        `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 (${days[now.getDay()]})`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+
+  // ─── 점촌 좌표 ────────────────────────────────────────
+  const CENTER = [36.6195, 128.1924];
+  const RADIUS = 5000; // 5km
+
+  // ─── Leaflet 지도 ─────────────────────────────────────
+  const map = L.map('map').setView(CENTER, 14);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+
+  // 점촌 중심 표시
+  L.circle(CENTER, { radius: RADIUS, color: '#4f46e5', fillColor: '#4f46e5', fillOpacity: 0.03, weight: 1.5, dashArray: '6' }).addTo(map);
+
+  let markers = [];
+  let allPlaces = [];
+
+  // ─── 영업시간 파서 ────────────────────────────────────
+  function isOpenNow(ohStr) {
+    if (!ohStr) return null;
+
+    const now = new Date();
+    const todayIdx = now.getDay(); // 0=Sun
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+    const dayMap = { Su:0, Mo:1, Tu:2, We:3, Th:4, Fr:5, Sa:6,
+                     일:0, 월:1, 화:2, 수:3, 목:4, 금:5, 토:6 };
+
+    const rules = ohStr.split(';').map(r => r.trim()).filter(Boolean);
+
+    for (const rule of rules) {
+      if (rule === '24/7') return true;
+
+      // 시간 범위 파싱 (HH:MM-HH:MM)
+      const timeMatch = rule.match(/(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})/);
+      if (!timeMatch) continue;
+
+      const openMins  = parseInt(timeMatch[1]) * 60 + parseInt(timeMatch[2]);
+      const closeMins = parseInt(timeMatch[3]) * 60 + parseInt(timeMatch[4]);
+
+      // 요일 파싱
+      const dayPart = rule.replace(/(\d{1,2}:\d{2}\s*[-–]\s*\d{1,2}:\d{2})/g, '').trim();
+      let dayMatch = true;
+
+      if (dayPart) {
+        const dayRangeMatch = dayPart.match(/([A-Z][a-z])\s*-\s*([A-Z][a-z])/);
+        const singleDayMatch = dayPart.match(/^([A-Z][a-z])$/);
+
+        if (dayRangeMatch) {
+          const from = dayMap[dayRangeMatch[1]] ?? -1;
+          const to   = dayMap[dayRangeMatch[2]] ?? -1;
+          if (from !== -1 && to !== -1) {
+            if (from <= to) {
+              dayMatch = todayIdx >= from && todayIdx <= to;
+            } else {
+              dayMatch = todayIdx >= from || todayIdx <= to;
+            }
+          }
+        } else if (singleDayMatch) {
+          const d = dayMap[singleDayMatch[1]] ?? -1;
+          dayMatch = (d === todayIdx);
+        }
+        // PH (공휴일) 등 처리 불가 → 그냥 dayMatch=true
+      }
+
+      if (!dayMatch) { return false; }
+
+      if (closeMins > openMins) {
+        return nowMins >= openMins && nowMins < closeMins;
+      } else {
+        // 자정 넘어가는 영업 (예: 17:00-02:00)
+        return nowMins >= openMins || nowMins < closeMins;
+      }
+    }
+
+    return null;
+  }
+
+  // ─── Overpass 검색 ────────────────────────────────────
+  async function doSearch() {
+    const raw = document.getElementById('searchInput').value.trim();
+    if (!raw) return;
+
+    // 네이버지도 링크 업데이트
+    document.getElementById('naverLink').href =
+      `https://map.naver.com/v5/search/점촌+${encodeURIComponent(raw)}`;
+
+    setLoading(true);
+    clearMarkers();
+    allPlaces = [];
+
+    // 검색 키워드에서 정규식 특수문자 이스케이프
+    const kw = raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    const query = `[out:json][timeout:30];
+(
+  node["name"~"${kw}"](around:${RADIUS},${CENTER[0]},${CENTER[1]});
+  way["name"~"${kw}"](around:${RADIUS},${CENTER[0]},${CENTER[1]});
+  node["amenity"="restaurant"]["name"~"${kw}"](around:${RADIUS},${CENTER[0]},${CENTER[1]});
+  way["amenity"="restaurant"]["name"~"${kw}"](around:${RADIUS},${CENTER[0]},${CENTER[1]});
+);
+out center;`;
+
+    try {
+      const res = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        body: query
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      const data = await res.json();
+      allPlaces = data.elements || [];
+      renderResults(allPlaces);
+    } catch (e) {
+      document.getElementById('resultsList').innerHTML =
+        `<div class="state-msg">검색 실패: ${e.message}<br>
+        <a href="https://map.naver.com/v5/search/점촌+${encodeURIComponent(raw)}" target="_blank">네이버지도에서 검색하기</a></div>`;
+      document.getElementById('searchMeta').textContent = '';
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ─── 결과 렌더링 ───────────────────────────────────────
+  function renderResults(places) {
+    const filterOpen = document.getElementById('openFilter').checked;
+
+    // 좌표 추출
+    const withCoords = places.map(el => ({
+      ...el,
+      _lat: el.lat ?? el.center?.lat,
+      _lon: el.lon ?? el.center?.lon
+    })).filter(el => el._lat && el._lon);
+
+    // 영업 여부 판단
+    const withStatus = withCoords.map(el => ({
+      ...el,
+      _open: isOpenNow(el.tags?.opening_hours ?? null)
+    }));
+
+    // 필터
+    const filtered = filterOpen
+      ? withStatus.filter(el => el._open === true)
+      : withStatus;
+
+    const list = document.getElementById('resultsList');
+
+    if (filtered.length === 0) {
+      const keyword = document.getElementById('searchInput').value.trim();
+      list.innerHTML = `<div class="state-msg">
+        ${filterOpen ? '현재 영업 중인 곳이 없습니다.' : 'OpenStreetMap에 등록된 결과가 없습니다.'}<br>
+        <a href="https://map.naver.com/v5/search/점촌+${encodeURIComponent(keyword)}" target="_blank">네이버지도에서 검색하기</a>
+      </div>`;
+      updateMeta(withStatus, filtered.length);
+      return;
+    }
+
+    list.innerHTML = '';
+    const bounds = L.latLngBounds([]);
+
+    filtered.forEach((el, i) => {
+      const pos = [el._lat, el._lon];
+      bounds.extend(pos);
+
+      const name    = el.tags?.name || '이름 없음';
+      const phone   = el.tags?.phone || el.tags?.['contact:phone'] || '';
+      const hours   = el.tags?.opening_hours || '';
+      const website = el.tags?.website || el.tags?.['contact:website'] || '';
+      const addr    = el.tags?.['addr:full'] || el.tags?.['addr:street'] || '';
+
+      // 마커
+      const marker = L.marker(pos).addTo(map);
+      marker.bindPopup(`<strong>${name}</strong>${phone ? `<br>${phone}` : ''}${hours ? `<br><small>${hours}</small>` : ''}`);
+      markers.push(marker);
+
+      // 영업 배지
+      let badge = '';
+      if (el._open === true)  badge = '<span class="badge badge-open">영업 중</span>';
+      else if (el._open === false) badge = '<span class="badge badge-closed">영업 종료</span>';
+      else badge = '<span class="badge badge-unknown">시간 미확인</span>';
+
+      // 링크들
+      const naverUrl   = `https://map.naver.com/v5/search/${encodeURIComponent(name + ' 점촌')}`;
+      const kakaoUrl   = `https://map.kakao.com/?q=${encodeURIComponent(name)}`;
+      const osmUrl     = `https://www.openstreetmap.org/${el.type}/${el.id}`;
+
+      const item = document.createElement('div');
+      item.className = 'result-item';
+      item.id = `ri-${i}`;
+      item.innerHTML = `
+        <div class="item-header">
+          <span class="item-num">${i+1}</span>
+          <span class="item-name">${name}</span>
+          ${badge}
+        </div>
+        ${addr   ? `<div class="item-sub">${addr}</div>` : ''}
+        ${phone  ? `<div class="item-sub">${phone}</div>` : ''}
+        ${hours  ? `<div class="item-hours">${hours}</div>` : ''}
+        <div class="item-links">
+          <a class="item-link naver-link" href="${naverUrl}" target="_blank">네이버지도</a>
+          <a class="item-link" href="${kakaoUrl}" target="_blank">카카오맵</a>
+          <a class="item-link" href="${osmUrl}" target="_blank">OSM</a>
+          ${website ? `<a class="item-link" href="${website}" target="_blank">웹사이트</a>` : ''}
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        marker.openPopup();
+        map.setView(pos, 17);
+        activateItem(i);
+      });
+      list.appendChild(item);
+    });
+
+    if (bounds.isValid()) map.fitBounds(bounds, { padding: [40, 40] });
+    updateMeta(withStatus, filtered.length);
+    document.getElementById('resultsTitle').textContent = `검색 결과 (${filtered.length}건)`;
+  }
+
+  function activateItem(idx) {
+    document.querySelectorAll('.result-item').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    const el = document.getElementById(`ri-${idx}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function clearMarkers() {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+  }
+
+  function updateMeta(all, shown) {
+    const open    = all.filter(p => p._open === true).length;
+    const closed  = all.filter(p => p._open === false).length;
+    const unknown = all.length - open - closed;
+    let parts = [`총 ${all.length}건`];
+    if (open)    parts.push(`영업 중 ${open}건`);
+    if (closed)  parts.push(`종료 ${closed}건`);
+    if (unknown) parts.push(`미확인 ${unknown}건`);
+    if (shown !== all.length) parts.push(`표시 ${shown}건`);
+    document.getElementById('searchMeta').innerHTML = parts.join(' · ');
+  }
+
+  function setLoading(on) {
+    document.getElementById('searchBtn').disabled = on;
+    if (on) {
+      document.getElementById('resultsList').innerHTML =
+        '<div class="state-msg loading-msg">Overpass API 검색 중...</div>';
+      document.getElementById('searchMeta').textContent = '';
+      document.getElementById('resultsTitle').textContent = '검색 결과';
+    }
+  }
+
+  function resetSearch() {
+    document.getElementById('searchInput').value = '횟집';
+    document.getElementById('openFilter').checked = false;
+    document.getElementById('naverLink').href = 'https://map.naver.com/v5/search/점촌+횟집';
+    doSearch();
+  }
+
+  document.getElementById('openFilter').addEventListener('change', () => {
+    if (allPlaces.length > 0) renderResults(allPlaces);
+  });
+
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  // 초기 검색
+  doSearch();
+</script>
+</body>
+</html>

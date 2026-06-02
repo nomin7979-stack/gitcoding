@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 프로젝트 허브</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a14; --card: #16162a; --border: #2a2a4a;
+      --accent: #6c63ff; --accent2: #ff6b9d; --accent3: #00d4aa;
+      --text: #e8e8f0; --muted: #8888aa;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      min-height: 100vh;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 40%, rgba(108,99,255,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 70% 60%, rgba(255,107,157,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; margin-bottom: 24px;
+      box-shadow: 0 0 40px rgba(108,99,255,.4);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 48px); font-weight: 700;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 12px; letter-spacing: -0.5px;
+    }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 480px; line-height: 1.7; }
+    .live-clock {
+      margin-top: 28px; display: flex; gap: 12px; align-items: center;
+      background: var(--card); border: 1px solid var(--border);
+      padding: 10px 24px; border-radius: 40px; font-size: 15px; color: var(--muted);
+    }
+    .live-clock span { color: var(--accent3); font-weight: 600; font-size: 16px; letter-spacing: 1px; }
+
+    .stats-bar { display: flex; justify-content: center; gap: 24px; padding: 0 24px 48px; flex-wrap: wrap; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 28px; text-align: center; min-width: 120px; }
+    .stat .num { font-size: 28px; font-weight: 700; color: var(--accent); }
+    .stat .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .section { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+    .section-title {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 3px;
+      color: var(--muted); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px;
+      text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 14px;
+      position: relative; overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--card-accent, linear-gradient(90deg, var(--accent), var(--accent2)));
+      opacity: 0; transition: opacity .2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 40px rgba(108,99,255,.15); }
+    .card:hover::before { opacity: 1; }
+    .card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+    .card-title { font-size: 17px; font-weight: 600; }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .card-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); background: rgba(255,255,255,.06); border-radius: 20px; padding: 4px 10px; width: fit-content; }
+    .card-tag .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    .c-purple .card-icon { background: rgba(108,99,255,.18); } .c-purple .dot { background: #6c63ff; }
+    .c-pink   .card-icon { background: rgba(255,107,157,.18); } .c-pink   .dot { background: #ff6b9d; }
+    .c-teal   .card-icon { background: rgba(0,212,170,.18); }  .c-teal   .dot { background: #00d4aa; }
+    .c-orange .card-icon { background: rgba(255,165,0,.18); }  .c-orange .dot { background: #ffa500; }
+    .c-blue   .card-icon { background: rgba(100,180,255,.18); }.c-blue   .dot { background: #64b4ff; }
+    .c-green  .card-icon { background: rgba(100,220,100,.18); }.c-green  .dot { background: #64dc64; }
+    .c-red    .card-icon { background: rgba(255,80,80,.18); }  .c-red    .dot { background: #ff5050; }
+    .c-yellow .card-icon { background: rgba(255,220,50,.18); } .c-yellow .dot { background: #ffdc32; }
+    .c-sea    .card-icon { background: rgba(0,180,216,.18); }  .c-sea    .dot { background: #00b4d8; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: 13px; }
+    footer span { color: var(--accent2); }
+    @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="avatar">🚀</div>
+    <h1>나의 프로젝트 허브</h1>
+    <p>직접 만든 웹 앱 모음입니다.<br>카드를 클릭해 각 프로젝트를 열어보세요.</p>
+    <div class="live-clock">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8888aa" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+      </svg>
+      현재 시각&nbsp;<span id="clock-time">--:--:--</span>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="num">10</div><div class="label">총 프로젝트</div></div>
+    <div class="stat"><div class="num">HTML</div><div class="label">주 언어</div></div>
+    <div class="stat"><div class="num">2026</div><div class="label">제작 연도</div></div>
+  </div>
+
+  <main class="section">
+    <div class="section-title">프로젝트</div>
+    <div class="grid">
+      <a href="natrang.html" class="card c-sea">
+        <div class="card-icon">🌊</div>
+        <div class="card-title">나트랑 여행 패키지</div>
+        <div class="card-desc">항공권·숙소·관광지를 한 번에 비교하는 나트랑 최저가 여행 앱.</div>
+        <div class="card-tag"><span class="dot"></span>여행 · 비교 · 예약</div>
+      </a>
+      <a href="clock.html" class="card c-purple">
+        <div class="card-icon">🕐</div>
+        <div class="card-title">아날로그 & 디지털 시계</div>
+        <div class="card-desc">실시간 아날로그/디지털 시계.</div>
+        <div class="card-tag"><span class="dot"></span>시계 · 애니메이션</div>
+      </a>
+      <a href="search.html" class="card c-blue">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">통합 검색</div>
+        <div class="card-desc">구글, 네이버, 유튜브 등 다양한 검색 엔진을 한 곳에서.</div>
+        <div class="card-tag"><span class="dot"></span>검색 · 유틸리티</div>
+      </a>
+      <a href="scheduler.html" class="card c-teal">
+        <div class="card-icon">📅</div>
+        <div class="card-title">스케줄러</div>
+        <div class="card-desc">할 일과 일정을 등록하고 관리하는 시간표 앱.</div>
+        <div class="card-tag"><span class="dot"></span>일정 · 생산성</div>
+      </a>
+      <a href="calendar.html" class="card c-pink">
+        <div class="card-icon">🗓️</div>
+        <div class="card-title">달력</div>
+        <div class="card-desc">월별 달력을 보고 날짜를 확인할 수 있는 캘린더 앱.</div>
+        <div class="card-tag"><span class="dot"></span>달력 · 날짜</div>
+      </a>
+      <a href="digit_recognition.html" class="card c-orange">
+        <div class="card-icon">✍️</div>
+        <div class="card-title">숫자 인식</div>
+        <div class="card-desc">손으로 그린 숫자를 AI가 인식하는 머신러닝 데모.</div>
+        <div class="card-tag"><span class="dot"></span>AI · 머신러닝</div>
+      </a>
+      <a href="math_exam.html" class="card c-green">
+        <div class="card-icon">🧮</div>
+        <div class="card-title">수학 시험</div>
+        <div class="card-desc">수학 문제를 풀고 점수를 확인하는 온라인 시험 앱.</div>
+        <div class="card-tag"><span class="dot"></span>교육 · 퀴즈</div>
+      </a>
+      <a href="academy_manager.html" class="card c-yellow">
+        <div class="card-icon">🏫</div>
+        <div class="card-title">학원 관리</div>
+        <div class="card-desc">학원 수강생, 수업, 출결 등을 관리하는 관리자 대시보드.</div>
+        <div class="card-tag"><span class="dot"></span>관리 · 대시보드</div>
+      </a>
+      <a href="naver_search.html" class="card c-teal">
+        <div class="card-icon">🟢</div>
+        <div class="card-title">네이버 검색</div>
+        <div class="card-desc">네이버 검색 API를 활용한 검색 결과 뷰어.</div>
+        <div class="card-tag"><span class="dot"></span>API · 검색</div>
+      </a>
+      <a href="jeomchon.html" class="card c-red">
+        <div class="card-icon">🌟</div>
+        <div class="card-title">점촌</div>
+        <div class="card-desc">점촌 관련 정보를 제공하는 페이지.</div>
+        <div class="card-tag"><span class="dot"></span>정보 · 로컬</div>
+      </a>
+    </div>
+  </main>
+
+  <footer>직접 만든 프로젝트들 &mdash; made with <span>♥</span> in 2026</footer>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      document.getElementById('clock-time').textContent = `${h}:${m}:${s}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

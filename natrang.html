@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나트랑 최저가 패키지</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a1628;
+      --bg2: #0d1f3c;
+      --card: #112240;
+      --border: #1e3a5f;
+      --accent: #00b4d8;
+      --accent2: #f77f00;
+      --accent3: #06d6a0;
+      --text: #e2eaf5;
+      --muted: #7a9cc4;
+      --danger: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(0,180,216,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 30% at 80% 100%, rgba(6,214,160,.04) 0%, transparent 50%);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 80px 24px 140px;
+    }
+
+    /* 배경 슬라이드 */
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center center;
+      opacity: 0;
+      transition: opacity 1.6s ease-in-out;
+      transform: scale(1.04);
+      animation: kenBurns 12s ease-in-out infinite alternate;
+    }
+    .hero-slide.active { opacity: 1; }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to   { transform: scale(1.08); }
+    }
+
+    /* 오버레이 */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(to bottom,
+          rgba(0,0,0,.35) 0%,
+          rgba(0,0,0,.15) 35%,
+          rgba(8,16,28,.75) 75%,
+          var(--bg) 100%);
+    }
+
+    /* 히어로 콘텐츠 */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 30px;
+      padding: 7px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: .5px;
+      margin-bottom: 24px;
+    }
+    .eyebrow-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #06d6a0;
+      box-shadow: 0 0 8px #06d6a0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 7vw, 72px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 4px 24px rgba(0,0,0,.5);
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #00e5ff, #06d6a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,.75);
+      font-weight: 400;
+      line-height: 1.6;
+      max-width: 520px;
+      margin-bottom: 32px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.4);
+    }
+
+    /* 가격 스냅샷 뱃지 */
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 14px;
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-stat .val {
+      font-size: 17px;
+      font-weight: 800;
+      color: #00e5ff;
+    }
+
+    /* 플로팅 뱃지 */
+    .float-badge {
+      position: absolute;
+      z-index: 2;
+      background: rgba(255,255,255,.11);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      pointer-events: none;
+      text-shadow: none;
+    }
+    .fb1 { top: 18%; left:  7%; animation: fb 7s 0s    ease-in-out infinite; }
+    .fb2 { top: 25%; right: 6%; animation: fb 6s 1.2s  ease-in-out infinite; }
+    .fb3 { top: 58%; left:  4%; animation: fb 8s 0.6s  ease-in-out infinite; }
+    .fb4 { top: 65%; right: 5%; animation: fb 7s 2s    ease-in-out infinite; }
+    .fb5 { top: 40%; left:  3%; animation: fb 9s 0.3s  ease-in-out infinite; }
+    @keyframes fb {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-14px) rotate(2deg); }
+    }
+
+    /* 슬라이드 도트 인디케이터 */
+    .hero-dots {
+      position: absolute;
+      bottom: 112px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+    .hero-dot {
+      width: 28px; height: 3px;
+      border-radius: 2px;
+      background: rgba(255,255,255,.35);
+      transition: background .3s, width .3s;
+      cursor: pointer;
+    }
+    .hero-dot.active { background: #fff; width: 44px; }
+
+    /* 하단 웨이브 */
+    .hero-wave {
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      z-index: 3;
+      line-height: 0;
+    }
+
+    /* ── 날짜/인원 선택 ── */
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 18px;
+      padding: 14px 18px;
+    }
+    .search-bar select, .search-bar input {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      min-width: 140px;
+    }
+    .search-bar input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+    .search-bar select:focus, .search-bar input:focus {
+      border-color: #00e5ff;
+      background: rgba(255,255,255,.18);
+    }
+    .search-bar select option { background: #112240; color: #e2eaf5; }
+
+    /* ── Tab ── */
+    .tab-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .tabs {
+      display: flex;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-count {
+      background: rgba(0,180,216,.2);
+      color: var(--accent);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* ── Main ── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── Section header ── */
+    .sec-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .sec-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .sort-bar {
+      display: flex;
+      gap: 8px;
+    }
+    .sort-btn {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .sort-btn.active, .sort-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Panel ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Flight Card ── */
+    .flight-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      transition: border-color .2s, transform .2s;
+      flex-wrap: wrap;
+    }
+    .flight-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .airline-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .flight-info { flex: 1; min-width: 240px; }
+    .airline-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .flight-leg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .leg-label {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .leg-go  { background: rgba(0,180,216,.15); color: var(--accent); }
+    .leg-ret { background: rgba(6,214,160,.15); color: var(--accent3); }
+    .flight-route {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .flight-route .arrow { color: var(--muted); font-size: 13px; }
+    .flight-times {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .flight-meta {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .meta-badge {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-pill {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .pill-direct { background: rgba(6,214,160,.15); color: var(--accent3); }
+    .pill-stop   { background: rgba(247,127,0,.15); color: var(--accent2); }
+    .flight-price { text-align: right; min-width: 140px; }
+    .price-main {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .price-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .flight-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .btn-select {
+      padding: 10px 22px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      white-space: nowrap;
+      width: 100%;
+    }
+    .btn-select:hover { background: #0098bb; transform: scale(1.03); }
+    .btn-select.selected { background: var(--accent3); color: #0a1628; }
+    .btn-airline-site {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+      white-space: nowrap;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-airline-site:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Hotel Card ── */
+    .hotel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+    .hotel-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .hotel-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,180,216,.12);
+    }
+
+    /* 사진 영역 */
+    .hotel-photo-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: #0d1f3c;
+    }
+    .hotel-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+      display: block;
+    }
+    .hotel-card:hover .hotel-photo { transform: scale(1.04); }
+    .hotel-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.3) 0%, transparent 50%, rgba(0,0,0,.5) 100%);
+    }
+    .hotel-grade {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #ffd700;
+      z-index: 2;
+    }
+    .hotel-lowest {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: var(--danger);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      z-index: 2;
+    }
+
+    /* 썸네일 스트립 */
+    .hotel-thumbs {
+      position: absolute;
+      bottom: 10px; left: 10px;
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    .hotel-thumb {
+      width: 52px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,.3);
+      cursor: pointer;
+      transition: border-color .2s, transform .2s;
+    }
+    .hotel-thumb:hover { border-color: #fff; transform: scale(1.08); }
+
+    /* 본문 */
+    .hotel-body { padding: 18px 20px 20px; }
+    .hotel-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+
+    /* 평점 */
+    .hotel-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .rating-score {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--accent2);
+      line-height: 1;
+    }
+    .rating-stars { color: #ffd700; font-size: 14px; letter-spacing: 1px; }
+    .rating-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent2);
+      background: rgba(247,127,0,.12);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .rating-count { font-size: 12px; color: var(--muted); }
+
+    .hotel-loc { font-size: 13px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+    .hotel-features { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .feat-tag {
+      font-size: 11px;
+      background: rgba(255,255,255,.06);
+      border-radius: 6px;
+      padding: 3px 9px;
+      color: var(--muted);
+    }
+
+    /* 리뷰 */
+    .hotel-reviews {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .review-item { display: flex; flex-direction: column; gap: 5px; }
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .reviewer-avatar {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      color: #0a1628;
+      flex-shrink: 0;
+    }
+    .reviewer-name { font-size: 13px; font-weight: 600; }
+    .reviewer-flag { font-size: 14px; }
+    .review-score {
+      font-size: 12px; font-weight: 700;
+      background: var(--accent);
+      color: #0a1628;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-left: auto;
+    }
+    .review-date { font-size: 11px; color: var(--muted); }
+    .review-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    .hotel-footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+    .hotel-price .per { font-size: 11px; color: var(--muted); }
+    .hotel-price .amt { font-size: 22px; font-weight: 800; color: var(--accent2); }
+    .hotel-price .note { font-size: 11px; color: var(--muted); }
+    .hotel-btns { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .btn-book {
+      padding: 8px 16px;
+      background: rgba(247,127,0,.2);
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .btn-book:hover { background: var(--accent2); color: #fff; }
+    .btn-book.selected { background: var(--accent2); color: #fff; }
+    .btn-booking-site {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 12px;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+      white-space: nowrap;
+    }
+    .btn-booking-site:hover { border-color: var(--accent3); color: var(--accent3); }
+
+    /* ── Attraction Card ── */
+    .attr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .attr-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .attr-card:hover {
+      border-color: var(--accent3);
+      transform: translateY(-3px);
+    }
+    .attr-img {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      position: relative;
+    }
+    .attr-cat {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .cat-nature  { background: rgba(6,214,160,.2); color: var(--accent3); }
+    .cat-culture { background: rgba(0,180,216,.2); color: var(--accent); }
+    .cat-leisure { background: rgba(247,127,0,.2); color: var(--accent2); }
+    .cat-free    { background: rgba(100,220,100,.2); color: #6ddc6d; }
+    .attr-body { padding: 18px; }
+    .attr-name { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .attr-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .attr-footer { display: flex; align-items: center; justify-content: space-between; }
+    .attr-price { font-size: 20px; font-weight: 800; color: var(--accent3); }
+    .attr-price.free { color: #6ddc6d; font-size: 16px; }
+    .attr-duration { font-size: 12px; color: var(--muted); }
+    .btn-add {
+      padding: 8px 18px;
+      background: rgba(6,214,160,.15);
+      border: 1px solid var(--accent3);
+      color: var(--accent3);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-add:hover { background: var(--accent3); color: #0a1628; }
+    .btn-add.added { background: var(--accent3); color: #0a1628; }
+
+    /* ── 총 예산 바 ── */
+    .budget-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(10,22,40,.96);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      z-index: 200;
+    }
+    .budget-items { display: flex; gap: 24px; flex-wrap: wrap; }
+    .budget-item { font-size: 13px; color: var(--muted); }
+    .budget-item strong { color: var(--text); font-size: 15px; }
+    .budget-total {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .budget-total .total-label { font-size: 14px; color: var(--muted); }
+    .budget-total .total-price {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .btn-reserve {
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      border: none;
+      border-radius: 12px;
+      color: #0a1628;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-reserve:hover { opacity: .9; transform: scale(1.03); }
+
+    /* ── 인원수에 따른 안내 ── */
+    .info-bar {
+      background: rgba(0,180,216,.08);
+      border: 1px solid rgba(0,180,216,.2);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-bar span { color: var(--accent); font-weight: 600; }
+
+    /* ── 숙소 서브탭 ── */
+    .hotel-sub-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .hotel-sub-btn {
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .hotel-sub-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+    .hotel-sub-btn:hover { color: var(--text); }
+    .hotel-section { display: none; }
+    .hotel-section.active { display: block; }
+
+    /* 인기 예약 배지 */
+    .popular-rank {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: linear-gradient(135deg, #f77f00, #f7c500);
+      color: #0a1628;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 2;
+    }
+    .popular-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #f7c500;
+      background: rgba(247,197,0,.12);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .recent-bookings {
+      font-size: 12px;
+      color: var(--danger);
+      font-weight: 600;
+    }
+    .last-booked { font-size: 11px; color: var(--muted); }
+
+    /* ── 관광지 사진 ── */
+    .attr-photo-wrap {
+      position: relative;
+      height: 160px;
+      overflow: hidden;
+      background: #0d1f3c;
+    }
+    .attr-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+      display: block;
+    }
+    .attr-card:hover .attr-photo { transform: scale(1.05); }
+    .attr-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.2) 0%, transparent 40%, rgba(0,0,0,.55) 100%);
+    }
+
+    /* ── 날씨 팝업 ── */
+    .weather-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .weather-modal.show { display: flex; }
+    .weather-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(6px);
+    }
+    .weather-box {
+      position: relative;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 1;
+    }
+    .weather-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .weather-title { font-size: 20px; font-weight: 800; }
+    .weather-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .weather-close {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .weather-close:hover { background: rgba(255,255,255,.08); }
+    .weather-summary {
+      display: flex;
+      gap: 16px;
+      background: rgba(0,180,216,.07);
+      border: 1px solid rgba(0,180,216,.15);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .weather-icon-big { font-size: 56px; line-height: 1; }
+    .weather-summary-info { flex: 1; min-width: 160px; }
+    .weather-condition { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .weather-temp { font-size: 32px; font-weight: 900; color: var(--accent); }
+    .weather-temp span { font-size: 16px; font-weight: 400; color: var(--muted); }
+    .weather-meta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+    .weather-meta { font-size: 13px; color: var(--muted); }
+    .weather-meta strong { color: var(--text); }
+    .weather-days {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .weather-day {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+    .day-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .day-icon { font-size: 24px; margin-bottom: 4px; }
+    .day-temp { font-size: 14px; font-weight: 700; }
+    .day-rain { font-size: 11px; color: #64b4ff; margin-top: 2px; }
+    .weather-tip {
+      background: rgba(6,214,160,.08);
+      border: 1px solid rgba(6,214,160,.2);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .weather-tip strong { color: var(--accent3); }
+
+    /* ── 사진 클릭 커서 ── */
+    .hotel-photo-wrap, .attr-photo-wrap { cursor: zoom-in; }
+
+    /* ── 라이트박스 ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(0,0,0,.92);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px;
+    }
+    #lightbox.show { display: flex; }
+    .lb-header {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      background: linear-gradient(to bottom, rgba(0,0,0,.7), transparent);
+      z-index: 2;
+    }
+    .lb-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .lb-counter { font-size: 13px; color: rgba(255,255,255,.6); }
+    .lb-close {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(0,0,0,.4);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,.15); }
+    .lb-img-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 960px;
+      max-height: 80vh;
+      position: relative;
+    }
+    #lb-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      transition: opacity .2s;
+    }
+    .lb-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s;
+      z-index: 2;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,.2); transform: translateY(-50%) scale(1.1); }
+    #lb-prev { left: -56px; }
+    #lb-next { right: -56px; }
+    .lb-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .lb-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      transition: background .2s, transform .2s;
+      cursor: pointer;
+    }
+    .lb-dot.active { background: #fff; transform: scale(1.3); }
+    .lb-caption {
+      font-size: 13px;
+      color: rgba(255,255,255,.5);
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .flight-card { flex-direction: column; align-items: flex-start; }
+      .flight-price { text-align: left; }
+      .budget-bar { flex-direction: column; }
+      .tab-btn { padding: 14px 16px; font-size: 13px; }
+      .weather-box { padding: 20px; }
+      #lb-prev { left: -4px; }
+      #lb-next { right: -4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+
+    <!-- 배경 슬라이드쇼 -->
+    <div class="hero-slides" id="hero-slides">
+      <div class="hero-slide active" style="background-image:url('https://static.vinwonders.com/production/nha-trang-beaches-banner.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/Beautiful-island-in-Nha-Trang.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/nha-trang-bay-banner.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/2025/08/vinwonders-nha-trangg.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/vinwonders-nha-trang-water-park-banner.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/2025/08/nha-trang-by-night.jpg')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+
+    <!-- 플로팅 뱃지 -->
+    <div class="float-badge fb1">🌊 에메랄드빛 바다</div>
+    <div class="float-badge fb2">🏖️ 7km 황금 해변</div>
+    <div class="float-badge fb3">🎢 빈원더스 워터파크</div>
+    <div class="float-badge fb4">🍹 리조트 올인클루시브</div>
+    <div class="float-badge fb5">✈️ 직항 5시간 15분</div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        베트남 · 나트랑 최저가 패키지
+      </div>
+      <h1>지금 떠나요,<br><em>나트랑으로!</em></h1>
+      <p class="hero-sub">
+        에메랄드 바다, 황금 해변, 짜릿한 테마파크까지<br>
+        항공권 · 숙소 · 관광지를 한 번에 비교하고 최저가로 예약하세요
+      </p>
+
+      <!-- 가격 스냅샷 -->
+      <div class="hero-stats">
+        <div class="hero-stat">✈️ 항공 최저 <span class="val">178,000원</span></div>
+        <div class="hero-stat">🏨 숙소 최저 <span class="val">32,000원</span></div>
+        <div class="hero-stat">🌴 관광지 <span class="val">무료~50,000원</span></div>
+      </div>
+
+      <!-- 검색 바 -->
+      <div class="search-bar">
+        <input type="date" id="dep-date" title="출발일" onchange="onDateChange()">
+        <input type="date" id="arr-date" title="도착일" onchange="onDateChange()">
+        <select id="sel-people" onchange="updatePeople()">
+          <option value="1">1명</option>
+          <option value="2" selected>2명</option>
+          <option value="3">3명</option>
+          <option value="4">4명</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 슬라이드 도트 -->
+    <div class="hero-dots" id="hero-dots"></div>
+
+    <!-- 하단 웨이브 -->
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
+        <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#0a1628"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('flight', this)">✈️ 항공권 <span class="tab-count">8</span></button>
+      <button class="tab-btn" onclick="switchTab('hotel', this)">🏨 숙소 <span class="tab-count">9</span></button>
+      <button class="tab-btn" onclick="switchTab('attr', this)">🌴 관광지 <span class="tab-count">10</span></button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- 항공권 패널 -->
+    <div id="panel-flight" class="panel active">
+      <div class="sec-header">
+        <div class="sec-title">✈️ 인천 → 나트랑(CXR) 항공권</div>
+        <div class="sort-bar">
+          <button class="sort-btn active" onclick="sortFlight('price', this)">가격순</button>
+          <button class="sort-btn" onclick="sortFlight('time', this)">시간순</button>
+        </div>
+      </div>
+      <div class="info-bar">
+        ℹ️ 가격은 <span id="info-people">2명</span> 기준, 왕복 편도 합산 최저가입니다. 실제 예약 시 달라질 수 있습니다.
+      </div>
+      <div id="flight-list"></div>
+    </div>
+
+    <!-- 숙소 패널 -->
+    <div id="panel-hotel" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">🏨 나트랑 숙소</div>
+        <div class="sort-bar">
+          <button class="sort-btn active" onclick="sortHotel('price', this)">가격순</button>
+          <button class="sort-btn" onclick="sortHotel('grade', this)">등급순</button>
+          <button class="sort-btn" onclick="sortHotel('rating', this)">평점순</button>
+        </div>
+      </div>
+      <div class="info-bar">
+        ℹ️ 가격은 <span class="info-people">2명</span> 기준, <span id="info-nights">4</span>박 숙박 총액입니다.
+      </div>
+      <!-- 서브탭 -->
+      <div class="hotel-sub-tabs">
+        <button class="hotel-sub-btn active" onclick="switchHotelTab('all', this)">🏨 전체 숙소</button>
+        <button class="hotel-sub-btn" onclick="switchHotelTab('popular', this)">🔥 인기 예약 TOP 6</button>
+      </div>
+      <div id="hotel-all" class="hotel-section active">
+        <div class="hotel-grid" id="hotel-list"></div>
+      </div>
+      <div id="hotel-popular" class="hotel-section">
+        <div class="hotel-grid" id="hotel-popular-list"></div>
+      </div>
+    </div>
+
+    <!-- 관광지 패널 -->
+    <div id="panel-attr" class="panel">
+      <div class="sec-header">
+        <div class="sec-title">🌴 나트랑 관광지</div>
+        <div class="sort-bar">
+          <button class="sort-btn active" onclick="sortAttr('price', this)">가격순</button>
+          <button class="sort-btn" onclick="sortAttr('name', this)">이름순</button>
+        </div>
+      </div>
+      <div class="info-bar">
+        ℹ️ 입장료는 1인 기준입니다. 원하는 관광지를 추가해 예산을 계산하세요.
+      </div>
+      <div class="attr-grid" id="attr-list"></div>
+    </div>
+
+  </div>
+
+  <!-- 라이트박스 -->
+  <div id="lightbox" onclick="if(event.target===this)closeLightbox()">
+    <div class="lb-header">
+      <span class="lb-title" id="lb-title"></span>
+      <span class="lb-counter" id="lb-counter"></span>
+      <button class="lb-close" onclick="closeLightbox()">✕</button>
+    </div>
+    <div class="lb-img-wrap">
+      <button class="lb-nav" id="lb-prev" onclick="lbPrev()">‹</button>
+      <img id="lb-img" src="" alt="">
+      <button class="lb-nav" id="lb-next" onclick="lbNext()">›</button>
+    </div>
+    <div class="lb-dots" id="lb-dots"></div>
+    <div class="lb-caption" id="lb-caption">이미지를 클릭하면 닫힙니다 · ESC · ← →</div>
+  </div>
+
+  <!-- 날씨 팝업 -->
+  <div class="weather-modal" id="weather-modal">
+    <div class="weather-backdrop" onclick="closeWeather()"></div>
+    <div class="weather-box">
+      <div class="weather-header">
+        <div>
+          <div class="weather-title">📍 나트랑 현지 날씨 예보</div>
+          <div class="weather-sub" id="w-dates">출발일과 도착일을 선택하세요</div>
+        </div>
+        <button class="weather-close" onclick="closeWeather()">✕</button>
+      </div>
+      <div class="weather-summary">
+        <div class="weather-icon-big" id="w-icon">🌤️</div>
+        <div class="weather-summary-info">
+          <div class="weather-condition" id="w-condition">-</div>
+          <div class="weather-temp" id="w-temp">-<span> °C</span></div>
+          <div class="weather-meta-row">
+            <div class="weather-meta">🌧️ 강수 확률 <strong id="w-rain">-</strong></div>
+            <div class="weather-meta">💧 습도 <strong id="w-humid">-</strong></div>
+            <div class="weather-meta">🌬️ 풍속 <strong id="w-wind">-</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="weather-days" id="w-days"></div>
+      <div class="weather-tip" id="w-tip"></div>
+    </div>
+  </div>
+
+  <!-- 예산 바 -->
+  <div class="budget-bar">
+    <div class="budget-items">
+      <div class="budget-item">✈️ 항공 <strong id="b-flight">-</strong></div>
+      <div class="budget-item">🏨 숙소 <strong id="b-hotel">-</strong></div>
+      <div class="budget-item">🌴 관광지 <strong id="b-attr">0원</strong></div>
+    </div>
+    <div class="budget-total">
+      <span class="total-label">총 예상 비용</span>
+      <span class="total-price" id="b-total">0원</span>
+      <button class="btn-reserve">견적 완성 🎉</button>
+    </div>
+  </div>
+
+<script>
+  // ── 데이터 ──
+  const flights = [
+    { id:0, airline:'비엣젯항공',  icon:'🔴', color:'rgba(220,50,50,.15)',
+      dep:'09:10', arr:'13:25', time:'5h 15m',
+      retDep:'14:30', retArr:'21:45', retTime:'5h 15m', stop:'직항', price:178000,
+      url:'https://www.vietjetair.com/ko' },
+    { id:1, airline:'티웨이항공',  icon:'🟠', color:'rgba(247,127,0,.15)',
+      dep:'08:00', arr:'12:20', time:'5h 20m',
+      retDep:'13:30', retArr:'20:50', retTime:'5h 20m', stop:'직항', price:218000,
+      url:'https://www.twayair.com' },
+    { id:2, airline:'제주항공',    icon:'🟡', color:'rgba(255,200,0,.15)',
+      dep:'14:30', arr:'18:50', time:'5h 20m',
+      retDep:'20:00', retArr:'03:20+1', retTime:'5h 20m', stop:'직항', price:236000,
+      url:'https://www.jejuair.net' },
+    { id:3, airline:'에어아시아',  icon:'🔴', color:'rgba(220,50,50,.12)',
+      dep:'06:30', arr:'13:45', time:'7h 15m',
+      retDep:'15:00', retArr:'00:15+1', retTime:'7h 15m', stop:'1회 경유', price:198000,
+      url:'https://www.airasia.com/ko/ko' },
+    { id:4, airline:'베트남항공',  icon:'🌸', color:'rgba(0,150,200,.15)',
+      dep:'11:00', arr:'15:15', time:'5h 15m',
+      retDep:'16:30', retArr:'23:45', retTime:'5h 15m', stop:'직항', price:276000,
+      url:'https://www.vietnamairlines.com/kr/ko' },
+    { id:5, airline:'아시아나항공', icon:'🔵', color:'rgba(0,80,200,.15)',
+      dep:'10:30', arr:'14:45', time:'5h 15m',
+      retDep:'16:00', retArr:'23:15', retTime:'5h 15m', stop:'직항', price:318000,
+      url:'https://flyasiana.com/C/KR/KO/index' },
+    { id:6, airline:'대한항공',    icon:'🔵', color:'rgba(0,60,180,.15)',
+      dep:'09:00', arr:'13:20', time:'5h 20m',
+      retDep:'14:30', retArr:'21:50', retTime:'5h 20m', stop:'직항', price:352000,
+      url:'https://www.koreanair.com/kr/ko' },
+    { id:7, airline:'에어서울',    icon:'🟣', color:'rgba(120,50,200,.15)',
+      dep:'23:55', arr:'04:10+1', time:'5h 15m',
+      retDep:'05:30', retArr:'12:45', retTime:'5h 15m', stop:'직항', price:196000,
+      url:'https://www.flyairseoul.com/CW/ko/main.do' },
+  ];
+
+  const hotels = [
+    { id:0, name:'씨라이트 게스트하우스', loc:'나트랑 해변 800m', grade:2,
+      features:['조식포함','Wi-Fi','에어컨'], price:32000, isLowest:false,
+      photo:'https://picsum.photos/seed/beach11/600/260',
+      thumbs:['https://picsum.photos/seed/beach12/160/120','https://picsum.photos/seed/beach13/160/120','https://picsum.photos/seed/beach14/160/120'],
+      rating:7.8, ratingLabel:'좋음', reviewCount:312,
+      avatarColor:'#3a7bd5',
+      reviews:[
+        { name:'김**', flag:'🇰🇷', score:8.0, date:'2025.11', text:'"가격 대비 깨끗하고 위치도 괜찮아요. 해변까지 걸어서 10분이면 충분합니다."' },
+        { name:'이**', flag:'🇰🇷', score:7.5, date:'2025.10', text:'"직원분들이 친절해서 좋았어요. 시설은 조금 오래됐지만 잠만 자기엔 충분해요."' }
+      ],
+      bookSite:'Agoda', bookUrl:'https://www.agoda.com/ko-kr/search?city=3184&textToSearch=nha+trang+guesthouse' },
+
+    { id:1, name:'아마리아 리조트', loc:'나트랑 해변 직접', grade:3,
+      features:['조식포함','수영장','Wi-Fi'], price:68000, isLowest:true,
+      photo:'https://amianaresort.com/wp-content/uploads/2026/03/NT-1170-x-550.png',
+      thumbs:['https://amianaresort.com/wp-content/uploads/2024/06/AmianaNhaTrang_DeluxeKing01-1.jpg','https://amianaresort.com/wp-content/uploads/2026/04/Signature-Family-Suite-2-Bedroom-Sea-View-WCTR-10-Home.jpg','https://amianaresort.com/wp-content/uploads/2024/06/AMIANA1-e1713162359421.jpg'],
+      rating:8.6, ratingLabel:'매우 좋음', reviewCount:1847,
+      avatarColor:'#11998e',
+      reviews:[
+        { name:'박**', flag:'🇰🇷', score:9.0, date:'2025.12', text:'"수영장에서 바라보는 바다 뷰가 환상적이에요. 조식도 다양하고 맛있었습니다!"' },
+        { name:'최**', flag:'🇰🇷', score:8.0, date:'2025.11', text:'"해변 바로 앞이라 편리했어요. 이 가격에 이 퀄리티면 강력 추천합니다."' }
+      ],
+      bookSite:'Agoda', bookUrl:'https://www.agoda.com/ko-kr/search?city=3184&textToSearch=amiana+resort+nha+trang' },
+
+    { id:2, name:'코럴 비치 호텔', loc:'쩐푸 해변', grade:3,
+      features:['수영장','조식포함','바','Wi-Fi'], price:74000, isLowest:false,
+      photo:'https://picsum.photos/seed/hotel31/600/260',
+      thumbs:['https://picsum.photos/seed/hotel32/160/120','https://picsum.photos/seed/hotel33/160/120','https://picsum.photos/seed/hotel34/160/120'],
+      rating:8.2, ratingLabel:'매우 좋음', reviewCount:923,
+      avatarColor:'#f7971e',
+      reviews:[
+        { name:'정**', flag:'🇰🇷', score:8.5, date:'2025.12', text:'"루프탑 바에서 마시는 칵테일과 석양이 정말 멋졌어요. 꼭 한번은 가보세요."' },
+        { name:'강**', flag:'🇰🇷', score:7.8, date:'2025.11', text:'"쩐푸 해변과 가까워서 매일 아침 산책하기 좋았습니다. 조식 구성도 알차요."' }
+      ],
+      bookSite:'Booking.com', bookUrl:'https://www.booking.com/searchresults.ko.html?ss=Nha+Trang&ac_langcode=ko' },
+
+    { id:3, name:'노보텔 나트랑', loc:'나트랑 시내', grade:4,
+      features:['수영장','조식포함','스파','레스토랑'], price:128000, isLowest:false,
+      photo:'https://d2e5ushqwiltxm.cloudfront.net/wp-content/uploads/sites/38/2024/10/30062712/13.-Building_0771-1-724x357.jpg',
+      thumbs:['https://d2e5ushqwiltxm.cloudfront.net/wp-content/uploads/sites/38/2024/10/30093514/3.Sup-Ocean-View_-300x200.jpg','https://d2e5ushqwiltxm.cloudfront.net/wp-content/uploads/sites/38/2024/10/30063241/9.-The-Square_01-1-300x200.jpg','https://d2e5ushqwiltxm.cloudfront.net/wp-content/uploads/sites/38/2024/10/30061407/Spa_17773-300x200.jpg'],
+      rating:8.9, ratingLabel:'훌륭함', reviewCount:3241,
+      avatarColor:'#6a3093',
+      reviews:[
+        { name:'윤**', flag:'🇰🇷', score:9.2, date:'2025.12', text:'"스파 서비스가 정말 최고예요. 몸이 완전히 리프레시 됩니다. 또 오고 싶어요."' },
+        { name:'조**', flag:'🇰🇷', score:8.5, date:'2025.11', text:'"시내 중심에 있어 쇼핑하고 먹거리 즐기기 딱 좋은 위치입니다. 직원도 친절!"' }
+      ],
+      bookSite:'Booking.com', bookUrl:'https://www.booking.com/hotel/vn/novotel-nha-trang.ko.html' },
+
+    { id:4, name:'쉐라톤 그랜드 나트랑', loc:'나트랑 해변 직접', grade:5,
+      features:['프라이빗 비치','수영장','스파','바'], price:218000, isLowest:false,
+      photo:'https://www.fivestaralliance.com/files/fivestaralliance.com/field/image/nodes/2011/20370/20370_0_sheratonnhatranghotelandspa_fsa-g.jpg',
+      thumbs:['https://www.fivestaralliance.com/files/fivestaralliance.com/field/image/nodes/2011/20370/20370_3_sheratonnhatranghotelandspa_fsa-s.jpg','https://picsum.photos/seed/sheraton53/160/120','https://picsum.photos/seed/sheraton54/160/120'],
+      rating:9.2, ratingLabel:'훌륭함', reviewCount:5812,
+      avatarColor:'#c94b4b',
+      reviews:[
+        { name:'한**', flag:'🇰🇷', score:9.5, date:'2025.12', text:'"프라이빗 비치에서 즐기는 시간이 너무 좋았어요. 5성급 그 이상의 서비스!"' },
+        { name:'임**', flag:'🇰🇷', score:9.0, date:'2025.11', text:'"객실 뷰가 압도적입니다. 창문을 열면 바로 바다가 펼쳐져요. 강력 추천!"' }
+      ],
+      bookSite:'Marriott', bookUrl:'https://www.marriott.com/ko/hotels/cxrsi-sheraton-grand-nha-trang-hotel-and-spa' },
+
+    { id:5, name:'빈펄 리조트 나트랑', loc:'혼쩌 섬', grade:5,
+      features:['올인클루시브','워터파크','해변','골프'], price:286000, isLowest:false,
+      photo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Vinpearl_Hotel_-_Nha_Trang.jpg/800px-Vinpearl_Hotel_-_Nha_Trang.jpg',
+      thumbs:['https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Vinpearl_Land_Beach.jpg/400px-Vinpearl_Land_Beach.jpg','https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Vinpearl_Land_seen_from_Nha_Trang.jpg/400px-Vinpearl_Land_seen_from_Nha_Trang.jpg','https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Vinpearl_Nha_Trang_%2849356302988%29.jpg/400px-Vinpearl_Nha_Trang_%2849356302988%29.jpg'],
+      rating:9.4, ratingLabel:'최고', reviewCount:8934,
+      avatarColor:'#2ecc71',
+      reviews:[
+        { name:'오**', flag:'🇰🇷', score:9.8, date:'2025.12', text:'"섬 전체가 리조트예요. 아이들이랑 오기 정말 좋아요. 워터파크만으로도 충분한 가치!"' },
+        { name:'신**', flag:'🇰🇷', score:9.2, date:'2025.11', text:'"올인클루시브라 먹고 마시고 즐기는데 추가 비용 없어요. 가성비 최고 리조트!"' }
+      ],
+      bookSite:'Vinpearl', bookUrl:'https://vinpearl.com/ko/nha-trang-resort' },
+
+    { id:6, name:'선라이즈 나트랑', loc:'나트랑 해변 직접', grade:4,
+      features:['수영장','조식','스파'], price:112000, isLowest:false,
+      photo:'https://d2ile4x3f22snf.cloudfront.net/wp-content/uploads/sites/220/2018/02/04024504/DJI_0073.jpg',
+      thumbs:['https://sunrisenhatrang.com.vn/wp-content/uploads/sites/220/2018/02/7C23778-1.jpg','https://sunrisenhatrang.com.vn/wp-content/uploads/sites/220/2018/02/DSC_8023-HDR.jpg','https://sunrisenhatrang.com.vn/wp-content/uploads/sites/220/2018/02/DSC_8287.jpg'],
+      rating:8.7, ratingLabel:'훌륭함', reviewCount:2156,
+      avatarColor:'#f39c12',
+      reviews:[
+        { name:'권**', flag:'🇰🇷', score:9.0, date:'2025.12', text:'"이름처럼 일출이 정말 아름다워요. 새벽에 해변 산책하며 일출 보는 게 최고였어요!"' },
+        { name:'황**', flag:'🇰🇷', score:8.3, date:'2025.10', text:'"수영장 규모가 크고 깨끗해요. 해변과 수영장을 번갈아 즐기기 딱 좋은 호텔이에요."' }
+      ],
+      bookSite:'Agoda', bookUrl:'https://www.agoda.com/ko-kr/search?city=3184&textToSearch=sunrise+nha+trang' },
+
+    { id:7, name:'갈리나 리조트', loc:'쩐푸 해변', grade:4,
+      features:['수영장','조식','루프탑바'], price:98000, isLowest:false,
+      photo:'https://galina.vn/storage/app/media/room.webp',
+      thumbs:['https://galina.vn/storage/app/media/room/galina-hotel-and-spa-nha-trang-sea-view%20.webp','https://galina.vn/storage/app/media/phong/Deluxe/dsc5835-1-1.webp','https://galina.vn/storage/app/media/Hotel%20room/Suite%20City%20View%20Window/DSC07622.webp'],
+      rating:8.5, ratingLabel:'매우 좋음', reviewCount:1489,
+      avatarColor:'#1abc9c',
+      reviews:[
+        { name:'장**', flag:'🇰🇷', score:8.8, date:'2025.12', text:'"루프탑 바가 진짜 인생 뷰예요. 해 질 때 맥주 한 잔이 여행의 절정이었습니다."' },
+        { name:'안**', flag:'🇰🇷', score:8.0, date:'2025.11', text:'"가격 대비 객실 퀄리티가 높아요. 직원들도 영어 잘 하고 친절합니다!"' }
+      ],
+      bookSite:'Booking.com', bookUrl:'https://www.booking.com/searchresults.ko.html?ss=Nha+Trang&ac_langcode=ko' },
+
+    { id:8, name:'카야리조트 나트랑', loc:'빈러이 해변', grade:3,
+      features:['수영장','조식','해변','Wi-Fi'], price:58000, isLowest:true,
+      photo:'https://picsum.photos/seed/kaya91/600/260',
+      thumbs:['https://picsum.photos/seed/kaya92/160/120','https://picsum.photos/seed/kaya93/160/120','https://picsum.photos/seed/kaya94/160/120'],
+      rating:8.1, ratingLabel:'매우 좋음', reviewCount:674,
+      avatarColor:'#8e44ad',
+      reviews:[
+        { name:'노**', flag:'🇰🇷', score:8.5, date:'2025.12', text:'"빈러이 해변이 한적하고 물이 맑아요. 번잡하지 않게 조용히 쉬기 딱 좋은 곳!"' },
+        { name:'류**', flag:'🇰🇷', score:7.8, date:'2025.10', text:'"이 가격에 해변 뷰 수영장이라니 놀라워요. 다음에도 꼭 다시 오고 싶은 곳이에요."' }
+      ],
+      bookSite:'Agoda', bookUrl:'https://www.agoda.com/ko-kr/search?city=3184&textToSearch=nha+trang+resort' },
+  ];
+
+  const attractions = [
+    { id:0, name:'빈원더스 나트랑', cat:'leisure', catName:'레저',
+      photo:'https://static.vinwonders.com/production/2025/08/vinwonders-nha-trangg.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/2025/08/vinwonders-nha-trangg.jpg',
+        'https://static.vinwonders.com/production/vinwonders-nha-trang-water-park-banner.jpg',
+        'https://static.vinwonders.com/production/2026/02/the-gioi-nuoc.jpg',
+        'https://static.vinwonders.com/production/VinWonders-Nha-Trang-super-fun.jpg',
+        'https://static.vinwonders.com/production/2026/02/THUY-CUNG-VWNT-scaled.jpg',
+      ],
+      desc:'베트남 최대 테마파크. 워터파크·롤러코스터·아쿠아리움과 세계 최장 해상 케이블카까지 즐길 수 있습니다.', price:50000, duration:'하루 종일', free:false },
+
+    { id:1, name:'포나가르 탑', cat:'culture', catName:'문화',
+      photo:'https://static.vinwonders.com/2022/07/po-nagar-cham-towers-top-banner.jpg',
+      gallery:[
+        'https://static.vinwonders.com/2022/07/po-nagar-cham-towers-top-banner.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Champa_Po_Nagar_Nha_Trang.jpg/800px-Champa_Po_Nagar_Nha_Trang.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Ganesh_Tempel_Po_Nagar_Nha_Trang.jpg/800px-Ganesh_Tempel_Po_Nagar_Nha_Trang.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/04052023_Ponagar_Hindu_temples_complex%2C_Nha_Trang_Vietnam_-_27.jpg/800px-04052023_Ponagar_Hindu_temples_complex%2C_Nha_Trang_Vietnam_-_27.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Durga_ornament_Po_Nagar.jpg/800px-Durga_ornament_Po_Nagar.jpg',
+      ],
+      desc:'2세기에 지어진 참파 왕국의 힌두교 사원. 나트랑을 대표하는 역사 유적지입니다.', price:5000, duration:'1~2시간', free:false },
+
+    { id:2, name:'혼쩌 섬 투어', cat:'nature', catName:'자연',
+      photo:'https://static.vinwonders.com/production/Beautiful-island-in-Nha-Trang.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/Beautiful-island-in-Nha-Trang.jpg',
+        'https://static.vinwonders.com/production/Hon-Mun-Island-thumb-1.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/H%C3%B2n_N%E1%BB%99i%2C_Nha_Trang_Bay%2C_Vietnam.jpg/800px-H%C3%B2n_N%E1%BB%99i%2C_Nha_Trang_Bay%2C_Vietnam.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Vinpearl_Land_Beach.jpg/800px-Vinpearl_Land_Beach.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Sapphire_Princess_anchored_in_Nha_Trang_Bay_-_Vietnam.jpg/800px-Sapphire_Princess_anchored_in_Nha_Trang_Bay_-_Vietnam.jpg',
+      ],
+      desc:'에메랄드빛 바다에서 스노클링, 낚시, 바다 위 바비큐를 즐기는 인기 1일 투어입니다.', price:35000, duration:'종일 투어', free:false },
+
+    { id:3, name:'양베이 폭포', cat:'nature', catName:'자연',
+      photo:'https://static.vinwonders.com/production/yang-bay-waterfall-banner.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/yang-bay-waterfall-banner.jpg',
+        'https://static.vinwonders.com/production/nha-trang-vietnam-top-banner.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Around_Nha_Trang%2C_rice_fields_%286224431058%29.jpg/800px-Around_Nha_Trang%2C_rice_fields_%286224431058%29.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Hon_Tam_Resort_-_Nha_Trang.jpg/800px-Hon_Tam_Resort_-_Nha_Trang.jpg',
+        'https://static.vinwonders.com/production/Explore-Hon-Chong-Nha-Trang.jpg',
+      ],
+      desc:'정글 속 3단 폭포. 수달, 타조, 원숭이를 볼 수 있는 작은 동물원도 함께 있습니다.', price:12000, duration:'3~4시간', free:false },
+
+    { id:4, name:'머드 온천 (I-Resort)', cat:'leisure', catName:'레저',
+      photo:'https://static.vinwonders.com/production/Nha-Trang-mud-bath-banner.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/Nha-Trang-mud-bath-banner.jpg',
+        'https://static.vinwonders.com/production/Nha-Trang-mud-bath-1.jpg',
+        'https://static.vinwonders.com/production/Nha-Trang-mud-bath-2.jpg',
+        'https://static.vinwonders.com/production/Nha-Trang-mud-bath-3.jpg',
+        'https://static.vinwonders.com/production/Nha-Trang-mud-bath-6.jpg',
+      ],
+      desc:'미네랄 머드 온천에서 피부 미용을 즐길 수 있습니다. 자쿠지, 수영장, 온천 풀 포함.', price:22000, duration:'2~3시간', free:false },
+
+    { id:5, name:'나트랑 대성당', cat:'culture', catName:'문화',
+      photo:'https://static.vinwonders.com/production/Nha-Trang-Cathedral-banner-1-1.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/Nha-Trang-Cathedral-banner-1-1.jpg',
+        'https://static.vinwonders.com/production/Nha-Trang-Cathedral-1.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Nh%C3%A0_th%E1%BB%9D_N%C3%BAi_Nha_Trang.JPG/800px-Nh%C3%A0_th%E1%BB%9D_N%C3%BAi_Nha_Trang.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Ave_Maria_Square%2C_Nha_Trang.jpg/800px-Ave_Maria_Square%2C_Nha_Trang.jpg',
+        'https://static.vinwonders.com/production/Cultural-experiences-on-your-Nha-Trang-itinerary.jpg',
+      ],
+      desc:'1928년 지어진 프랑스 고딕 양식의 아름다운 성당. 언덕 위에 위치해 전망도 좋습니다.', price:0, duration:'30분', free:true },
+
+    { id:6, name:'나트랑 해변', cat:'nature', catName:'자연',
+      photo:'https://static.vinwonders.com/production/nha-trang-beaches-banner.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/nha-trang-beaches-banner.jpg',
+        'https://static.vinwonders.com/production/nha-trang-bay-banner.jpg',
+        'https://static.vinwonders.com/production/2025/08/nha-trang-by-night.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Beach_in_Nha_Trang%2C_Vietnam_-_panoramio.jpg/800px-Beach_in_Nha_Trang%2C_Vietnam_-_panoramio.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Coastline_of_Nha_Trang_in_December_2017%2C_picture1.jpg/800px-Coastline_of_Nha_Trang_in_December_2017%2C_picture1.jpg',
+      ],
+      desc:'6km에 달하는 아름다운 해변. 새벽 일출부터 야경까지 언제나 아름다운 무료 명소.', price:0, duration:'자유', free:true },
+
+    { id:7, name:'혼문 스노클링', cat:'leisure', catName:'레저',
+      photo:'https://static.vinwonders.com/production/Hon-Mun-Island-thumb-1.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/Hon-Mun-Island-thumb-1.jpg',
+        'https://static.vinwonders.com/production/Beautiful-island-in-Nha-Trang.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/H%C3%B2n_T%E1%BA%B1m.jpg/800px-H%C3%B2n_T%E1%BA%B1m.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/H%C3%B2n_N%E1%BB%99i%2C_Nha_Trang_Bay%2C_Vietnam.jpg/800px-H%C3%B2n_N%E1%BB%99i%2C_Nha_Trang_Bay%2C_Vietnam.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Sapphire_Princess_anchored_in_Nha_Trang_Bay_-_Vietnam.jpg/800px-Sapphire_Princess_anchored_in_Nha_Trang_Bay_-_Vietnam.jpg',
+      ],
+      desc:'투명한 바다에서 산호초와 열대어를 감상하는 스노클링 투어입니다.', price:28000, duration:'반일', free:false },
+
+    { id:8, name:'담 시장', cat:'culture', catName:'문화',
+      photo:'https://static.vinwonders.com/production/6IdazXLW-cho-dam-nha-trang-1.jpg',
+      gallery:[
+        'https://static.vinwonders.com/production/6IdazXLW-cho-dam-nha-trang-1.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Cho_Dam_in_Sunset_-_panoramio.jpg/800px-Cho_Dam_in_Sunset_-_panoramio.jpg',
+        'https://static.vinwonders.com/production/Visit-Vinpearl-Harbour-on-your-Nha-Trang-itinerary.jpg',
+        'https://static.vinwonders.com/production/Lively-nights-at-Vinpearl-Harbour-Nha-Trang.jpg',
+        'https://static.vinwonders.com/production/nha-trang-itinerary-banner.jpg',
+      ],
+      desc:'현지 물가로 기념품, 과일, 해산물을 구입할 수 있는 전통 시장. 가격 흥정은 필수!', price:0, duration:'1~2시간', free:true },
+
+    { id:9, name:'롱선사 (와불)', cat:'culture', catName:'문화',
+      photo:'https://static.vinwonders.com/2023/01/Long-Son-Pagoda-thumb-1.jpg',
+      gallery:[
+        'https://static.vinwonders.com/2023/01/Long-Son-Pagoda-thumb-1.jpg',
+        'https://static.vinwonders.com/production/Long-Son-Pagoda-on-the-Nha-Trang-itinerary.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Ch%C3%B9a_Long_S%C6%A1n_%28ch%C3%B9a_Ph%E1%BA%ADt_Tr%E1%BA%AFng%29%2C_Nha_Trang%2C_ng%C3%A0y_27_th%C3%A1ng_5_n%C4%83m_2015_%288%29.jpg/800px-Ch%C3%B9a_Long_S%C6%A1n_%28ch%C3%B9a_Ph%E1%BA%ADt_Tr%E1%BA%AFng%29%2C_Nha_Trang%2C_ng%C3%A0y_27_th%C3%A1ng_5_n%C4%83m_2015_%288%29.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Long_Son_Buddhist_Temple%2C_Nha_Trang_-_panoramio.jpg/800px-Long_Son_Buddhist_Temple%2C_Nha_Trang_-_panoramio.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Long_S%C6%A1n_Pagoda-Long_S%C6%A1n_Buddhist_Temple%2C_Nha_Trang_-_panoramio.jpg/800px-Long_S%C6%A1n_Pagoda-Long_S%C6%A1n_Buddhist_Temple%2C_Nha_Trang_-_panoramio.jpg',
+      ],
+      desc:'거대한 흰색 와불상이 있는 불교 사원. 도심에 위치해 접근성이 좋은 무료 명소.', price:0, duration:'1시간', free:true },
+  ];
+
+  // ── 인기 예약 숙소 (호텔 데이터 기반, 예약 트렌드 추가) ──
+  const hotelTrends = {
+    5: { rank:1, trend:'+43%', recentBookings:127, lastBooked:'3분 전' },
+    4: { rank:2, trend:'+31%', recentBookings:89,  lastBooked:'7분 전' },
+    3: { rank:3, trend:'+28%', recentBookings:64,  lastBooked:'12분 전' },
+    6: { rank:4, trend:'+52%', recentBookings:93,  lastBooked:'5분 전' },
+    1: { rank:5, trend:'+19%', recentBookings:47,  lastBooked:'18분 전' },
+    7: { rank:6, trend:'+38%', recentBookings:71,  lastBooked:'9분 전' },
+  };
+  const popularHotels = [5,4,3,6,1,7].map(id => ({...hotels.find(h => h.id === id), ...hotelTrends[id]}));
+
+  // ── 나트랑 월별 날씨 ──
+  const weatherByMonth = {
+    1:  { icon:'☀️', condition:'맑고 건조', tempMin:21, tempMax:27, rain:'10%', humid:'72%', wind:'12km/h', tip:'나트랑 최고의 여행 시즌! 맑은 날씨가 이어집니다. 자외선 차단제 필수.', days:[{i:'☀️',t:'25~27',r:'5%'},{i:'☀️',t:'24~27',r:'5%'},{i:'🌤️',t:'24~26',r:'10%'},{i:'☀️',t:'25~28',r:'5%'},{i:'☀️',t:'25~27',r:'8%'}] },
+    2:  { icon:'☀️', condition:'화창하고 쾌적', tempMin:22, tempMax:28, rain:'8%', humid:'70%', wind:'10km/h', tip:'연중 가장 건조한 시기. 해변 활동과 섬 투어에 최적의 날씨입니다.', days:[{i:'☀️',t:'25~28',r:'5%'},{i:'☀️',t:'26~29',r:'5%'},{i:'☀️',t:'25~28',r:'5%'},{i:'🌤️',t:'24~27',r:'8%'},{i:'☀️',t:'25~28',r:'5%'}] },
+    3:  { icon:'🌞', condition:'완벽한 날씨', tempMin:23, tempMax:29, rain:'6%', humid:'68%', wind:'9km/h', tip:'가장 여행하기 좋은 달! 강수량 최저, 기온 쾌적. 피크 성수기에 해당합니다.', days:[{i:'🌞',t:'26~29',r:'3%'},{i:'🌞',t:'26~30',r:'3%'},{i:'☀️',t:'25~29',r:'5%'},{i:'🌞',t:'26~30',r:'3%'},{i:'🌞',t:'27~30',r:'3%'}] },
+    4:  { icon:'🌞', condition:'덥고 맑음', tempMin:25, tempMax:31, rain:'12%', humid:'73%', wind:'8km/h', tip:'더위가 시작되지만 여전히 좋은 날씨. 해수욕 즐기기 딱 좋은 시기입니다.', days:[{i:'🌞',t:'27~31',r:'8%'},{i:'☀️',t:'26~30',r:'10%'},{i:'🌤️',t:'26~30',r:'15%'},{i:'🌞',t:'27~31',r:'8%'},{i:'☀️',t:'27~30',r:'10%'}] },
+    5:  { icon:'🌤️', condition:'덥고 간헐적 소나기', tempMin:25, tempMax:32, rain:'32%', humid:'78%', wind:'11km/h', tip:'우기 초반. 오전은 맑고 오후에 소나기가 올 수 있습니다. 우산 지참 권장.', days:[{i:'🌤️',t:'28~32',r:'25%'},{i:'⛅',t:'27~31',r:'35%'},{i:'🌤️',t:'28~32',r:'28%'},{i:'🌦️',t:'26~30',r:'45%'},{i:'🌤️',t:'28~32',r:'25%'}] },
+    6:  { icon:'⛅', condition:'흐리고 소나기', tempMin:25, tempMax:31, rain:'40%', humid:'82%', wind:'14km/h', tip:'우기 시즌. 하루에 1~2번 소나기가 지나갑니다. 방수 가방과 우산 필수.', days:[{i:'🌦️',t:'27~31',r:'40%'},{i:'⛅',t:'26~30',r:'45%'},{i:'🌧️',t:'25~29',r:'60%'},{i:'🌤️',t:'27~31',r:'30%'},{i:'🌦️',t:'26~30',r:'45%'}] },
+    7:  { icon:'🌤️', condition:'덥고 간헐적 비', tempMin:25, tempMax:31, rain:'28%', humid:'79%', wind:'13km/h', tip:'인기 성수기이지만 우기입니다. 실내 관광지와 해변 활동을 적절히 조합하세요.', days:[{i:'🌤️',t:'28~31',r:'25%'},{i:'☀️',t:'28~32',r:'15%'},{i:'🌦️',t:'26~30',r:'40%'},{i:'🌤️',t:'28~31',r:'25%'},{i:'⛅',t:'27~30',r:'35%'}] },
+    8:  { icon:'🌤️', condition:'덥고 산발적 소나기', tempMin:25, tempMax:31, rain:'30%', humid:'80%', wind:'12km/h', tip:'한국 여름 휴가 성수기. 숙소 예약이 빠르게 마감되므로 서두르세요.', days:[{i:'⛅',t:'27~31',r:'30%'},{i:'🌤️',t:'28~31',r:'25%'},{i:'🌦️',t:'26~30',r:'40%'},{i:'🌤️',t:'28~31',r:'25%'},{i:'☀️',t:'28~32',r:'15%'}] },
+    9:  { icon:'🌧️', condition:'많은 비', tempMin:23, tempMax:29, rain:'68%', humid:'87%', wind:'18km/h', tip:'우기 절정. 태풍 위험도 있습니다. 여행을 피하거나 일정에 여유를 두세요.', days:[{i:'🌧️',t:'25~28',r:'70%'},{i:'⛈️',t:'24~27',r:'80%'},{i:'🌧️',t:'24~28',r:'65%'},{i:'🌦️',t:'25~28',r:'55%'},{i:'🌧️',t:'24~27',r:'72%'}] },
+    10: { icon:'🌧️', condition:'많은 비, 태풍 주의', tempMin:22, tempMax:28, rain:'80%', humid:'88%', wind:'22km/h', tip:'연중 강수량이 가장 많은 달. 태풍 시즌이며 여행 비추천. 여행보험 필수 가입.', days:[{i:'⛈️',t:'23~27',r:'85%'},{i:'🌧️',t:'22~26',r:'80%'},{i:'⛈️',t:'23~27',r:'90%'},{i:'🌧️',t:'23~27',r:'75%'},{i:'⛈️',t:'22~26',r:'85%'}] },
+    11: { icon:'🌦️', condition:'흐리고 비', tempMin:22, tempMax:27, rain:'62%', humid:'85%', wind:'17km/h', tip:'우기가 끝나가는 시기. 월말로 갈수록 날씨가 개선됩니다. 유연한 일정 권장.', days:[{i:'🌧️',t:'23~27',r:'65%'},{i:'🌦️',t:'23~26',r:'55%'},{i:'⛅',t:'24~27',r:'40%'},{i:'🌦️',t:'23~26',r:'58%'},{i:'⛅',t:'24~27',r:'45%'}] },
+    12: { icon:'🌤️', condition:'선선하고 맑아짐', tempMin:21, tempMax:26, rain:'25%', humid:'76%', wind:'14km/h', tip:'건기가 시작되는 좋은 시기. 하반기~연말 여행에 추천합니다. 가벼운 겉옷 챙기세요.', days:[{i:'🌤️',t:'22~25',r:'28%'},{i:'⛅',t:'22~26',r:'22%'},{i:'☀️',t:'23~26',r:'15%'},{i:'🌤️',t:'22~25',r:'25%'},{i:'☀️',t:'23~26',r:'12%'}] },
+  };
+
+  // ── 상태 ──
+  let selFlight = null;
+  let selHotel = null;
+  let selAttrs = new Set();
+  let people = 2;
+  let nights = 4;
+
+  // ── 히어로 슬라이드쇼 ──
+  (function initSlideshow() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dotsEl = document.getElementById('hero-dots');
+    let cur = 0;
+
+    dotsEl.innerHTML = [...slides].map((_,i) =>
+      `<div class="hero-dot ${i===0?'active':''}" onclick="heroGoto(${i})"></div>`
+    ).join('');
+
+    window.heroGoto = function(idx) {
+      slides[cur].classList.remove('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.remove('active');
+      cur = idx;
+      slides[cur].classList.add('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.add('active');
+    };
+
+    setInterval(() => {
+      heroGoto((cur + 1) % slides.length);
+    }, 5000);
+  })();
+
+  // ── 날짜 기본값 설정 ──
+  (function initDates() {
+    const today = new Date();
+    const dep = new Date(today); dep.setDate(dep.getDate() + 30);
+    const arr = new Date(dep);   arr.setDate(arr.getDate() + 5);
+    const fmt = d => d.toISOString().slice(0,10);
+    document.getElementById('dep-date').value = fmt(dep);
+    document.getElementById('arr-date').value = fmt(arr);
+    nights = 5;
+  })();
+
+  // ── 탭 전환 ──
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── 숙소 서브탭 전환 ──
+  function switchHotelTab(tab, btn) {
+    document.querySelectorAll('.hotel-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.hotel-sub-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('hotel-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── 렌더링 ──
+  function renderFlights(list) {
+    const el = document.getElementById('flight-list');
+    el.innerHTML = list.map((f, idx) => `
+      <div class="flight-card">
+        <div class="airline-logo" style="background:${f.color}">${f.icon}</div>
+        <div class="flight-info">
+          <div class="airline-name">
+            ${f.airline}
+            ${idx === 0 ? '<span style="background:var(--danger);color:#fff;font-size:11px;padding:2px 8px;border-radius:6px;">최저가</span>' : ''}
+            <span class="badge-pill ${f.stop === '직항' ? 'pill-direct' : 'pill-stop'}">${f.stop}</span>
+          </div>
+          <div class="flight-leg">
+            <span class="leg-label leg-go">가는 편</span>
+            <div class="flight-route">
+              <span>ICN</span><span class="arrow"> ──▶ </span><span>CXR</span>
+            </div>
+            <div class="flight-times">
+              <span class="meta-badge">🛫 ${f.dep}</span>
+              <span class="meta-badge">🛬 ${f.arr}</span>
+              <span class="meta-badge">⏱ ${f.time}</span>
+            </div>
+          </div>
+          <div class="flight-leg">
+            <span class="leg-label leg-ret">오는 편</span>
+            <div class="flight-route">
+              <span>CXR</span><span class="arrow"> ──▶ </span><span>ICN</span>
+            </div>
+            <div class="flight-times">
+              <span class="meta-badge">🛫 ${f.retDep}</span>
+              <span class="meta-badge">🛬 ${f.retArr}</span>
+              <span class="meta-badge">⏱ ${f.retTime}</span>
+            </div>
+          </div>
+        </div>
+        <div class="flight-price">
+          <div class="price-main">${fmt(f.price * people)}</div>
+          <div class="price-sub">1인 ${fmt(f.price)} · ${people}명 왕복</div>
+        </div>
+        <div class="flight-actions">
+          <button class="btn-select ${selFlight === f.id ? 'selected' : ''}" onclick="selectFlight(${f.id})">
+            ${selFlight === f.id ? '✓ 선택됨' : '선택하기'}
+          </button>
+          <a class="btn-airline-site" href="${f.url}" target="_blank" rel="noopener">
+            🌐 항공사 홈페이지
+          </a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderHotels(list) {
+    const el = document.getElementById('hotel-list');
+    el.innerHTML = list.map(h => {
+      const total = h.price * nights * people;
+      const starsFull = Math.round(h.rating / 2);
+      const starsHtml = '★'.repeat(starsFull) + '☆'.repeat(5 - starsFull);
+      const gradeStars = '⭐'.repeat(h.grade);
+      return `
+        <div class="hotel-card">
+          <div class="hotel-photo-wrap" onclick="openHotelLb(${h.id},0)">
+            <img class="hotel-photo" src="${h.photo}" alt="${h.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${h.id}fb/600/260'">
+            <div class="hotel-photo-overlay"></div>
+            ${h.isLowest ? '<div class="hotel-lowest">최저가</div>' : ''}
+            <div class="hotel-grade">${gradeStars}</div>
+            <div class="hotel-thumbs">
+              ${h.thumbs.map((t,ti) => `<img class="hotel-thumb" src="${t}" alt="사진" loading="lazy" onclick="event.stopPropagation();openHotelLb(${h.id},${ti+1})" onerror="this.style.display='none'">`).join('')}
+            </div>
+          </div>
+          <div class="hotel-body">
+            <div class="hotel-name">${h.name}</div>
+            <div class="hotel-rating-row">
+              <span class="rating-score">${h.rating.toFixed(1)}</span>
+              <span class="rating-stars">${starsHtml}</span>
+              <span class="rating-label">${h.ratingLabel}</span>
+              <span class="rating-count">리뷰 ${h.reviewCount.toLocaleString()}개</span>
+            </div>
+            <div class="hotel-loc">📍 ${h.loc}</div>
+            <div class="hotel-features">${h.features.map(f => `<span class="feat-tag">${f}</span>`).join('')}</div>
+            <div class="hotel-reviews">
+              ${h.reviews.map(r => `
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="reviewer-avatar" style="background:${h.avatarColor}">${r.name[0]}</span>
+                    <span class="reviewer-name">${r.name}</span>
+                    <span class="reviewer-flag">${r.flag}</span>
+                    <span class="review-date">${r.date}</span>
+                    <span class="review-score">${r.score}</span>
+                  </div>
+                  <div class="review-text">${r.text}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">
+                <div class="per">1박 1인 기준</div>
+                <div class="amt">${fmt(h.price)}</div>
+                <div class="note">${nights}박 ${people}인 총 ${fmt(total)}</div>
+              </div>
+              <div class="hotel-btns">
+                <button class="btn-book ${selHotel === h.id ? 'selected' : ''}" onclick="selectHotel(${h.id})">
+                  ${selHotel === h.id ? '✓ 선택됨' : '📌 선택'}
+                </button>
+                <a class="btn-booking-site" href="${h.bookUrl}" target="_blank" rel="noopener">
+                  🌐 ${h.bookSite}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderAttrs(list) {
+    const el = document.getElementById('attr-list');
+    el.innerHTML = list.map(a => `
+      <div class="attr-card">
+        <div class="attr-photo-wrap" onclick="openAttrLb(${a.id})">
+          <img class="attr-photo" src="${a.photo}" alt="${a.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/atv${a.id}/600/260'">
+          <div class="attr-photo-overlay"></div>
+          <span class="attr-cat cat-${a.cat}">${a.catName}</span>
+        </div>
+        <div class="attr-body">
+          <div class="attr-name">${a.name}</div>
+          <div class="attr-desc">${a.desc}</div>
+          <div class="attr-footer">
+            <div>
+              <div class="${a.free ? 'attr-price free' : 'attr-price'}">${a.free ? '무료' : fmt(a.price)}</div>
+              <div class="attr-duration">⏱ ${a.duration}</div>
+            </div>
+            <button class="btn-add ${selAttrs.has(a.id) ? 'added' : ''}" onclick="toggleAttr(${a.id})">
+              ${selAttrs.has(a.id) ? '✓ 추가됨' : '+ 추가'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── 인기 숙소 렌더링 ──
+  function renderPopularHotels() {
+    const el = document.getElementById('hotel-popular-list');
+    el.innerHTML = popularHotels.map(h => {
+      const total = h.price * nights * people;
+      const starsFull = Math.round(h.rating / 2);
+      const starsHtml = '★'.repeat(starsFull) + '☆'.repeat(5 - starsFull);
+      const gradeStars = '⭐'.repeat(h.grade);
+      return `
+        <div class="hotel-card">
+          <div class="hotel-photo-wrap" onclick="openHotelLb(${h.id},0)">
+            <img class="hotel-photo" src="${h.photo}" alt="${h.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${h.id}fb/600/260'">
+            <div class="hotel-photo-overlay"></div>
+            <div class="popular-rank">#${h.rank} 인기</div>
+            <div class="hotel-grade">${gradeStars}</div>
+            <div class="hotel-thumbs">
+              ${h.thumbs.map((t,ti) => `<img class="hotel-thumb" src="${t}" alt="사진" loading="lazy" onclick="event.stopPropagation();openHotelLb(${h.id},${ti+1})" onerror="this.style.display='none'">`).join('')}
+            </div>
+          </div>
+          <div class="hotel-body">
+            <div class="hotel-name">${h.name}</div>
+            <div class="hotel-rating-row">
+              <span class="rating-score">${h.rating.toFixed(1)}</span>
+              <span class="rating-stars">${starsHtml}</span>
+              <span class="rating-label">${h.ratingLabel}</span>
+              <span class="rating-count">리뷰 ${h.reviewCount.toLocaleString()}개</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+              <span class="popular-trend">📈 이번 달 ${h.trend} 예약 증가</span>
+              <span class="recent-bookings">🔥 최근 24시간 ${h.recentBookings}명 예약</span>
+            </div>
+            <div class="hotel-loc">📍 ${h.loc}</div>
+            <div class="hotel-features">${h.features.map(f => `<span class="feat-tag">${f}</span>`).join('')}</div>
+            <div class="hotel-reviews">
+              ${h.reviews.map(r => `
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="reviewer-avatar" style="background:${h.avatarColor}">${r.name[0]}</span>
+                    <span class="reviewer-name">${r.name}</span>
+                    <span class="reviewer-flag">${r.flag}</span>
+                    <span class="review-date">${r.date}</span>
+                    <span class="review-score">${r.score}</span>
+                  </div>
+                  <div class="review-text">${r.text}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div class="hotel-footer">
+              <div class="hotel-price">
+                <div class="per">1박 1인 기준</div>
+                <div class="amt">${fmt(h.price)}</div>
+                <div class="note">${nights}박 ${people}인 총 ${fmt(total)}</div>
+              </div>
+              <div class="hotel-btns">
+                <button class="btn-book ${selHotel === h.id ? 'selected' : ''}" onclick="selectHotel(${h.id})">
+                  ${selHotel === h.id ? '✓ 선택됨' : '📌 선택'}
+                </button>
+                <a class="btn-booking-site" href="${h.bookUrl}" target="_blank" rel="noopener">
+                  🌐 ${h.bookSite}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── 선택 핸들러 ──
+  function selectFlight(id) {
+    selFlight = selFlight === id ? null : id;
+    renderFlights(flights);
+    updateBudget();
+  }
+
+  function selectHotel(id) {
+    selHotel = selHotel === id ? null : id;
+    renderHotels(hotels);
+    updateBudget();
+  }
+
+  function toggleAttr(id) {
+    selAttrs.has(id) ? selAttrs.delete(id) : selAttrs.add(id);
+    renderAttrs(attractions);
+    updateBudget();
+  }
+
+  // ── 예산 계산 ──
+  function updateBudget() {
+    const f = selFlight !== null ? flights[selFlight] : null;
+    const h = selHotel !== null ? hotels[selHotel] : null;
+    const attrTotal = [...selAttrs].reduce((s, id) => s + attractions[id].price * people, 0);
+
+    const fTotal = f ? f.price * people : 0;
+    const hTotal = h ? h.price * nights * people : 0;
+    const total = fTotal + hTotal + attrTotal;
+
+    document.getElementById('b-flight').textContent = f ? fmt(fTotal) : '-';
+    document.getElementById('b-hotel').textContent  = h ? fmt(hTotal) : '-';
+    document.getElementById('b-attr').textContent   = fmt(attrTotal);
+    document.getElementById('b-total').textContent  = fmt(total);
+  }
+
+  // ── 정렬 ──
+  function sortFlight(by, btn) {
+    btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sorted = [...flights].sort((a, b) => by === 'price' ? a.price - b.price : a.dep.localeCompare(b.dep));
+    renderFlights(sorted);
+  }
+
+  function sortHotel(by, btn) {
+    btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sorted = [...hotels].sort((a, b) =>
+      by === 'price' ? a.price - b.price :
+      by === 'grade' ? b.grade - a.grade :
+      b.rating - a.rating
+    );
+    renderHotels(sorted);
+  }
+
+  function sortAttr(by, btn) {
+    btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sorted = [...attractions].sort((a, b) => by === 'price' ? a.price - b.price : a.name.localeCompare(b.name, 'ko'));
+    renderAttrs(sorted);
+  }
+
+  // ── 날짜 변경 → 박수 계산 + 날씨 팝업 ──
+  function onDateChange() {
+    const depVal = document.getElementById('dep-date').value;
+    const arrVal = document.getElementById('arr-date').value;
+    if (!depVal || !arrVal) return;
+    const dep = new Date(depVal), arr = new Date(arrVal);
+    if (arr <= dep) return;
+    nights = Math.round((arr - dep) / 86400000);
+    document.getElementById('info-nights').textContent = nights;
+    renderHotels(hotels);
+    renderPopularHotels();
+    updateBudget();
+    showWeather(dep, arr);
+  }
+
+  // ── 날씨 팝업 ──
+  function showWeather(dep, arr) {
+    const month = dep.getMonth() + 1;
+    const w = weatherByMonth[month];
+    const ko = { 0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토' };
+    const fmtDate = d => `${d.getMonth()+1}/${d.getDate()}(${ko[d.getDay()]})`;
+
+    document.getElementById('w-dates').textContent =
+      `${fmtDate(dep)} → ${fmtDate(arr)} · ${nights}박 ${nights+1}일`;
+    document.getElementById('w-icon').textContent = w.icon;
+    document.getElementById('w-condition').textContent = w.condition;
+    document.getElementById('w-temp').innerHTML = `${w.tempMin}~${w.tempMax}<span>°C</span>`;
+    document.getElementById('w-rain').textContent = w.rain;
+    document.getElementById('w-humid').textContent = w.humid;
+    document.getElementById('w-wind').textContent = w.wind;
+
+    const dayNames = ['1일차','2일차','3일차','4일차','5일차'];
+    document.getElementById('w-days').innerHTML = w.days.map((d, i) => {
+      const date = new Date(dep); date.setDate(dep.getDate() + i);
+      return `
+        <div class="weather-day">
+          <div class="day-label">${fmtDate(date)}</div>
+          <div class="day-icon">${d.i}</div>
+          <div class="day-temp">${d.t}°</div>
+          <div class="day-rain">🌧 ${d.r}</div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('w-tip').innerHTML = `<strong>여행 팁</strong> — ${w.tip}`;
+    document.getElementById('weather-modal').classList.add('show');
+  }
+
+  function closeWeather() {
+    document.getElementById('weather-modal').classList.remove('show');
+  }
+
+  // ── 인원 업데이트 ──
+  function updatePeople() {
+    people = parseInt(document.getElementById('sel-people').value);
+    document.getElementById('info-people').textContent = people + '명';
+    document.querySelectorAll('.info-people').forEach(el => el.textContent = people + '명');
+    renderFlights(flights);
+    renderHotels(hotels);
+    renderPopularHotels();
+    renderAttrs(attractions);
+    updateBudget();
+  }
+
+  // ── 포맷 ──
+  function fmt(n) {
+    return n.toLocaleString('ko-KR') + '원';
+  }
+
+  // ── 라이트박스 헬퍼 (ID 기반 호출) ──
+  function openHotelLb(hotelId, imgIdx) {
+    const h = hotels.find(x => x.id === hotelId);
+    if (!h) return;
+    openLightbox([h.photo, ...h.thumbs], imgIdx || 0, h.name);
+  }
+  function openAttrLb(attrId) {
+    const a = attractions.find(x => x.id === attrId);
+    if (!a) return;
+    openLightbox(a.gallery || [a.photo], 0, a.name);
+  }
+
+  // ── 라이트박스 ──
+  let lbImages = [], lbIdx = 0;
+
+  function openLightbox(imgs, idx, title) {
+    lbImages = Array.isArray(imgs) ? imgs : [imgs];
+    lbIdx = idx || 0;
+    document.getElementById('lb-title').textContent = title || '';
+    renderLightbox();
+    document.getElementById('lightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function renderLightbox() {
+    const img = document.getElementById('lb-img');
+    img.style.opacity = '0';
+    img.src = lbImages[lbIdx];
+    img.onload = () => { img.style.opacity = '1'; };
+    img.onerror = () => { img.style.opacity = '1'; };
+    document.getElementById('lb-counter').textContent =
+      lbImages.length > 1 ? `${lbIdx + 1} / ${lbImages.length}` : '';
+    document.getElementById('lb-prev').style.display = lbImages.length > 1 ? 'flex' : 'none';
+    document.getElementById('lb-next').style.display = lbImages.length > 1 ? 'flex' : 'none';
+    const dotsEl = document.getElementById('lb-dots');
+    dotsEl.innerHTML = lbImages.length > 1
+      ? lbImages.map((_, i) =>
+          `<div class="lb-dot ${i === lbIdx ? 'active' : ''}" onclick="lbGoto(${i})"></div>`
+        ).join('')
+      : '';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function lbNext() { lbIdx = (lbIdx + 1) % lbImages.length; renderLightbox(); }
+  function lbPrev() { lbIdx = (lbIdx - 1 + lbImages.length) % lbImages.length; renderLightbox(); }
+  function lbGoto(i) { lbIdx = i; renderLightbox(); }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') lbNext();
+    if (e.key === 'ArrowLeft') lbPrev();
+  });
+
+  // ── 초기 렌더 ──
+  renderFlights(flights);
+  renderHotels(hotels);
+  renderPopularHotels();
+  renderAttrs(attractions);
+  updateBudget();
+</script>
+</body>
+</html>
