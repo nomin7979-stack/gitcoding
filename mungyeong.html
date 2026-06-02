@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문경 여행 가이드</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #131008;
+      --bg2:     #1c1608;
+      --card:    #221c0a;
+      --border:  #3a2e10;
+      --accent:  #e8891a;
+      --accent2: #4a8c3f;
+      --accent3: #c4952a;
+      --text:    #f5efe6;
+      --muted:   #a09070;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 80px 24px 160px;
+    }
+
+    .hero-slides { position: absolute; inset: 0; z-index: 0; }
+    .hero-slide {
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.8s ease-in-out;
+      animation: kb 14s ease-in-out infinite alternate;
+    }
+    .hero-slide.active { opacity: 1; }
+    @keyframes kb { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,.4) 0%,
+        rgba(0,0,0,.15) 35%,
+        rgba(19,16,8,.8) 78%,
+        var(--bg) 100%
+      );
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+
+    .hero-season {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,137,26,.15);
+      border: 1px solid rgba(232,137,26,.4);
+      border-radius: 30px; padding: 7px 20px;
+      font-size: 13px; font-weight: 600;
+      color: var(--accent); margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 80px);
+      font-weight: 900; letter-spacing: -3px; line-height: 1;
+      color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.6);
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #f5c842, #e8891a);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,.78);
+      line-height: 1.7; margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.5);
+    }
+
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff;
+      padding: 14px 32px; border-radius: 50px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 24px rgba(232,137,26,.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(232,137,26,.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff; padding: 14px 28px;
+      border-radius: 50px; font-size: 15px; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.2); transform: translateY(-3px); }
+
+    /* 슬라이드 도트 */
+    .hero-dots {
+      position: absolute; bottom: 120px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 3;
+    }
+    .hero-dot {
+      width: 28px; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,.3);
+      transition: background .3s, width .3s; cursor: pointer;
+    }
+    .hero-dot.active { background: var(--accent); width: 44px; }
+
+    /* 웨이브 */
+    .hero-wave {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      z-index: 3; line-height: 0;
+    }
+
+    /* ── STATS ── */
+    .stats-wrap {
+      display: flex; justify-content: center; gap: 0;
+      max-width: 800px; margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .stat-item {
+      flex: 1; text-align: center;
+      padding: 28px 16px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-size: 32px; font-weight: 900;
+      color: var(--accent); display: block;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── SECTION ── */
+    .section { max-width: 1100px; margin: 0 auto; padding: 0 24px 72px; }
+    .section-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+    .section-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 3px;
+      color: var(--accent); font-weight: 700; margin-bottom: 6px;
+    }
+    .section-title { font-size: 28px; font-weight: 800; }
+
+    /* ── ATTRACTION CARDS ── */
+    .attr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .attr-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+    .attr-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 16px 48px rgba(232,137,26,.12);
+    }
+    .attr-photo-wrap {
+      position: relative; height: 200px; overflow: hidden;
+      background: #2a1f08; cursor: zoom-in;
+    }
+    .attr-photo {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s;
+    }
+    .attr-card:hover .attr-photo { transform: scale(1.05); }
+    .attr-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.55) 100%);
+    }
+    .attr-cat-badge {
+      position: absolute; top: 12px; right: 12px;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .cat-nature  { background: rgba(74,140,63,.25); color: #6dcc60; border: 1px solid rgba(74,140,63,.4); }
+    .cat-culture { background: rgba(232,137,26,.2); color: var(--accent); border: 1px solid rgba(232,137,26,.3); }
+    .cat-leisure { background: rgba(100,160,255,.2); color: #7ab4ff; border: 1px solid rgba(100,160,255,.3); }
+    .cat-food    { background: rgba(220,80,80,.2); color: #ff8080; border: 1px solid rgba(220,80,80,.3); }
+    .cat-free-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--accent2); color: #fff;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .attr-body { padding: 20px; }
+    .attr-name { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .attr-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .attr-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .attr-info { display: flex; gap: 14px; flex-wrap: wrap; }
+    .attr-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .attr-price { font-size: 18px; font-weight: 800; color: var(--accent); }
+    .attr-price.free { color: #6dcc60; font-size: 15px; }
+
+    /* ── FOOD SECTION ── */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .food-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+    .food-card:hover { transform: translateY(-3px); border-color: var(--accent3); }
+    .food-img {
+      height: 150px; position: relative; overflow: hidden; background: #2a1c08;
+    }
+    .food-img img { width: 100%; height: 100%; object-fit: cover; }
+    .food-emoji { font-size: 52px; display: flex; align-items: center; justify-content: center; height: 100%; }
+    .food-body { padding: 16px; }
+    .food-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .food-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    /* ── TRANSPORT ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .transport-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .transport-icon { font-size: 32px; margin-bottom: 12px; }
+    .transport-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .transport-info { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .transport-info strong { color: var(--text); }
+
+    /* ── SEASONS BANNER ── */
+    .seasons {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-bottom: 72px; padding: 0 24px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .season-card {
+      border-radius: 16px; padding: 24px 20px;
+      text-align: center; border: 1px solid var(--border);
+    }
+    .season-icon { font-size: 32px; margin-bottom: 10px; }
+    .season-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .season-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .s-spring { background: linear-gradient(135deg, #1a1208, #1a2010); }
+    .s-summer { background: linear-gradient(135deg, #1a1208, #0e1f10); }
+    .s-autumn { background: linear-gradient(135deg, #1a1208, #2a1408); border-color: rgba(232,137,26,.3); }
+    .s-winter { background: linear-gradient(135deg, #1a1208, #101525); }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(0,0,0,.92); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; padding: 20px;
+    }
+    #lightbox.show { display: flex; }
+    .lb-header {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px;
+      background: linear-gradient(to bottom, rgba(0,0,0,.7), transparent);
+      z-index: 2;
+    }
+    .lb-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .lb-counter { font-size: 13px; color: rgba(255,255,255,.5); }
+    .lb-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(0,0,0,.4); color: #fff; font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lb-close:hover { background: rgba(255,255,255,.15); }
+    .lb-img-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 960px; max-height: 80vh; position: relative;
+    }
+    #lb-img {
+      max-width: 100%; max-height: 80vh;
+      border-radius: 12px; object-fit: contain;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6); transition: opacity .2s;
+    }
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,.2); }
+    #lb-prev { left: -56px; } #lb-next { right: -56px; }
+    .lb-dots { display: flex; gap: 8px; margin-top: 4px; }
+    .lb-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.3); cursor: pointer; transition: background .2s;
+    }
+    .lb-dot.active { background: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px; text-align: center;
+    }
+    .footer-logo { font-size: 24px; font-weight: 900; color: var(--accent); margin-bottom: 10px; }
+    .footer-sub { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .seasons { grid-template-columns: repeat(2, 1fr); }
+      .stats-wrap { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); min-width: 120px; }
+      #lb-prev { left: 0; } #lb-next { right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-slides" id="hero-slides">
+    <div class="hero-slide active" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Korea_Munggyeongsaejae_01_%2815016986620%29.jpg/800px-Korea_Munggyeongsaejae_01_%2815016986620%29.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/%EB%AC%B8%EA%B2%BD%EC%9D%98_%EC%95%84%EC%B9%A8.jpg/800px-Mungyeong_Morning.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Saejae_third_gate.jpg/800px-Saejae_third_gate.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Yeonggang.jpg/800px-Yeonggang.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Jhk_%2810%29%EC%83%88%EC%9E%AC.jpg/800px-Jhk_%2810%29%EC%83%88%EC%9E%AC.jpg')"></div>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-season">🍂 경북 북부 대표 관광지</div>
+    <h1>자연이 품은 도시<br><em>문경</em></h1>
+    <p class="hero-desc">
+      천년의 역사 문경새재부터 짜릿한 레일바이크, 오미자 향 가득한 골목까지<br>
+      사계절 내내 다채로운 매력을 품은 경북의 보석 같은 여행지
+    </p>
+    <div class="hero-btns">
+      <a href="#attractions" class="btn-primary">🗺️ 관광지 보기</a>
+      <a href="#transport" class="btn-secondary">🚌 교통 안내</a>
+    </div>
+  </div>
+
+  <div class="hero-dots" id="hero-dots"></div>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#131008"/>
+    </svg>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-wrap">
+  <div class="stat-item"><span class="stat-num">8+</span><span class="stat-label">주요 관광지</span></div>
+  <div class="stat-item"><span class="stat-num">2,000원~</span><span class="stat-label">최저 입장료</span></div>
+  <div class="stat-item"><span class="stat-num">서울 2h</span><span class="stat-label">고속버스 거리</span></div>
+  <div class="stat-item"><span class="stat-num">사계절</span><span class="stat-label">여행 가능</span></div>
+</div>
+
+<!-- SEASONS -->
+<div class="seasons">
+  <div class="season-card s-spring">
+    <div class="season-icon">🌸</div>
+    <div class="season-name">봄 (3~5월)</div>
+    <div class="season-desc">벚꽃과 진달래로 물드는 새재 계곡. 트레킹 최적 시즌</div>
+  </div>
+  <div class="season-card s-summer">
+    <div class="season-icon">🌿</div>
+    <div class="season-name">여름 (6~8월)</div>
+    <div class="season-desc">울창한 녹음 속 레일바이크와 계곡 물놀이가 인기</div>
+  </div>
+  <div class="season-card s-autumn">
+    <div class="season-icon">🍁</div>
+    <div class="season-name">가을 (9~11월)</div>
+    <div class="season-desc">오미자 수확 계절. 단풍으로 붉게 물드는 문경새재 절경</div>
+  </div>
+  <div class="season-card s-winter">
+    <div class="season-icon">❄️</div>
+    <div class="season-name">겨울 (12~2월)</div>
+    <div class="season-desc">눈 덮인 새재의 고요한 설경. 온천으로 피로 회복</div>
+  </div>
+</div>
+
+<!-- ATTRACTIONS -->
+<section class="section" id="attractions">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Tourist Spots</div>
+      <div class="section-title">🗺️ 문경 관광지</div>
+    </div>
+  </div>
+  <div class="attr-grid" id="attr-grid"></div>
+</section>
+
+<!-- FOOD -->
+<section class="section" id="food">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Local Food</div>
+      <div class="section-title">🍽️ 문경 먹거리</div>
+    </div>
+  </div>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍎</div></div>
+      <div class="food-body">
+        <div class="food-name">문경 사과</div>
+        <div class="food-desc">일교차가 큰 청정 산간 지역에서 재배되는 문경 사과. 당도가 높고 아삭한 식감으로 전국에서 인정받는 특산품입니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍇</div></div>
+      <div class="food-body">
+        <div class="food-name">오미자 음료 & 막걸리</div>
+        <div class="food-desc">단·쓴·짠·신·매운 다섯 가지 맛을 품은 오미자로 만든 청과 막걸리. 문경 여행의 시작과 끝을 함께하는 맛입니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🌿</div></div>
+      <div class="food-body">
+        <div class="food-name">산채비빔밥</div>
+        <div class="food-desc">새재 트레킹 후 즐기는 신선한 산나물 비빔밥. 고사리, 취나물, 도라지 등 문경 산에서 난 재료로 가득합니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍜</div></div>
+      <div class="food-body">
+        <div class="food-name">도리뱅뱅이</div>
+        <div class="food-desc">영강에서 잡은 피라미를 바삭하게 튀겨 양념에 조린 문경 향토 음식. 달콤 짭조름한 맛이 밥도둑입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPORT -->
+<section class="section" id="transport">
+  <div class="section-head">
+    <div>
+      <div class="section-label">How to Get There</div>
+      <div class="section-title">🚌 교통 안내</div>
+    </div>
+  </div>
+  <div class="transport-grid">
+    <div class="transport-card">
+      <div class="transport-icon">🚌</div>
+      <div class="transport-title">고속버스</div>
+      <div class="transport-info">
+        <strong>서울 → 점촌</strong><br>
+        동서울터미널 출발<br>
+        소요시간 약 <strong>2시간 30분</strong><br>
+        1일 다수 운행
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🚆</div>
+      <div class="transport-title">기차 (KTX·무궁화)</div>
+      <div class="transport-info">
+        <strong>서울 → 점촌역</strong><br>
+        청량리역 출발 (무궁화호)<br>
+        소요시간 약 <strong>2시간 40분</strong><br>
+        코레일 예약 필수
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🚗</div>
+      <div class="transport-title">자가용</div>
+      <div class="transport-info">
+        <strong>서울 → 문경새재</strong><br>
+        경부고속도로 → 중부내륙고속도로<br>
+        문경새재IC 하차<br>
+        소요시간 약 <strong>2시간 30분</strong>
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🏨</div>
+      <div class="transport-title">추천 숙박</div>
+      <div class="transport-info">
+        <strong>문경 온천 인근</strong><br>
+        호텔·펜션·게스트하우스 다수<br>
+        문경새재 인근 숙박<br>
+        평균 <strong>6~12만원/박</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="if(event.target===this)closeLb()">
+  <div class="lb-header">
+    <span class="lb-title" id="lb-title"></span>
+    <span class="lb-counter" id="lb-counter"></span>
+    <button class="lb-close" onclick="closeLb()">✕</button>
+  </div>
+  <div class="lb-img-wrap">
+    <button class="lb-nav" id="lb-prev" onclick="lbPrev()">‹</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lb-nav" id="lb-next" onclick="lbNext()">›</button>
+  </div>
+  <div class="lb-dots" id="lb-dots"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🍁 문경</div>
+  <div class="footer-sub">
+    경상북도 문경시 · 자연과 역사가 공존하는 여행지<br>
+    문경시 공식 관광 안내 · 1544-9191
+  </div>
+  <div class="footer-links">
+    <a href="https://www.mungyeong.go.kr" target="_blank">문경시 공식 홈페이지</a>
+    <a href="https://korean.visitkorea.or.kr" target="_blank">대한민국 구석구석</a>
+    <a href="index.html">← 프로젝트 홈</a>
+  </div>
+</footer>
+
+<script>
+  // ── 관광지 데이터 ──
+  const attractions = [
+    {
+      name: '문경새재 도립공원', cat: 'nature', catName: '자연', free: true,
+      desc: '조선시대 한양으로 가는 관문이었던 옛길. 3개의 관문과 맑은 계곡, 빼어난 산세가 어우러진 문경 대표 명소.',
+      price: 0, duration: '2~4시간', tip: '제1·2·3관문 트레킹 코스 추천',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Korea_Munggyeongsaejae_01_%2815016986620%29.jpg/800px-Korea_Munggyeongsaejae_01_%2815016986620%29.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Saejae_first_gate.jpg/800px-Saejae_first_gate.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Saejae_second_gate.jpg/800px-Saejae_second_gate.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Saejae_third_gate.jpg/800px-Saejae_third_gate.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Jhk_%2810%29%EC%83%88%EC%9E%AC.jpg/800px-Jhk_%2810%29%EC%83%88%EC%9E%AC.jpg',
+      ]
+    },
+    {
+      name: '문경새재 오픈세트장', cat: 'culture', catName: '문화', free: false,
+      desc: '드라마 촬영지로 유명한 대형 사극 오픈세트장. 경복궁·광화문·한옥 마을 등이 재현되어 있어 볼거리가 풍성합니다.',
+      price: 2000, duration: '1~2시간', tip: '주말엔 역사 체험 행사 진행',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Mungyeong_Saejae_Open_Film_Set.jpg/800px-Mungyeong_Saejae_Open_Film_Set.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gwanghwamun%2C_KBS_Mungyeon_Studio_%28%EA%B4%91%ED%99%94%EB%AC%B8%2C_%EB%AC%B8%EA%B2%BD_KBS_%EC%B4%AC%EC%98%81%EC%9E%A5%29_-_panoramio.jpg/800px-Gwanghwamun%2C_KBS_Mungyeon_Studio.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Saejae_Gyogwijeong.jpg/800px-Saejae_Gyogwijeong.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Ancient_Wood_Building_%28177011607%29.jpeg/800px-Ancient_Wood_Building_%28177011607%29.jpeg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Beoljae.jpg/800px-Beoljae.jpg',
+      ]
+    },
+    {
+      name: '문경 레일바이크', cat: 'leisure', catName: '레저', free: false,
+      desc: '폐철로를 활용한 짜릿한 레일바이크 체험. 영강 계곡을 따라 달리며 문경의 자연을 두 눈으로 즐길 수 있습니다.',
+      price: 25000, duration: '1~2시간', tip: '가레일 2인용·4인용 선택 가능',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Yeonggang.jpg/800px-Yeonggang.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/%EB%AC%B8%EA%B2%BD%EC%9D%98_%EC%95%84%EC%B9%A8.jpg/800px-Mungyeong_Morning.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Jungbunaeryukbridge.png/800px-Jungbunaeryukbridge.png',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Museum_of_Old_Roads%2C_Mungyeong_%28%EB%AC%B8%EA%B2%BD_%EC%98%9B%EA%B8%B8_%EB%B0%95%EB%AC%BC%EA%B4%80%29_-_panoramio.jpg/800px-Museum_of_Old_Roads_Mungyeong.jpg',
+      ]
+    },
+    {
+      name: '문경 에코랄라', cat: 'leisure', catName: '레저', free: false,
+      desc: '가족 단위 여행객에게 인기 있는 복합 테마파크. 집라인, 반딧불이 생태 체험, 미로정원 등 다양한 즐길 거리가 가득.',
+      price: 15000, duration: '반나절', tip: '아이와 함께라면 필수 코스!',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Mungyeong_Culture_Street_2.JPG/800px-Mungyeong_Culture_Street_2.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Mungyeong_Culture_Street.JPG/800px-Mungyeong_Culture_Street.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mungyeong_City_Banner.jpg/800px-Mungyeong_City_Banner.jpg',
+      ]
+    },
+    {
+      name: '문경 석탄박물관', cat: 'culture', catName: '문화', free: false,
+      desc: '석탄 산업의 역사와 광부들의 삶을 생생하게 체험할 수 있는 박물관. 탄광 갱도 체험이 특히 인기.',
+      price: 3000, duration: '1~2시간', tip: '실제 갱도 체험 코스 강추',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Museum_of_Old_Roads%2C_Mungyeong_%28%EB%AC%B8%EA%B2%BD_%EC%98%9B%EA%B8%B8_%EB%B0%95%EB%AC%BC%EA%B4%80%29_-_panoramio.jpg/800px-Museum_of_Old_Roads_Mungyeong.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Cheongungak.jpg/800px-Cheongungak.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Mungyeong_Traditional_Market_01.jpg/800px-Mungyeong_Traditional_Market_01.jpg',
+      ]
+    },
+    {
+      name: '오미자 테마터널', cat: 'culture', catName: '문화', free: true,
+      desc: '문경의 특산물 오미자를 테마로 조성한 아름다운 터널. 형형색색 조명이 들어오는 야간 방문을 추천합니다.',
+      price: 0, duration: '30분~1시간', tip: '야간 조명 방문이 더욱 아름다워요',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Cheongungak.jpg/800px-Cheongungak.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Mungyeong_Culture_Street_2.JPG/800px-Mungyeong_Culture_Street_2.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mungyeong_City_Banner.jpg/800px-Mungyeong_City_Banner.jpg',
+      ]
+    },
+    {
+      name: '문경 활공랜드 (파라글라이딩)', cat: 'leisure', catName: '레저', free: false,
+      desc: '산 정상에서 뛰어내려 문경 시내와 산맥을 한눈에 내려다보는 탠덤 파라글라이딩. 짜릿한 익스트림 체험.',
+      price: 120000, duration: '30분~1시간', tip: '사전 예약 필수, 체중 제한 있음',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/%EB%AC%B8%EA%B2%BD%EC%9D%98_%EC%95%84%EC%B9%A8.jpg/800px-Mungyeong_Morning.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Yeonggang.jpg/800px-Yeonggang.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mungyeong_City_Banner.jpg/800px-Mungyeong_City_Banner.jpg',
+      ]
+    },
+    {
+      name: '문경 전통시장', cat: 'culture', catName: '문화', free: true,
+      desc: '점촌 중앙시장과 문경읍 시장에서 신선한 로컬 식재료와 오미자, 사과, 도자기 등 문경 특산품을 저렴하게 구입하세요.',
+      price: 0, duration: '1~2시간', tip: '매월 5·10일 오일장이 열려요',
+      photos: [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Mungyeong_Traditional_Market_01.jpg/800px-Mungyeong_Traditional_Market_01.jpg',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Mungyeong_Culture_Street.JPG/800px-Mungyeong_Culture_Street.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Mungyeong_Culture_Street_2.JPG/800px-Mungyeong_Culture_Street_2.JPG',
+      ]
+    },
+  ];
+
+  // ── 렌더링 ──
+  function renderAttractions() {
+    const grid = document.getElementById('attr-grid');
+    grid.innerHTML = attractions.map((a, i) => `
+      <div class="attr-card">
+        <div class="attr-photo-wrap" onclick="openLb(${i}, 0)">
+          <img class="attr-photo" src="${a.photos[0]}" alt="${a.name}" loading="lazy"
+               onerror="this.src='https://picsum.photos/seed/mg${i}/600/300'">
+          <div class="attr-photo-overlay"></div>
+          <span class="attr-cat-badge cat-${a.cat}">${a.catName}</span>
+          ${a.free ? '<span class="cat-free-badge">무료</span>' : ''}
+        </div>
+        <div class="attr-body">
+          <div class="attr-name">${a.name}</div>
+          <div class="attr-desc">${a.desc}</div>
+          <div class="attr-footer">
+            <div class="attr-info">
+              <span class="attr-meta">⏱ ${a.duration}</span>
+              <span class="attr-meta">💡 ${a.tip}</span>
+            </div>
+            <div class="${a.free ? 'attr-price free' : 'attr-price'}">
+              ${a.free ? '무료' : a.price.toLocaleString() + '원~'}
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── 라이트박스 ──
+  let lbAttrIdx = 0, lbImgIdx = 0;
+
+  function openLb(attrIdx, imgIdx) {
+    lbAttrIdx = attrIdx; lbImgIdx = imgIdx;
+    const a = attractions[attrIdx];
+    document.getElementById('lb-title').textContent = a.name;
+    updateLb();
+    document.getElementById('lightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function updateLb() {
+    const imgs = attractions[lbAttrIdx].photos;
+    const img = document.getElementById('lb-img');
+    img.style.opacity = '0';
+    img.src = imgs[lbImgIdx];
+    img.onload = () => { img.style.opacity = '1'; };
+    img.onerror = () => { img.style.opacity = '1'; };
+    document.getElementById('lb-counter').textContent = imgs.length > 1 ? `${lbImgIdx + 1} / ${imgs.length}` : '';
+    document.getElementById('lb-prev').style.display = imgs.length > 1 ? 'flex' : 'none';
+    document.getElementById('lb-next').style.display = imgs.length > 1 ? 'flex' : 'none';
+    document.getElementById('lb-dots').innerHTML = imgs.length > 1
+      ? imgs.map((_, i) => `<div class="lb-dot ${i===lbImgIdx?'active':''}" onclick="lbGoto(${i})"></div>`).join('')
+      : '';
+  }
+
+  function closeLb() {
+    document.getElementById('lightbox').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function lbNext() { const l = attractions[lbAttrIdx].photos.length; lbImgIdx = (lbImgIdx+1)%l; updateLb(); }
+  function lbPrev() { const l = attractions[lbAttrIdx].photos.length; lbImgIdx = (lbImgIdx-1+l)%l; updateLb(); }
+  function lbGoto(i) { lbImgIdx = i; updateLb(); }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowRight') lbNext();
+    if (e.key === 'ArrowLeft') lbPrev();
+  });
+
+  // ── 히어로 슬라이드쇼 ──
+  (function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dotsEl = document.getElementById('hero-dots');
+    let cur = 0;
+    dotsEl.innerHTML = [...slides].map((_,i) =>
+      `<div class="hero-dot ${i===0?'active':''}" onclick="heroGoto(${i})"></div>`
+    ).join('');
+    window.heroGoto = function(idx) {
+      slides[cur].classList.remove('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.remove('active');
+      cur = idx;
+      slides[cur].classList.add('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.add('active');
+    };
+    setInterval(() => heroGoto((cur + 1) % slides.length), 5000);
+  })();
+
+  // ── 초기화 ──
+  renderAttractions();
+</script>
+</body>
+</html>
