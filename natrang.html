@@ -906,13 +906,22 @@
       display: flex;
       gap: 8px;
       margin-bottom: 20px;
+      /* 부모 padding을 돌파해 스크롤 영역 확장 */
+      margin-left: -32px;
+      margin-right: -32px;
+      padding-left: 32px;
+      padding-right: 32px;
       overflow-x: auto;
-      padding-bottom: 6px;
+      overflow-y: visible;
+      padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
+      scrollbar-color: var(--accent) transparent;
     }
     .weather-days::-webkit-scrollbar { height: 4px; }
-    .weather-days::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .weather-days::-webkit-scrollbar-track { background: transparent; }
+    .weather-days::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
     .weather-day {
       background: var(--card);
       border: 1px solid var(--border);
@@ -921,6 +930,7 @@
       text-align: center;
       flex: 0 0 88px;
       min-width: 88px;
+      scroll-snap-align: start;
     }
     .weather-day.today { border-color: var(--accent); background: rgba(0,180,216,.08); }
     .weather-day.weekend { border-color: rgba(255,107,107,.4); }
@@ -1041,6 +1051,7 @@
       .budget-bar { flex-direction: column; }
       .tab-btn { padding: 14px 16px; font-size: 13px; }
       .weather-box { padding: 20px; }
+      .weather-days { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
       #lb-prev { left: -4px; }
       #lb-next { right: -4px; }
     }
