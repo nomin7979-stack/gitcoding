@@ -1322,6 +1322,7 @@
       <button class="tab-btn" onclick="switchTab('hotel', this)">🏨 숙소 <span class="tab-count">20</span></button>
       <button class="tab-btn" onclick="switchTab('attr', this)">🌴 관광지 <span class="tab-count">20</span></button>
       <button class="tab-btn" onclick="switchTab('shop', this)">🛍️ 쇼핑 <span class="tab-count">20</span></button>
+      <button class="tab-btn" onclick="switchTab('food', this)">🍜 음식 <span class="tab-count">20</span></button>
     </div>
   </div>
 
@@ -1400,6 +1401,24 @@
         ℹ️ 가격은 1개 기준 예상 가격입니다 (현지 시장 기준, 환율 변동 있음).
       </div>
       <div class="shop-grid" id="shop-list"></div>
+    </div>
+
+    <!-- 음식 패널 -->
+    <div id="panel-food" class="panel">
+      <div class="sec-header">
+        <div>
+          <div class="section-label" style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--accent3);font-weight:700;margin-bottom:6px;">Korean Favorites</div>
+          <div class="sec-title">🍜 한국인이 사랑하는 베트남 음식 TOP 20</div>
+        </div>
+        <div class="sort-bar">
+          <button class="sort-btn active" onclick="sortFood('rank', this)">인기순</button>
+          <button class="sort-btn" onclick="sortFood('price', this)">가격순</button>
+        </div>
+      </div>
+      <div class="info-bar">
+        ℹ️ 가격은 1인분 기준 현지 식당 예상 가격입니다.
+      </div>
+      <div class="shop-grid" id="food-list"></div>
     </div>
 
   </div>
@@ -1966,71 +1985,71 @@
   // ── 쇼핑 데이터 ──
   const shopping = [
     { rank:1,  name:'G7 베트남 블랙 커피',     price:8000,  hot:true,
-      img:'https://picsum.photos/seed/g7coffee/400/300',
+      img:'https://static.vinwonders.com/production/vietnamese-coffee-1.jpg',
       desc:'베트남 대표 인스턴트 커피. 진한 향과 깔끔한 맛으로 한국인이 가장 많이 사가는 1위 기념품. 믹스·블랙 두 종류.',
       where:'담 시장·마트', tip:'박스째 구매 시 할인' },
     { rank:2,  name:'코코넛 커피 파우더',       price:12000, hot:true,
-      img:'https://picsum.photos/seed/coconutcoffee/400/300',
+      img:'https://static.vinwonders.com/production/vietnamese-coffee-thumb.jpg',
       desc:'코코넛 크림 베이스 달달한 커피. 나트랑 카페 스타일 그대로 집에서 재현 가능. SNS에서 화제.',
       where:'빈마트·편의점', tip:'냉장 보관 필요' },
     { rank:3,  name:'캐슈넛 (볶음)',            price:15000, hot:true,
-      img:'https://picsum.photos/seed/cashew3/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-banner.jpg',
       desc:'베트남산 프리미엄 캐슈넛. 소금·버터·바질 등 다양한 맛. 진공포장으로 신선하게 유지. 선물용 최적.',
       where:'담 시장·공항 면세점', tip:'진공팩 확인 필수' },
     { rank:4,  name:'말린 망고 & 열대과일',     price:10000, hot:false,
-      img:'https://picsum.photos/seed/driedfruit4/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-5.jpg',
       desc:'설탕 무첨가 자연 건조 망고, 파파야, 자몽피. 새콤달콤하고 가볍게 들고 다니기 좋아 인기.',
       where:'담 시장·전통시장', tip:'무가당 제품 확인' },
     { rank:5,  name:'피쉬소스 (느억맘)',         price:7000,  hot:false,
-      img:'https://picsum.photos/seed/fishsauce5/400/300',
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-9.jpg',
       desc:'베트남 요리의 핵심 재료. Phu Quoc 브랜드가 최고급. 한국에서 판매가의 1/3 수준에 구입 가능.',
       where:'빈마트·Co.opmart', tip:'액체라 위탁수하물로' },
     { rank:6,  name:'쌀국수 면 + 소스 세트',    price:9000,  hot:true,
-      img:'https://picsum.photos/seed/pho6/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-1.jpg',
       desc:'한국 귀국 후 집에서 바로 끓여 먹는 쌀국수 세트. 생면+스프+고추소스 패키지로 베트남 현지맛.',
       where:'빈마트·슈퍼마켓', tip:'2~3세트 구매 추천' },
     { rank:7,  name:'코코넛 오일 (유기농)',      price:18000, hot:false,
-      img:'https://picsum.photos/seed/coconutoil7/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-4.jpg',
       desc:'냉압착 100% 유기농 코코넛 오일. 피부·헤어 관리용으로 인기. 한국보다 절반 이하 가격.',
       where:'건강식품점·마트', tip:'유기농 인증 확인' },
     { rank:8,  name:'이글 오일 스틱 (독수리)',   price:4000,  hot:true,
-      img:'https://picsum.photos/seed/eagleoil8/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-souvenirs-banner.jpg',
       desc:'두통·멀미·코막힘에 효과적인 베트남 전통 오일 스틱. 한국인 단체 여행 필수품으로 자리잡음.',
       where:'편의점·약국·시장', tip:'개당 가격 저렴해 여러개 구매' },
     { rank:9,  name:'전통 라탄 핸드백',         price:25000, hot:false,
-      img:'https://picsum.photos/seed/ratan9/400/300',
+      img:'https://static.vinwonders.com/production/6IdazXLW-cho-dam-nha-trang-1.jpg',
       desc:'베트남 장인이 손으로 엮은 라탄 가방. 여름용 패션 아이템으로 국내 백화점에선 10만원대.',
       where:'담 시장·기념품점', tip:'직접 들어보고 구매' },
     { rank:10, name:'논라 (베트남 전통 모자)',    price:6000,  hot:false,
-      img:'https://picsum.photos/seed/nonla10/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-6.jpg',
       desc:'야자나무 잎으로 만든 원뿔형 모자. 해변·관광지 패션 포토 필수 아이템. 접어서 캐리어에 OK.',
       where:'담 시장·기념품점', tip:'무게 가벼운 것 선택' },
     { rank:11, name:'베트남 원두 커피 (위즐)',   price:22000, hot:true,
-      img:'https://picsum.photos/seed/weasel11/400/300',
+      img:'https://static.vinwonders.com/production/vietnamese-coffee-1.jpg',
       desc:'사향고양이 배설물에서 추출하는 위즐 커피. 세계 3대 커피 중 하나. 한국보다 현저히 저렴.',
       where:'커피 전문점·공항', tip:'공항 면세점이 가장 저렴' },
     { rank:12, name:'실크 스카프 & 아오자이',    price:35000, hot:false,
-      img:'https://picsum.photos/seed/silk12/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-7.jpg',
       desc:'베트남 전통 비단 소재 스카프와 아오자이(전통 의상). 색감이 아름답고 가볍고 고급스러운 선물.',
       where:'시장·기념품점', tip:'흥정 가능, 처음 가격 절반부터' },
     { rank:13, name:'해조류 스킨케어 세트',      price:28000, hot:true,
-      img:'https://picsum.photos/seed/seaweed13/400/300',
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-7.jpg',
       desc:'나트랑 해양 스킨케어 브랜드. 해조류 추출 수분크림·선크림 세트. K-뷰티 팬들에게 인기.',
       where:'빈컴 센터·드럭스토어', tip:'테스터 먼저 사용 권장' },
     { rank:14, name:'진주 목걸이 & 귀걸이',      price:40000, hot:false,
-      img:'https://picsum.photos/seed/pearl14/400/300',
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-11.jpg',
       desc:'나트랑 앞바다 양식 진주. 가격은 저렴하지만 광택이 뛰어남. 세트로 구매 시 추가 할인.',
       where:'보석상·기념품점', tip:'GIA 인증서 요청' },
     { rank:15, name:'베트남 칠기 그릇 세트',     price:32000, hot:false,
-      img:'https://picsum.photos/seed/lacquer15/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-8.jpg',
       desc:'전통 나전칠기 기법으로 만든 그릇 & 트레이 세트. 인테리어 소품으로도 활용 가능한 예술품.',
       where:'공예품점·담 시장', tip:'파손에 주의, 포장 꼼꼼히' },
     { rank:16, name:'열대 향신료 세트',          price:11000, hot:false,
-      img:'https://picsum.photos/seed/spice16/400/300',
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-3.jpg',
       desc:'강황·레몬그라스·갈랑가 등 베트남 요리 필수 향신료 세트. 집에서 베트남 요리 도전용.',
       where:'담 시장·재래시장', tip:'진공 포장된 것으로 구매' },
     { rank:17, name:'코코넛 사탕 & 초콜릿',      price:8000,  hot:false,
-      img:'https://picsum.photos/seed/cocosweet17/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-9.jpg',
       desc:'베트남식 코코넛 사탕. 달콤하고 쫀득한 식감. 개별 포장으로 직장 선물용으로 완벽한 가성비.',
       where:'편의점·슈퍼마켓', tip:'용량 대비 가성비 최고' },
     { rank:18, name:'아로마 마사지 오일',         price:14000, hot:true,
@@ -2038,14 +2057,130 @@
       desc:'나트랑 스파에서 사용하는 동일한 아로마 오일. 레몬그라스·진저·자스민 향. 귀국 후 홈 마사지용.',
       where:'스파 샵·기념품점', tip:'100ml 이하만 기내 반입 가능' },
     { rank:19, name:'Vinamilk 연유 & 요거트',    price:5000,  hot:false,
-      img:'https://picsum.photos/seed/vinamilk19/400/300',
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-10.jpg',
       desc:'베트남 국민 유제품 브랜드. 달콤한 연유 커피용 연유와 신선한 요거트. 현지 식당 느낌 그대로.',
       where:'편의점·빈마트', tip:'요거트는 냉장 유지 필수' },
     { rank:20, name:'종이 랜턴 & 자개 장식품',   price:9000,  hot:false,
-      img:'https://picsum.photos/seed/lantern20/400/300',
+      img:'https://cms.junglebosstours.com/assets/4671cad3-8706-43ed-a7d1-ae69293bc279?width=800&height=533',
       desc:'호이안 스타일 화려한 종이 랜턴과 자개 그림 액자. 방 인테리어용으로 한국에서도 인기 높은 기념품.',
       where:'기념품점·담 시장', tip:'작은 사이즈로 짐 최소화' },
   ];
+
+  // ── 음식 데이터 ──
+  const foods = [
+    { rank:1,  name:'쌀국수 (Phở Bò)',        price:6000, hot:true,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-1.jpg',
+      desc:'베트남 국민 음식. 맑은 소뼈 육수에 라이스 누들, 육회·숙주·허브를 올린 한 그릇. 이른 아침부터 줄 서는 나트랑 쌀국수 명소가 많다.',
+      where:'전통 식당·야시장', tip:'숙주·라임·고추 추가하면 더 맛있어요' },
+    { rank:2,  name:'반미 (Bánh Mì)',          price:3000, hot:true,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-2.jpg',
+      desc:'바게트에 돼지고기·파테·채소·칠리소스를 가득 채운 베트남 샌드위치. 길거리 음식의 왕. 한 개에 한화 3천원이면 배불리.',
+      where:'길거리 카트·반미 전문점', tip:'고수 빼달라고 하려면 "không rau mùi"' },
+    { rank:3,  name:'분짜 (Bún Chả)',          price:7000, hot:true,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-3.jpg',
+      desc:'숯불에 구운 돼지고기 완자와 라이스 누들을 새콤달콤 느억맘 소스에 찍어먹는 하노이식 요리. 오바마가 방문해 유명해진 음식.',
+      where:'전통 식당·분짜 전문점', tip:'야채와 함께 싸먹으면 최고' },
+    { rank:4,  name:'반쎄오 (Bánh Xèo)',       price:5000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-4.jpg',
+      desc:'쌀가루 반죽에 새우·돼지고기·숙주를 넣고 코코넛 밀크로 지진 지글지글 베트남 부침개. 상추에 싸 느억맘 소스와 먹는 것이 정석.',
+      where:'로컬 식당·야시장', tip:'바삭하게 먹으려면 신선한 것 주문' },
+    { rank:5,  name:'고이꾸온 (Gỏi Cuốn)',     price:4000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-5.jpg',
+      desc:'투명한 라이스 페이퍼에 새우·돼지고기·채소·허브를 말아 만든 생 스프링롤. 땅콩 소스에 찍어먹으면 건강하고 상큼한 한 입.',
+      where:'식당·카페', tip:'피넛 소스 2개 달라고 하세요' },
+    { rank:6,  name:'넴 누응 (Nem Nướng)',     price:8000, hot:true,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-6.jpg',
+      desc:'나트랑 대표 향토 음식. 돼지고기 완자를 숯불에 구워 라이스 페이퍼와 각종 채소·허브와 함께 싸먹는 나트랑만의 특별한 맛.',
+      where:'넴 누응 전문점', tip:'나트랑에서만 먹을 수 있는 특식' },
+    { rank:7,  name:'코코넛 커피 (Cà Phê Dừa)', price:3500, hot:true,
+      img:'https://static.vinwonders.com/production/vietnamese-coffee-1.jpg',
+      desc:'진한 베트남 커피 위에 달콤한 코코넛 크림을 올린 나트랑 스타일 커피. 인스타그램 감성 최고, 달달하고 진한 맛이 중독성 있음.',
+      where:'카페·커피샵', tip:'얼음 추가해서 마시면 더 시원해요' },
+    { rank:8,  name:'껌따름 (Cơm Tấm)',        price:5000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-7.jpg',
+      desc:'쪄진 부서진 쌀밥에 숯불 돼지갈비·반근(찐 달걀)·느억맘 소스를 곁들인 사이공식 밥 요리. 아침부터 저녁까지 언제나 인기.',
+      where:'껌따름 전문점', tip:'돼지갈비 추가하면 더 풍성해요' },
+    { rank:9,  name:'껌가 (Cơm Gà)',           price:5500, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-8.jpg',
+      desc:'황금빛 강황 쌀밥 위에 찢어낸 닭고기를 올린 베트남 치킨라이스. 나트랑 호이안식 껌가는 다른 지역과 다른 특별한 맛.',
+      where:'껌가 전문점·로컬 식당', tip:'강황밥이 핵심, 소스 듬뿍' },
+    { rank:10, name:'분보후에 (Bún Bò Huế)',   price:6500, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-9.jpg',
+      desc:'레몬그라스 향이 진한 매콤한 소고기 육수 쌀국수. 쌀국수보다 굵은 면과 강렬한 붉은 육수가 특징. 매운 것 좋아하는 한국인 최애.',
+      where:'후에식 식당', tip:'고수 없이 주문하면 깔끔해요' },
+    { rank:11, name:'미꽝 (Mì Quảng)',         price:5000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-10.jpg',
+      desc:'강황 쌀국수에 새우·돼지고기·땅콩·참깨를 올리고 진한 육수를 조금만 부어먹는 중부 베트남식 비빔 국수. 쫀득쫀득한 면이 특징.',
+      where:'미꽝 전문점', tip:'바삭한 쌀과자와 함께 먹으면 식감이 살아나요' },
+    { rank:12, name:'새우 해산물 BBQ',          price:15000, hot:true,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-1.jpg',
+      desc:'나트랑 해변에서 즐기는 왕새우 직화 구이. 버터·마늘·허브 소스로 마무리. 한국인이 가장 많이 주문하는 해산물 메뉴 1위.',
+      where:'해변 식당·나트랑 시푸드 레스토랑', tip:'kg 단위 가격 흥정 가능' },
+    { rank:13, name:'구운 소라·조개 모둠',      price:12000, hot:false,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-3.jpg',
+      desc:'나트랑 앞바다에서 건져 올린 신선한 소라·조개·꼬막을 숯불에 구워 다양한 소스로 제공. 라임 소금에 찍어먹는 것이 현지 스타일.',
+      where:'해산물 식당·야시장', tip:'서너 종류 모둠으로 주문하면 가성비 굿' },
+    { rank:14, name:'킹크랩 & 랍스터 찜',      price:35000, hot:true,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-4.jpg',
+      desc:'나트랑 특유의 향신료로 찐 킹크랩과 랍스터. 한국 가격의 1/4 수준. 버터 파스타·찜·칠리 소스 선택 가능.',
+      where:'나트랑 시푸드 레스토랑', tip:'사전 예약하면 대기 없이 입장 가능' },
+    { rank:15, name:'짜까 (Chả Cá)',           price:9000, hot:false,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-5.jpg',
+      desc:'강황·딜로 양념한 흰 살 생선을 버터에 볶아 강황 쌀국수와 함께 먹는 하노이 전통 생선 요리. 독특한 허브 향이 중독성 있음.',
+      where:'짜까 전문점', tip:'딜(허브) 향 낯설 수 있지만 한번 먹으면 중독' },
+    { rank:16, name:'해산물 볶음 쌀국수',       price:8000, hot:false,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-6.jpg',
+      desc:'새우·오징어·조개를 넣고 볶은 비빔 라이스 누들. 피쉬소스·굴소스로 감칠맛을 더한 베트남식 볶음면. 나트랑 어디서든 쉽게 먹을 수 있음.',
+      where:'일반 식당·야시장', tip:'계란 추가하면 더 풍성해져요' },
+    { rank:17, name:'에그 커피 (Cà Phê Trứng)', price:4000, hot:true,
+      img:'https://static.vinwonders.com/production/vietnamese-coffee-thumb.jpg',
+      desc:'달걀노른자와 연유를 거품 내 올린 하노이 전통 커피. 크리미한 달걀 크림이 진한 에스프레소와 만나 초콜릿 무스 같은 맛.',
+      where:'하노이 스타일 카페', tip:'따뜻하게 마시면 더 풍부한 맛' },
+    { rank:18, name:'반꾸온 (Bánh Cuốn)',       price:5000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-11.jpg',
+      desc:'쌀가루 반죽을 종이처럼 얇게 쪄서 돼지고기 목이버섯 볶음을 싸 만든 찐 라이스롤. 튀긴 샬롯과 느억맘 소스에 찍어먹으면 부드럽고 쫀득.',
+      where:'반꾸온 전문점·아침 식당', tip:'새벽 일찍 판매하는 아침 음식' },
+    { rank:19, name:'쏘이 (Xôi · 찹쌀밥)',     price:3000, hot:false,
+      img:'https://static.vinwonders.com/production/Nha-Trang-street-food-12.jpg',
+      desc:'강황·녹두·코코넛으로 색을 낸 베트남 찹쌀 요리. 짭짤한 닭고기·돼지고기를 올린 것과 달콤한 코코넛 버전 두 종류가 있음.',
+      where:'아침 시장·길거리', tip:'아침 7시 전에 나가야 맛볼 수 있어요' },
+    { rank:20, name:'해산물 냄비 (Lẩu Hải Sản)', price:20000, hot:true,
+      img:'https://static.vinwonders.com/production/nha-trang-seafood-banner.jpg',
+      desc:'새우·게·조개·오징어가 듬뿍 들어간 베트남식 해산물 전골. 레몬그라스·고추 베이스 육수가 시원하고 칼칼해 한국인 입맛에 딱 맞음.',
+      where:'해산물 식당·야시장 포장마차', tip:'4인 이상 시키면 양이 풍성해요' },
+  ];
+
+  function renderFood(list) {
+    const el = document.getElementById('food-list');
+    el.innerHTML = list.map(f => `
+      <div class="shop-card">
+        <div class="shop-img-wrap">
+          <img class="shop-img" src="${f.img}" alt="${f.name}" loading="lazy"
+               onerror="this.src='https://picsum.photos/seed/food${f.rank}/400/300'">
+          <span class="shop-rank">#${f.rank}</span>
+          ${f.hot ? '<span class="shop-hot">🔥 HOT</span>' : ''}
+        </div>
+        <div class="shop-body">
+          <div class="shop-name">${f.name}</div>
+          <div class="shop-desc">${f.desc}</div>
+          <div class="shop-price">${f.price.toLocaleString()}원~ <span>1인분 예상</span></div>
+          <div class="shop-tags">
+            <span class="shop-tag tag-where">📍 ${f.where}</span>
+            <span class="shop-tag tag-tip">💡 ${f.tip}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function sortFood(by, btn) {
+    btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sorted = [...foods].sort((a, b) =>
+      by === 'price' ? a.price - b.price : a.rank - b.rank
+    );
+    renderFood(sorted);
+  }
 
   function renderShopping(list) {
     const el = document.getElementById('shop-list');
@@ -2637,6 +2772,7 @@
   renderPopularHotels();
   renderAttrs(attractions);
   renderShopping(shopping);
+  renderFood(foods);
   updateBudget();
 </script>
 </body>
