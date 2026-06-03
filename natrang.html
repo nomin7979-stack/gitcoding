@@ -906,22 +906,23 @@
       display: flex;
       gap: 8px;
       margin-bottom: 20px;
-      /* 부모 padding을 돌파해 스크롤 영역 확장 */
+      /* 부모 padding을 돌파해 끝까지 스크롤 가능 */
       margin-left: -32px;
       margin-right: -32px;
       padding-left: 32px;
       padding-right: 32px;
       overflow-x: auto;
       overflow-y: visible;
-      padding-bottom: 8px;
-      scroll-snap-type: x mandatory;
+      padding-bottom: 10px;
       -webkit-overflow-scrolling: touch;
+      cursor: grab;
       scrollbar-width: thin;
-      scrollbar-color: var(--accent) transparent;
+      scrollbar-color: var(--accent) rgba(255,255,255,.1);
     }
-    .weather-days::-webkit-scrollbar { height: 4px; }
-    .weather-days::-webkit-scrollbar-track { background: transparent; }
-    .weather-days::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    .weather-days:active { cursor: grabbing; }
+    .weather-days::-webkit-scrollbar { height: 5px; }
+    .weather-days::-webkit-scrollbar-track { background: rgba(255,255,255,.06); border-radius: 3px; }
+    .weather-days::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
     .weather-day {
       background: var(--card);
       border: 1px solid var(--border);
@@ -1970,6 +1971,38 @@
   function closeWeather() {
     document.getElementById('weather-modal').classList.remove('show');
   }
+
+  // ── 드래그 스크롤 공통 함수 ──
+  function enableDragScroll(el) {
+    if (!el) return;
+    let isDown = false, startX, scrollLeft;
+
+    el.addEventListener('mousedown', e => {
+      isDown = true;
+      startX = e.pageX;
+      scrollLeft = el.scrollLeft;
+      el.style.cursor = 'grabbing';
+      el.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!isDown) return;
+      isDown = false;
+      el.style.cursor = 'grab';
+      el.style.userSelect = '';
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      el.scrollLeft = scrollLeft - (e.pageX - startX) * 1.4;
+    });
+
+    el.style.cursor = 'grab';
+  }
+
+  // 날씨 팝업 열릴 때 드래그 스크롤 초기화
+  enableDragScroll(document.getElementById('w-days'));
 
   // ── 인원 업데이트 ──
   function updatePeople() {
