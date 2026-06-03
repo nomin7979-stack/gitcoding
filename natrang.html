@@ -903,21 +903,31 @@
     .weather-meta { font-size: 13px; color: var(--muted); }
     .weather-meta strong { color: var(--text); }
     .weather-days {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 10px;
+      display: flex;
+      gap: 8px;
       margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
     }
+    .weather-days::-webkit-scrollbar { height: 4px; }
+    .weather-days::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
     .weather-day {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 12px 8px;
+      padding: 12px 10px;
       text-align: center;
+      flex: 0 0 88px;
+      min-width: 88px;
     }
-    .day-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-    .day-icon { font-size: 24px; margin-bottom: 4px; }
-    .day-temp { font-size: 14px; font-weight: 700; }
+    .weather-day.today { border-color: var(--accent); background: rgba(0,180,216,.08); }
+    .weather-day.weekend { border-color: rgba(255,107,107,.4); }
+    .day-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; white-space: nowrap; }
+    .day-dow  { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .day-icon { font-size: 26px; margin-bottom: 4px; }
+    .day-temp { font-size: 13px; font-weight: 700; }
     .day-rain { font-size: 11px; color: #64b4ff; margin-top: 2px; }
     .weather-tip {
       background: rgba(6,214,160,.08);
@@ -1875,13 +1885,14 @@
 
   // ── 날씨 팝업 ──
   function showWeather(dep, arr) {
-    const month = dep.getMonth() + 1;
-    const w = weatherByMonth[month];
     const ko = { 0:'일',1:'월',2:'화',3:'수',4:'목',5:'금',6:'토' };
-    const fmtDate = d => `${d.getMonth()+1}/${d.getDate()}(${ko[d.getDay()]})`;
+    const koColor = { 0:'#ff8080', 6:'#ff8080' }; // 주말 빨간색
+    const fmtDate = d => `${d.getMonth()+1}/${d.getDate()}`;
+    const depMonth = dep.getMonth() + 1;
+    const w = weatherByMonth[depMonth];
 
     document.getElementById('w-dates').textContent =
-      `${fmtDate(dep)} → ${fmtDate(arr)} · ${nights}박 ${nights+1}일`;
+      `${fmtDate(dep)}(${ko[dep.getDay()]}) → ${fmtDate(arr)}(${ko[arr.getDay()]}) · ${nights}박 ${nights+1}일`;
     document.getElementById('w-icon').textContent = w.icon;
     document.getElementById('w-condition').textContent = w.condition;
     document.getElementById('w-temp').innerHTML = `${w.tempMin}~${w.tempMax}<span>°C</span>`;
@@ -1889,21 +1900,60 @@
     document.getElementById('w-humid').textContent = w.humid;
     document.getElementById('w-wind').textContent = w.wind;
 
-    const dayNames = ['1일차','2일차','3일차','4일차','5일차'];
-    document.getElementById('w-days').innerHTML = w.days.map((d, i) => {
-      const date = new Date(dep); date.setDate(dep.getDate() + i);
-      return `
-        <div class="weather-day">
+    // 날씨 패턴: 월별 기본 패턴에서 날짜별 소폭 변동 생성
+    const weatherPatterns = {
+      sunny:  ['☀️','🌞','☀️'],
+      cloudy: ['🌤️','⛅','🌤️'],
+      rainy:  ['🌧️','🌦️','⛈️'],
+      storm:  ['⛈️','🌧️','🌩️'],
+    };
+    function getDayWeather(dayIndex, monthData) {
+      // 시드 기반 결정론적 변동
+      const seed = (dayIndex * 7 + depMonth * 3) % 10;
+      const baseRainPct = parseInt(monthData.rain);
+      const variance = (seed % 3 - 1) * 10; // -10 ~ +10
+      const rainPct = Math.max(0, Math.min(99, baseRainPct + variance));
+      const tempVar = (seed % 3) - 1; // -1, 0, +1
+      const tMin = monthData.tempMin + tempVar;
+      const tMax = monthData.tempMax + tempVar;
+      let icon;
+      if (rainPct >= 65)      icon = weatherPatterns.storm[seed % 3];
+      else if (rainPct >= 40) icon = weatherPatterns.rainy[seed % 3];
+      else if (rainPct >= 20) icon = weatherPatterns.cloudy[seed % 3];
+      else                    icon = weatherPatterns.sunny[seed % 3];
+      return { icon, tMin, tMax, rainPct };
+    }
+
+    const totalDays = nights + 1;
+    let html = '';
+    for (let i = 0; i < totalDays; i++) {
+      const date = new Date(dep);
+      date.setDate(dep.getDate() + i);
+      const m = date.getMonth() + 1;
+      const mData = weatherByMonth[m] || w;
+      const { icon, tMin, tMax, rainPct } = getDayWeather(i, mData);
+      const dow = date.getDay();
+      const isWeekend = dow === 0 || dow === 6;
+      const isFirst = i === 0;
+      html += `
+        <div class="weather-day${isFirst ? ' today' : ''}${isWeekend ? ' weekend' : ''}">
           <div class="day-label">${fmtDate(date)}</div>
-          <div class="day-icon">${d.i}</div>
-          <div class="day-temp">${d.t}°</div>
-          <div class="day-rain">🌧 ${d.r}</div>
-        </div>
-      `;
-    }).join('');
+          <div class="day-dow" style="color:${koColor[dow] || 'var(--text)'}">${ko[dow]}요일</div>
+          <div class="day-icon">${icon}</div>
+          <div class="day-temp">${tMin}~${tMax}°</div>
+          <div class="day-rain">🌧 ${rainPct}%</div>
+        </div>`;
+    }
+    document.getElementById('w-days').innerHTML = html;
 
     document.getElementById('w-tip').innerHTML = `<strong>여행 팁</strong> — ${w.tip}`;
     document.getElementById('weather-modal').classList.add('show');
+
+    // 첫 번째 카드로 스크롤
+    setTimeout(() => {
+      const el = document.getElementById('w-days');
+      if (el) el.scrollLeft = 0;
+    }, 50);
   }
 
   function closeWeather() {
