@@ -37,116 +37,151 @@
     /* ── Hero ── */
     .hero {
       position: relative;
-      min-height: 88vh;
+      min-height: 92vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       overflow: hidden;
-      padding: 80px 24px 140px;
+      padding: 80px 24px 160px;
     }
 
-    /* 배경 슬라이드 */
-    .hero-slides {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-    }
+    /* ── 배경 슬라이드 ── */
+    .hero-slides { position: absolute; inset: 0; z-index: 0; }
     .hero-slide {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background-size: cover;
       background-position: center center;
       opacity: 0;
-      transition: opacity 1.6s ease-in-out;
-      transform: scale(1.04);
-      animation: kenBurns 12s ease-in-out infinite alternate;
+      transition: opacity 1.8s ease-in-out;
+      animation: kenBurns 16s ease-in-out infinite alternate;
     }
     .hero-slide.active { opacity: 1; }
     @keyframes kenBurns {
-      from { transform: scale(1); }
-      to   { transform: scale(1.08); }
+      from { transform: scale(1) translateX(0); }
+      to   { transform: scale(1.12) translateX(-2%); }
     }
 
-    /* 오버레이 */
+    /* ── 다이나믹 컬러 오버레이 ── */
     .hero-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background:
-        linear-gradient(to bottom,
-          rgba(0,0,0,.35) 0%,
-          rgba(0,0,0,.15) 35%,
-          rgba(8,16,28,.75) 75%,
-          var(--bg) 100%);
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,.28) 0%,
+        rgba(0,20,40,.1) 30%,
+        rgba(0,10,30,.7) 72%,
+        var(--bg) 100%);
+    }
+    .hero-color-layer {
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%,
+        rgba(0,180,216,.12) 0%, transparent 70%);
+      animation: colorPulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes colorPulse {
+      0%   { opacity: .6; transform: scale(1); }
+      50%  { opacity: 1; transform: scale(1.15); }
+      100% { opacity: .7; transform: scale(.95); }
     }
 
-    /* 히어로 콘텐츠 */
+    /* ── 빛 스윕 ── */
+    .hero-lightsweep {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: linear-gradient(110deg,
+        transparent 20%, rgba(255,255,255,.045) 50%, transparent 80%);
+      background-size: 200% 100%;
+      animation: lightSweep 5s ease-in-out infinite;
+    }
+    @keyframes lightSweep {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    /* ── 파티클 ── */
+    .hero-particles {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+    }
+    .pt {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,.9) 0%, transparent 70%);
+      animation: ptFloat var(--d,8s) ease-in-out infinite var(--dl,0s);
+    }
+    @keyframes ptFloat {
+      0%   { transform: translateY(0)   scale(.8); opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: .8; }
+      100% { transform: translateY(-110px) scale(.3); opacity: 0; }
+    }
+
+    /* ── 히어로 콘텐츠 ── */
     .hero-content {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
+      position: relative; z-index: 4;
+      display: flex; flex-direction: column; align-items: center; gap: 0;
     }
-
 
     .hero h1 {
-      font-size: clamp(36px, 7vw, 72px);
-      font-weight: 900;
-      letter-spacing: -2px;
-      line-height: 1.05;
+      font-size: clamp(38px, 7.5vw, 76px);
+      font-weight: 900; letter-spacing: -2.5px; line-height: 1.03;
       color: #fff;
-      text-shadow: 0 4px 24px rgba(0,0,0,.5);
-      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(0,180,216,.4), 0 4px 20px rgba(0,0,0,.6);
+      margin-bottom: 18px;
+      animation: titleReveal .9s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes titleReveal {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .hero h1 em {
       font-style: normal;
-      background: linear-gradient(135deg, #00e5ff, #06d6a0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background: linear-gradient(90deg, #00e5ff, #06d6a0, #00b4d8, #00e5ff);
+      background-size: 300% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: gradientFlow 3s linear infinite;
+      filter: drop-shadow(0 0 12px rgba(0,229,255,.5));
+    }
+    @keyframes gradientFlow {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
     }
 
     .hero-sub {
       font-size: clamp(15px, 2vw, 18px);
-      color: rgba(255,255,255,.75);
-      font-weight: 400;
-      line-height: 1.6;
-      max-width: 520px;
-      margin-bottom: 32px;
-      text-shadow: 0 2px 8px rgba(0,0,0,.4);
+      color: rgba(255,255,255,.82);
+      font-weight: 400; line-height: 1.6;
+      max-width: 520px; margin-bottom: 32px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.5);
+      animation: titleReveal .9s .18s cubic-bezier(.22,1,.36,1) both;
     }
 
-
-
-    /* 슬라이드 도트 인디케이터 */
+    /* ── 슬라이드 도트 ── */
     .hero-dots {
-      position: absolute;
-      bottom: 112px;
-      left: 50%;
+      position: absolute; bottom: 130px; left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      z-index: 3;
+      display: flex; gap: 8px; z-index: 5;
     }
     .hero-dot {
-      width: 28px; height: 3px;
-      border-radius: 2px;
+      width: 28px; height: 3px; border-radius: 2px;
       background: rgba(255,255,255,.35);
-      transition: background .3s, width .3s;
-      cursor: pointer;
+      transition: background .3s, width .3s; cursor: pointer;
     }
-    .hero-dot.active { background: #fff; width: 44px; }
+    .hero-dot.active { background: #00e5ff; width: 48px; box-shadow: 0 0 8px #00e5ff; }
 
-    /* 하단 웨이브 */
-    .hero-wave {
-      position: absolute;
-      bottom: -2px; left: 0; right: 0;
-      z-index: 3;
-      line-height: 0;
+    /* ── 트리플 웨이브 ── */
+    .hero-waves {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 3; height: 130px; pointer-events: none;
+    }
+    .wave-svg {
+      position: absolute; bottom: 0; left: 0;
+      width: 200%; height: 100%;
+    }
+    .wave-svg.w1 { animation: waveScroll 8s linear infinite; opacity: .9; }
+    .wave-svg.w2 { animation: waveScroll 11s linear infinite reverse; opacity: .5; }
+    .wave-svg.w3 { animation: waveScroll 14s linear infinite; opacity: .3; }
+    @keyframes waveScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     /* ── 날짜/인원 선택 ── */
@@ -1016,6 +1051,28 @@
       <div class="hero-slide" style="background-image:url('https://static.vinwonders.com/production/2025/08/nha-trang-by-night.jpg')"></div>
     </div>
     <div class="hero-overlay"></div>
+    <div class="hero-color-layer"></div>
+    <div class="hero-lightsweep"></div>
+
+    <!-- 파티클 -->
+    <div class="hero-particles">
+      <div class="pt" style="width:6px;height:6px;left:8%;top:70%;--d:7s;--dl:0s"></div>
+      <div class="pt" style="width:4px;height:4px;left:15%;top:55%;--d:9s;--dl:1s"></div>
+      <div class="pt" style="width:8px;height:8px;left:22%;top:75%;--d:6s;--dl:2s"></div>
+      <div class="pt" style="width:5px;height:5px;left:30%;top:65%;--d:11s;--dl:.5s"></div>
+      <div class="pt" style="width:3px;height:3px;left:38%;top:80%;--d:8s;--dl:3s"></div>
+      <div class="pt" style="width:7px;height:7px;left:48%;top:60%;--d:10s;--dl:1.5s"></div>
+      <div class="pt" style="width:4px;height:4px;left:57%;top:72%;--d:7s;--dl:4s"></div>
+      <div class="pt" style="width:6px;height:6px;left:65%;top:58%;--d:9s;--dl:2.5s"></div>
+      <div class="pt" style="width:5px;height:5px;left:73%;top:78%;--d:8s;--dl:.8s"></div>
+      <div class="pt" style="width:9px;height:9px;left:80%;top:63%;--d:12s;--dl:3.5s"></div>
+      <div class="pt" style="width:4px;height:4px;left:88%;top:70%;--d:7s;--dl:1.2s"></div>
+      <div class="pt" style="width:3px;height:3px;left:93%;top:55%;--d:10s;--dl:0.3s;background:radial-gradient(circle,rgba(6,214,160,.9),transparent)"></div>
+      <div class="pt" style="width:5px;height:5px;left:12%;top:40%;--d:13s;--dl:5s"></div>
+      <div class="pt" style="width:4px;height:4px;left:44%;top:45%;--d:9s;--dl:6s;background:radial-gradient(circle,rgba(247,127,0,.8),transparent)"></div>
+      <div class="pt" style="width:6px;height:6px;left:70%;top:42%;--d:11s;--dl:2s"></div>
+      <div class="pt" style="width:3px;height:3px;left:85%;top:48%;--d:8s;--dl:4.5s;background:radial-gradient(circle,rgba(6,214,160,.9),transparent)"></div>
+    </div>
 
     <!-- 메인 콘텐츠 -->
     <div class="hero-content">
@@ -1040,10 +1097,21 @@
     <!-- 슬라이드 도트 -->
     <div class="hero-dots" id="hero-dots"></div>
 
-    <!-- 하단 웨이브 -->
-    <div class="hero-wave">
-      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
-        <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#0a1628"/>
+    <!-- 트리플 애니메이션 웨이브 -->
+    <div class="hero-waves">
+      <!-- Wave 1: 가장 밝고 빠름 -->
+      <svg class="wave-svg w1" viewBox="0 0 2880 130" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,60 C180,100 360,20 540,60 C720,100 900,20 1080,60 C1260,100 1440,20 1620,60 C1800,100 1980,20 2160,60 C2340,100 2520,20 2700,60 C2880,100 2880,130 0,130 Z" fill="rgba(0,180,216,.18)"/>
+        <path d="M0,80 C180,110 360,50 540,80 C720,110 900,50 1080,80 C1260,110 1440,50 1620,80 C1800,110 1980,50 2160,80 C2340,110 2520,50 2700,80 L2880,80 L2880,130 L0,130 Z" fill="rgba(0,180,216,.12)"/>
+      </svg>
+      <!-- Wave 2: 초록빛 역방향 -->
+      <svg class="wave-svg w2" viewBox="0 0 2880 130" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,70 C240,30 480,110 720,70 C960,30 1200,110 1440,70 C1680,30 1920,110 2160,70 C2400,30 2640,110 2880,70 L2880,130 L0,130 Z" fill="rgba(6,214,160,.15)"/>
+      </svg>
+      <!-- Wave 3: 어둡고 느림 — 배경과 이음새 -->
+      <svg class="wave-svg w3" viewBox="0 0 2880 130" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,50 C360,90 720,10 1080,50 C1440,90 1800,10 2160,50 C2520,90 2880,10 2880,50 L2880,130 L0,130 Z" fill="#0a1628"/>
+        <path d="M0,90 C360,60 720,120 1080,90 C1440,60 1800,120 2160,90 C2520,60 2880,120 2880,90 L2880,130 L0,130 Z" fill="#0a1628"/>
       </svg>
     </div>
   </div>
