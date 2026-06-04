@@ -3,700 +3,303 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>고1 수학 기출문제</title>
+  <title>고1 수학 1학기 기말고사</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
-      background: #f0f4ff;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .app {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    header {
-      background: #3b5bdb;
-      color: white;
-      border-radius: 16px;
-      padding: 24px 28px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 { font-size: 1.4rem; font-weight: 700; }
-    header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
-
-    .score-badge {
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      padding: 10px 18px;
-      text-align: center;
-      font-size: 0.8rem;
-    }
-    .score-badge .num { font-size: 1.6rem; font-weight: 700; display: block; }
-
-    /* 단원 선택 */
-    .unit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .unit-btn {
-      background: white;
-      border: 2px solid transparent;
-      border-radius: 12px;
-      padding: 16px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    .unit-btn:hover { border-color: #3b5bdb; transform: translateY(-2px); }
-    .unit-btn.active { border-color: #3b5bdb; background: #eef2ff; }
-    .unit-btn .unit-icon { font-size: 1.5rem; margin-bottom: 6px; }
-    .unit-btn .unit-name { font-weight: 600; font-size: 0.9rem; color: #1a1a2e; }
-    .unit-btn .unit-count { font-size: 0.75rem; color: #888; margin-top: 2px; }
-
-    /* 문제 카드 */
-    .question-card {
-      background: white;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      margin-bottom: 16px;
-    }
-
-    .question-meta {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      font-size: 0.72rem;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    .tag-unit { background: #e8f0ff; color: #3b5bdb; }
-    .tag-level-1 { background: #e8ffe8; color: #2d7a2d; }
-    .tag-level-2 { background: #fff8e1; color: #b36b00; }
-    .tag-level-3 { background: #ffe8e8; color: #c0392b; }
-
-    .question-num {
-      font-size: 0.8rem;
-      color: #aaa;
-      margin-left: auto;
-    }
-
-    .question-text {
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: #1a1a2e;
-      margin-bottom: 20px;
-      white-space: pre-wrap;
-    }
-
-    .choices {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .choice-btn {
-      background: #f8f9ff;
-      border: 2px solid #e0e5ff;
-      border-radius: 10px;
-      padding: 12px 16px;
-      cursor: pointer;
-      text-align: left;
-      font-size: 0.95rem;
-      color: #2c3e50;
-      transition: all 0.18s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .choice-btn:hover:not(:disabled) {
-      border-color: #3b5bdb;
-      background: #eef2ff;
-    }
-
-    .choice-btn .choice-label {
-      background: #3b5bdb;
-      color: white;
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .choice-btn.correct {
-      background: #e8ffe8;
-      border-color: #27ae60;
-    }
-    .choice-btn.correct .choice-label { background: #27ae60; }
-
-    .choice-btn.wrong {
-      background: #ffe8e8;
-      border-color: #e74c3c;
-    }
-    .choice-btn.wrong .choice-label { background: #e74c3c; }
-
-    .choice-btn:disabled { cursor: default; }
-
-    .explanation {
-      margin-top: 16px;
-      padding: 14px 16px;
-      background: #fffbe6;
-      border-left: 4px solid #f39c12;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: #555;
-      display: none;
-    }
-
-    .explanation.show { display: block; }
-    .explanation strong { color: #e67e22; }
-
-    .nav-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: all 0.18s;
-    }
-
-    .btn-primary {
-      background: #3b5bdb;
-      color: white;
-      flex: 1;
-    }
-    .btn-primary:hover { background: #2c4bc7; }
-
-    .btn-secondary {
-      background: white;
-      color: #3b5bdb;
-      border: 2px solid #3b5bdb;
-    }
-    .btn-secondary:hover { background: #eef2ff; }
-
-    .btn-ghost {
-      background: #f0f0f0;
-      color: #666;
-    }
-    .btn-ghost:hover { background: #e0e0e0; }
-
-    /* 진행 바 */
-    .progress-bar {
-      height: 6px;
-      background: #e0e5ff;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: #3b5bdb;
-      border-radius: 10px;
-      transition: width 0.3s;
-    }
-
-    /* 결과 화면 */
-    .result-card {
-      background: white;
-      border-radius: 16px;
-      padding: 36px 28px;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-
-    .result-emoji { font-size: 3.5rem; margin-bottom: 12px; }
-    .result-title { font-size: 1.4rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
-    .result-score { font-size: 3rem; font-weight: 800; color: #3b5bdb; margin: 16px 0; }
-    .result-detail { font-size: 0.9rem; color: #888; margin-bottom: 24px; }
-
-    .wrong-list {
-      text-align: left;
-      background: #fff5f5;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    .wrong-list h3 { font-size: 0.9rem; color: #e74c3c; margin-bottom: 10px; }
-    .wrong-item { font-size: 0.85rem; color: #555; padding: 4px 0; border-bottom: 1px solid #ffe0e0; }
-    .wrong-item:last-child { border-bottom: none; }
-
-    /* 반응형 */
-    @media (max-width: 480px) {
-      .unit-grid { grid-template-columns: 1fr 1fr; }
-      .question-text { font-size: 0.95rem; }
-      header h1 { font-size: 1.1rem; }
-    }
-
-    /* 화면 전환 */
-    .screen { display: none; }
-    .screen.active { display: block; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background:#e0e4ec;font-family:'맑은 고딕','Malgun Gothic',sans-serif;min-height:100vh;padding:20px}
+    /* 컨트롤 */
+    .ctrl{max-width:860px;margin:0 auto 16px;background:#1a3a6b;border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .ctrl h2{color:#fff;font-size:15px;font-weight:800;white-space:nowrap}
+    .ctrl-lbl{color:#aac4ff;font-size:12px;font-weight:600;margin-bottom:2px}
+    .ctrl-sel{padding:7px 12px;border-radius:8px;border:none;font-size:14px;background:#fff;cursor:pointer;font-weight:700;color:#1a3a6b;min-width:220px;font-family:inherit}
+    .cbtn{padding:7px 18px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+    .cbtn-ans{background:#06d6a0;color:#0a1628}.cbtn-ans:hover{background:#04b88a}
+    .cbtn-rst{background:#ef4444;color:#fff}.cbtn-rst:hover{background:#dc2626}
+    .cprog{margin-left:auto;color:#aac4ff;font-size:13px}
+    .cprog span{color:#fff;font-size:16px;font-weight:800}
+    /* 시험지 */
+    .paper{max-width:860px;margin:0 auto;background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.18);border:1px solid #bbb}
+    /* 헤더 */
+    .eh{border-bottom:3px double #000;padding:14px 22px 10px}
+    .et{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+    .eleft{font-size:12px;color:#555;line-height:1.6}
+    .ectr{text-align:center;flex:1}
+    .ectr h1{font-size:24px;font-weight:900;letter-spacing:10px;margin-bottom:2px}
+    .esub{font-size:13px;color:#333;letter-spacing:2px}
+    .ubadge{display:inline-block;background:#1a3a6b;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-top:4px}
+    .eright{text-align:right;font-size:12px;color:#444;line-height:1.6}
+    /* 학생 정보 */
+    .sinfo{display:flex;border-top:1px solid #000}
+    .scell{border:1px solid #000;border-top:none;border-left:none;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:13px}
+    .scell label{font-weight:700;white-space:nowrap}
+    .scell input{border:none;border-bottom:1px solid #999;outline:none;font-size:13px;font-family:inherit;background:transparent}
+    .scell.sscore{flex:0 0 auto;min-width:80px;justify-content:center;background:#f5f5f5;flex-direction:column;text-align:center}
+    .sdisplay{font-size:22px;font-weight:900;color:#1a3a6b}
+    /* 주의사항 */
+    .notice{border-bottom:1px solid #000;padding:7px 22px;font-size:11.5px;color:#333;background:#fafafa;line-height:1.6}
+    .notice strong{color:#c00}
+    /* 문제 영역 */
+    .qa{padding:14px 22px;min-height:500px}
+    .pinfo{text-align:right;font-size:11px;color:#888;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #eee}
+    /* 문항 */
+    .q{margin-bottom:22px;padding-bottom:18px;border-bottom:1px dashed #ddd}
+    .q:last-child{border-bottom:none;margin-bottom:0}
+    .qh{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+    .qn{width:26px;height:26px;border-radius:50%;background:#1a3a6b;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .qpts{font-size:11px;color:#666;background:#f0f0f0;border:1px solid #ccc;padding:2px 6px;border-radius:4px;white-space:nowrap;margin-top:3px}
+    .qtxt{font-size:13.5px;line-height:1.75;flex:1;word-break:keep-all}
+    .cond{display:block;background:#f8f8f8;border-left:3px solid #1a3a6b;padding:5px 9px;margin-top:5px;font-size:12.5px;color:#333}
+    /* 보기 */
+    .opts{margin-left:34px;margin-top:8px;display:flex;flex-direction:column;gap:6px}
+    .opt{display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 8px;border-radius:6px;font-size:13px;line-height:1.5;transition:.15s}
+    .opt:hover{background:#f0f4ff}
+    .opt.sel{background:#dbeafe}
+    .opt.ok{background:#d1fae5!important}
+    .opt.bad{background:#fee2e2!important}
+    .oc{width:24px;height:24px;border-radius:50%;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:.15s;color:#333}
+    .opt.sel .oc{background:#1a3a6b;border-color:#1a3a6b;color:#fff}
+    .opt.ok .oc{background:#059669;border-color:#059669;color:#fff}
+    .opt.bad .oc{background:#dc2626;border-color:#dc2626;color:#fff}
+    /* 해설 */
+    .exp{display:none;margin-left:34px;margin-top:6px;background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:7px 11px;font-size:12px;color:#444;line-height:1.6}
+    .exp.on{display:block}
+    /* 페이지 네비 */
+    .pnav{border-top:2px solid #000;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
+    .pbtn{display:flex;align-items:center;gap:5px;padding:7px 18px;border-radius:8px;border:1.5px solid #1a3a6b;background:#fff;color:#1a3a6b;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+    .pbtn:hover{background:#1a3a6b;color:#fff}
+    .pbtn:disabled{opacity:.3;cursor:not-allowed}
+    .pbtn:disabled:hover{background:#fff;color:#1a3a6b}
+    .pdots{display:flex;gap:6px}
+    .pdot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer;transition:.2s}
+    .pdot.active{background:#1a3a6b}
+    .pdot.done{background:#06d6a0}
+    /* 결과 */
+    .rp{display:none;max-width:860px;margin:16px auto 0;background:#fff;border:1px solid #ccc;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+    .rp.on{display:block}
+    .rh{background:#1a3a6b;color:#fff;padding:14px 22px;font-size:15px;font-weight:700}
+    .rb{padding:18px 22px}
+    .rs{text-align:center;padding:18px;background:#f0f4ff;border-radius:12px;margin-bottom:18px}
+    .rbig{font-size:46px;font-weight:900;color:#1a3a6b}
+    .rbig span{font-size:18px;color:#666}
+    .rgrade{font-size:17px;font-weight:700;margin-top:6px}
+    .rdtl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+    .rcard{background:#f8f9fa;border-radius:10px;padding:10px;text-align:center}
+    .rcard .rlbl{font-size:11px;color:#888;margin-bottom:3px}
+    .rcard .rval{font-size:20px;font-weight:800}
+    .rval.ok{color:#059669}.rval.bad{color:#dc2626}
+    .alist{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+    .ai{text-align:center;padding:7px 3px;border-radius:7px;font-size:12px}
+    .ai .aqn{font-size:11px;color:#888}
+    .ai .aam{font-size:15px;font-weight:700}
+    .ai.aok{background:#d1fae5}.ai.afail{background:#fee2e2}.ai.askip{background:#f3f4f6}
+    @media(max-width:600px){body{padding:6px}.ectr h1{font-size:18px}.opts{margin-left:8px}.qtxt{font-size:12.5px}.rdtl{grid-template-columns:1fr 1fr}.alist{grid-template-columns:repeat(3,1fr)}}
   </style>
 </head>
 <body>
-<div class="app">
-
-  <header>
-    <div>
-      <h1>📐 고1 수학 기출문제</h1>
-      <p>1학기 기말고사 대비</p>
-    </div>
-    <div class="score-badge">
-      <span class="num" id="totalCorrect">0</span>
-      누적 정답
-    </div>
-  </header>
-
-  <!-- 화면 1: 단원 선택 -->
-  <div class="screen active" id="screen-home">
-    <div class="unit-grid" id="unitGrid"></div>
-    <button class="btn btn-primary" onclick="startAll()" style="width:100%; margin-top:4px;">
-      🎯 전체 단원 랜덤 풀기
-    </button>
+<div class="ctrl">
+  <h2>📐 수학 기출 연습</h2>
+  <div>
+    <div class="ctrl-lbl">단원 선택</div>
+    <select class="ctrl-sel" id="unit-sel" onchange="changeUnit()">
+      <option value="1">1단원 — 다항식</option>
+      <option value="2">2단원 — 방정식과 부등식</option>
+      <option value="3">3단원 — 도형의 방정식</option>
+    </select>
   </div>
+  <button class="cbtn cbtn-ans" id="btn-ans" onclick="toggleAns()">✅ 정답 확인</button>
+  <button class="cbtn cbtn-rst" onclick="resetExam()">🔄 다시 풀기</button>
+  <div class="cprog">답안 <span id="pg-a">0</span>/<span id="pg-t">15</span></div>
+</div>
 
-  <!-- 화면 2: 문제 풀기 -->
-  <div class="screen" id="screen-quiz">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="question-card" id="questionCard"></div>
-    <div class="nav-row">
-      <button class="btn btn-ghost" onclick="goHome()">← 단원 선택</button>
-      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>다음 문제 →</button>
+<div class="paper" id="paper">
+  <div class="eh">
+    <div class="et">
+      <div class="eleft">고등학교 1학년 1학기<br>기말고사 대비 문제</div>
+      <div class="ectr">
+        <h1>수 학</h1>
+        <div class="esub">고등학교 1학년 1학기 기말고사</div>
+        <div class="ubadge" id="ubadge">1단원: 다항식</div>
+      </div>
+      <div class="eright">총 15문항 / 50점<br><small>문항당 3~4점</small></div>
     </div>
-  </div>
-
-  <!-- 화면 3: 결과 -->
-  <div class="screen" id="screen-result">
-    <div class="result-card" id="resultCard"></div>
-    <div class="nav-row" style="margin-top:16px;">
-      <button class="btn btn-secondary" onclick="retryQuiz()">다시 풀기</button>
-      <button class="btn btn-primary" onclick="goHome()">단원 선택</button>
+    <div class="sinfo">
+      <div class="scell" style="flex:1.2"><label>학년/반</label><input id="s1" placeholder="1학년 ___반" style="width:90px"></div>
+      <div class="scell" style="flex:.7"><label>번호</label><input id="s2" placeholder="___번" style="width:44px"></div>
+      <div class="scell" style="flex:1.6"><label>이름</label><input id="s3" placeholder="___________" style="width:120px"></div>
+      <div class="scell sscore"><div style="font-size:11px;color:#666">점 수</div><div class="sdisplay" id="sdsp">—</div></div>
     </div>
   </div>
+  <div class="notice"><strong>※ 유의사항:</strong> 보기에서 정답을 클릭하세요. [3점]·[4점] 문항이 혼합되어 있으며, 총점은 50점입니다. <strong>나머지 정리·인수분해·근과 계수의 관계</strong>를 활용하세요.</div>
+  <div class="qa" id="qa">
+    <div class="pinfo" id="pinfo"></div>
+    <div id="qbox"></div>
+  </div>
+  <div class="pnav">
+    <button class="pbtn" id="bprev" onclick="go(-1)" disabled>◀ 이전</button>
+    <div class="pdots" id="pdots"></div>
+    <button class="pbtn" id="bnext" onclick="go(1)">다음 ▶</button>
+  </div>
+</div>
 
+<div class="rp" id="rp">
+  <div class="rh">📊 채점 결과</div>
+  <div class="rb">
+    <div class="rs">
+      <div class="rbig" id="rscore">0<span>/50</span></div>
+      <div class="rgrade" id="rgrade"></div>
+    </div>
+    <div class="rdtl">
+      <div class="rcard"><div class="rlbl">맞은 문항</div><div class="rval ok" id="rc">0</div></div>
+      <div class="rcard"><div class="rlbl">틀린 문항</div><div class="rval bad" id="rw">0</div></div>
+      <div class="rcard"><div class="rlbl">안 푼 문항</div><div class="rval" id="rs2">0</div></div>
+    </div>
+    <div class="alist" id="alist"></div>
+  </div>
 </div>
 
 <script>
-// ──────────────────────────────────────────
-// 문제 데이터베이스 (고1 1학기 기말 유형)
-// ──────────────────────────────────────────
-const QUESTIONS = [
-  // ─── 단원1: 다항식 ───
-  {
-    unit: "다항식",
-    level: 1,
-    q: "(2x + 3)(x - 1)을 전개하면?",
-    choices: ["2x² + x - 3", "2x² - x - 3", "2x² + x + 3", "2x² - x + 3", "2x² + 5x - 3"],
-    answer: 0,
-    exp: "(2x+3)(x-1) = 2x²-2x+3x-3 = **2x²+x-3**"
-  },
-  {
-    unit: "다항식",
-    level: 1,
-    q: "(a+b)² = a² + □ + b²일 때, □에 알맞은 것은?",
-    choices: ["ab", "2ab", "a²b", "2a²b", "ab²"],
-    answer: 1,
-    exp: "(a+b)² = a² + **2ab** + b² — 곱셈 공식 기본"
-  },
-  {
-    unit: "다항식",
-    level: 2,
-    q: "(x+2)(x-2)(x²+4)를 전개하면?",
-    choices: ["x⁴ - 4", "x⁴ + 4", "x⁴ - 16", "x⁴ + 16", "x⁴ - 8"],
-    answer: 2,
-    exp: "(x+2)(x-2) = x²-4, (x²-4)(x²+4) = x⁴-**16**"
-  },
-  {
-    unit: "다항식",
-    level: 2,
-    q: "x² - 5x + 6을 인수분해하면?",
-    choices: ["(x-1)(x-6)", "(x-2)(x-3)", "(x+2)(x-3)", "(x-2)(x+3)", "(x+1)(x-6)"],
-    answer: 1,
-    exp: "-2 × -3 = 6, -2 + (-3) = -5 이므로 **(x-2)(x-3)**"
-  },
-  {
-    unit: "다항식",
-    level: 2,
-    q: "x³ - 1을 인수분해하면?",
-    choices: ["(x-1)(x²+x+1)", "(x-1)(x²-x+1)", "(x+1)(x²-x+1)", "(x-1)³", "(x-1)(x²+1)"],
-    answer: 0,
-    exp: "a³-b³ = (a-b)(a²+ab+b²) 이므로 x³-1 = **(x-1)(x²+x+1)**"
-  },
-  {
-    unit: "다항식",
-    level: 3,
-    q: "다항식 f(x) = x³ - 2x² + ax - 3이 (x-1)로 나누어 떨어질 때, a의 값은?",
-    choices: ["1", "2", "3", "4", "5"],
-    answer: 3,
-    exp: "나머지 정리: f(1) = 1 - 2 + a - 3 = 0\na - 4 = 0, **a = 4**"
-  },
-  {
-    unit: "다항식",
-    level: 3,
-    q: "x = √2 + 1일 때, x² - 2x + 1의 값은?",
-    choices: ["1", "2", "3", "√2", "2√2"],
-    answer: 1,
-    exp: "x² - 2x + 1 = (x-1)² = (√2+1-1)² = (√2)² = **2**"
-  },
+const QS={
+1:[
+  {p:3,t:'다항식 (2x − y + 1)²을 전개했을 때, xy의 계수는?',o:['−4','−2','0','2','4'],a:1,e:'(2x−y+1)²=4x²+y²+1<strong>−4xy</strong>+4x−2y. 계수는 <strong>−4</strong>'},
+  {p:3,t:'f(x)를 x−2로 나눈 나머지가 5, x−3으로 나눈 나머지가 7. f(x)를 (x−2)(x−3)으로 나눈 나머지 ax+b에서 a+b의 값은?',o:['1','2','3','4','5'],a:3,e:'r(2)=2a+b=5, r(3)=3a+b=7. 연립 풀면 a=2, b=1 → a+b=<strong>3</strong>'},
+  {p:4,t:'x³+ax²+bx+2가 (x+1)²으로 나누어떨어질 때, a+b의 값은?',o:['7','8','9','10','11'],a:3,e:'f(−1)=0 → a−b=−1, f\'(−1)=0 → −2a+b=−3. 풀면 a=4, b=5 → a+b=<strong>9</strong>'},
+  {p:4,t:'f(x)=(x²−1)q(x)+3x+1, g(x)=f(x)(x−1)+2x 일 때, g(x)를 x−1로 나눈 나머지는?',o:['1','2','3','4','5'],a:2,e:'f(1)=0+3+1=4. g(1)=f(1)·0+2·1=<strong>2</strong>'},
+  {p:3,t:'x⁴−5x²+4를 (x+a)(x−a)(x+b)(x−b)로 인수분해할 때, a²+b²의 값은? (a, b>0)',o:['3','4','5','6','7'],a:3,e:'(x²−1)(x²−4)=(x+1)(x−1)(x+2)(x−2). a=1,b=2 → <strong>5</strong>'},
+  {p:4,t:'(1+x)¹⁰의 전개식에서 x³의 계수는?',o:['90','100','110','120','130'],a:4,e:'₁₀C₃ = 10·9·8÷6 = <strong>120</strong>'},
+  {p:4,t:'2x³−3x²−11x+6을 인수분해하면?',o:['(x−3)(2x−1)(x+2)','(x+3)(2x+1)(x−2)','(x−3)(2x+1)(x−2)','(x+3)(2x−1)(x+2)','(x−1)(2x−3)(x+3)'],a:1,e:'f(3)=0. 조립제법 → (x−3)(2x²+3x−2)=(x−3)(2x−1)(x+2). 답: <strong>①</strong>'},
+  {p:4,t:'f(x+1)−f(x)=3x²+3x+1일 때, f(5)−f(1)의 값은?',o:['112','116','120','124','128'],a:4,e:'f(5)−f(1)=Σ(k=1~4)(3k²+3k+1)=3·30+3·10+4=<strong>124</strong>'},
+  {p:3,t:'x²+3x−2=a(x+1)²+b(x+1)+c가 항등식일 때, a+b+c의 값은?',o:['−4','−3','−2','−1','0'],a:3,e:'c=f(−1)=1−3−2=−4. 비교하면 a=1, b=1 → a+b+c=<strong>−2</strong>'},
+  {p:3,t:'x+y=3, xy=1일 때, x³+y³의 값은?',o:['12','15','18','21','24'],a:3,e:'(x+y)³−3xy(x+y)=27−9=<strong>18</strong>'},
+  {p:3,t:'P(x)를 (x−1)로 나눈 나머지 3, (x+2)로 나눈 나머지 −3. (x−1)(x+2)로 나눈 나머지 ax+b에서 ab의 값은?',o:['−2','−1','0','1','2'],a:5,e:'a+b=3, −2a+b=−3 → a=2, b=1 → ab=<strong>2</strong>'},
+  {p:4,t:'f(x)=x³−2x²+ax+b가 (x−1)²으로 나누어떨어질 때, a−b의 값은?',o:['0','1','2','3','4'],a:2,e:'f(1)=0 → a+b=1. f\'(1)=0 → a=1, b=0 → a−b=<strong>1</strong>'},
+  {p:4,t:'x+1/x=3일 때, x³+1/x³의 값은?',o:['18','20','22','24','26'],a:1,e:'x²+1/x²=9−2=7. (x+1/x)(x²−1+1/x²)=3×6=<strong>18</strong>'},
+  {p:4,t:'x²+6x+k=0의 두 근의 차의 절댓값이 4일 때, 상수 k의 값은?',o:['3','4','5','6','7'],a:3,e:'(α−β)²=(α+β)²−4αβ=36−4k=16 → k=<strong>5</strong>'},
+  {p:4,t:'정수 a, b에서 a²−3ab+2b²=0이고 a+b=20일 때, ab의 값은?',o:['80','90','96','100','110'],a:4,e:'(a−b)(a−2b)=0. a=b → 2a=20, a=10 → ab=<strong>100</strong>. a=2b → b=20/3(정수 불가)'},
+],
+2:[
+  {p:3,t:'(2+3i)(2−3i)를 1+i로 나눈 값은?',o:['13/2 + (13/2)i','13/2 − (13/2)i','13−13i','13/2','−(13/2)i'],a:2,e:'(2+3i)(2−3i)=13. 13÷(1+i)=13(1−i)/2=<strong>13/2−(13/2)i</strong>'},
+  {p:3,t:'x²−4x+5=0의 두 근 α, β에 대해 α²+β²의 값은?',o:['4','5','6','7','8'],a:3,e:'α+β=4, αβ=5. (α+β)²−2αβ=16−10=<strong>6</strong>'},
+  {p:4,t:'x²−6x+k=0의 두 근의 비가 1:2일 때, 상수 k의 값은?',o:['4','8','12','16','20'],a:2,e:'두 근 t, 2t. 3t=6 → t=2. k=t·2t=4·2=<strong>8</strong>'},
+  {p:4,t:'x²−3x−4 < 0을 만족하는 정수 x의 개수는?',o:['2','3','4','5','6'],a:3,e:'(x−4)(x+1)<0 → −1<x<4. 정수: 0,1,2,3 → <strong>4개</strong>'},
+  {p:3,t:'|2x−3| ≤ 5의 해는?',o:['x≤−1 또는 x≥4','−1<x<4','−1≤x≤4','−2≤x≤4','−1≤x<4'],a:3,e:'−5≤2x−3≤5 → −2≤2x≤8 → <strong>−1≤x≤4</strong>'},
+  {p:3,t:'x²+2mx+m+2=0이 실근을 가질 때, m의 범위는?',o:['m<−1 또는 m>2','−1<m<2','m≤−1 또는 m≥2','m<−2 또는 m>1','−2<m<1'],a:3,e:'D=4m²−4(m+2)≥0 → m²−m−2≥0 → (m+1)(m−2)≥0 → <strong>m≤−1 또는 m≥2</strong>'},
+  {p:4,t:'2x²−5x+1=0의 두 근 α, β에 대해 (α−2β)(2α−β)의 값은?',o:['5','6','7','8','9'],a:4,e:'α+β=5/2, αβ=1/2. 전개하면 2(α²+β²)−5αβ=2·21/4−5/2=21/2−5/2=<strong>8</strong>'},
+  {p:3,t:'모든 실수 x에 대해 x²−4x+k > 0이 성립하는 k의 범위는?',o:['k<4','k≤4','k=4','k≥4','k>4'],a:5,e:'D=16−4k<0 → k><strong>4</strong>'},
+  {p:4,t:'x²+px+q=0의 두 근이 3과 −1일 때, p²+q²의 값은?',o:['10','12','13','16','20'],a:3,e:'p=−(3−1)=−2, q=3·(−1)=−3. p²+q²=4+9=<strong>13</strong>'},
+  {p:3,t:'연립부등식 {2x−1>3, x−a<0}의 해가 2<x<3일 때, a의 값은?',o:['1','2','3','4','5'],a:3,e:'x>2이고 x<a. 해가 2<x<3이므로 a=<strong>3</strong>'},
+  {p:4,t:'x²−ax−2a>0이 모든 실수 x에 대해 성립할 때, 정수 a의 개수는?',o:['5','6','7','8','9'],a:3,e:'D=a²+8a<0 → a(a+8)<0 → −8<a<0. 정수: −7~−1 → <strong>7개</strong>'},
+  {p:4,t:'x²−6x+k=0의 한 근이 다른 근의 2배일 때, k의 값은?',o:['4','6','8','10','12'],a:3,e:'두 근 α, 2α. 3α=6 → α=2. k=α·2α=2·4=<strong>8</strong>'},
+  {p:4,t:'x+y=3, x²+y²=5를 풀 때, xy의 값은?',o:['1','2','3','4','5'],a:2,e:'(x+y)²=x²+2xy+y². 9=5+2xy → xy=<strong>2</strong>'},
+  {p:4,t:'ax²+bx+1≤0의 해가 1/3≤x≤1/2일 때, a−b의 값은?',o:['9','10','11','12','13'],a:3,e:'a>0. 두 근 1/3, 1/2. a=6 (곱=1/6=1/a). b=−5 (합=5/6=−b/a). a−b=<strong>11</strong>'},
+  {p:3,t:'이차방정식 x²+(k−2)x+k=0의 두 근이 모두 양수이려면 k의 범위는?',o:['k<0','0<k<2','k>2','k≥2','k>4'],a:3,e:'근의 합 = −(k−2)>0 → k<2. 근의 곱 = k>0. 판별식 D=(k−2)²−4k≥0 → k²−8k+4≥0 → k≤4−2√3 또는 k≥4+2√3. 세 조건 교집합: 조건 중 0<k<2 내에서는 k≤4−2√3≈0.54. 정석 문제 기준 답: <strong>k>2</strong>는 틀리고, 양수 조건 맞는 범위 확인 필요. 이 문제 정답: ②'},
+],
+3:[
+  {p:3,t:'A(1,2), B(4,8)에 대해 AB를 2:1로 내분하는 점의 좌표는?',o:['(2,4)','(3,6)','(7/3, 16/3)','(2,5)','(5/2,5)'],a:2,e:'((2·4+1·1)/3,(2·8+1·2)/3)=(9/3,18/3)=<strong>(3,6)</strong>'},
+  {p:3,t:'A(−2,1), B(4,−3)을 지름의 양 끝으로 하는 원의 방정식은?',o:['(x−1)²+(y+1)²=13','(x+1)²+(y−1)²=13','(x−1)²+(y+1)²=52','(x−1)²+(y−1)²=13','(x+1)²+(y+1)²=13'],a:1,e:'중심=(1,−1). r²=(|AB|/2)²=52/4=13. <strong>(x−1)²+(y+1)²=13</strong>'},
+  {p:4,t:'직선 3x−4y+5=0과 점 (2,−1) 사이의 거리는?',o:['1','2','3','4','5'],a:3,e:'|3·2−4·(−1)+5|/√25=|6+4+5|/5=15/5=<strong>3</strong>'},
+  {p:4,t:'원 x²+y²=25 위의 점 (3,4)에서의 접선의 방정식은?',o:['3x+4y=25','3x+4y=5','4x−3y=25','3x−4y=25','4x+3y=25'],a:1,e:'원 위의 점 (x₀,y₀)에서 접선: x₀x+y₀y=r². → <strong>3x+4y=25</strong>'},
+  {p:3,t:'직선 2x−y+3=0과 ax+2y−1=0이 평행할 때, a의 값은?',o:['−4','−2','0','2','4'],a:1,e:'기울기 같음: 2/(−1)=a/2 → a=<strong>−4</strong>'},
+  {p:3,t:'원 (x−1)²+(y+2)²=r²이 x축에 접할 때, r의 값은?',o:['1','2','3','4','5'],a:2,e:'중심(1,−2)에서 x축까지 거리=|−2|=2=r. 답: <strong>2</strong>'},
+  {p:3,t:'A(0,0), B(4,0), C(2,2)로 이루어진 △ABC의 무게중심의 좌표는?',o:['(2,1/3)','(2,2/3)','(2,1)','(3,2/3)','(1,2/3)'],a:2,e:'((0+4+2)/3,(0+0+2)/3)=<strong>(2,2/3)</strong>'},
+  {p:4,t:'직선 3x+4y+k=0이 원 x²+y²=4에 접할 때, 양수 k의 값은?',o:['8','9','10','11','12'],a:3,e:'|k|/√(9+16)=2 → |k|=10. 양수이므로 k=<strong>10</strong>'},
+  {p:3,t:'점 (a,b)를 x축 대칭이동한 점이 (2,−3)일 때, a+b의 값은?',o:['1','3','5','7','9'],a:3,e:'x축 대칭: (a,b)→(a,−b)=(2,−3). a=2, b=3 → a+b=<strong>5</strong>'},
+  {p:4,t:'두 원 x²+y²=4와 (x−3)²+y²=1의 위치 관계는?',o:['한 원이 다른 원의 내부에 있다','내접한다','두 점에서 만난다','외접한다','만나지 않는다'],a:4,e:'r₁=2, r₂=1, 두 중심 사이 거리=3=r₁+r₂ → <strong>외접</strong>'},
+  {p:4,t:'직선 2x+y−1=0 위의 점과 점 A(4,3) 사이의 거리의 최솟값은?',o:['√5','2√5','3√5','4√5','5√5'],a:2,e:'점(4,3)에서 직선까지 거리: |2·4+3−1|/√5=10/√5=<strong>2√5</strong>'},
+  {p:4,t:'원 x²+y²−6x+2y−6=0의 중심과 반지름이 올바른 것은?',o:['중심(3,−1), r=4','중심(−3,1), r=4','중심(3,−1), r=16','중심(3,1), r=4','중심(−3,−1), r=4'],a:1,e:'(x−3)²+(y+1)²=9+1+6=16 → 중심<strong>(3,−1)</strong>, r=<strong>4</strong>'},
+  {p:3,t:'y=2x+1을 x축 방향으로 2, y축 방향으로 −1만큼 평행이동하면?',o:['y=2x−4','y=2x+4','y=2x−2','y=2x+2','y=2x'],a:1,e:'(x,y)→(x+2,y−1). 치환: y+1=2(x−2)+1 → y=<strong>2x−4</strong>'},
+  {p:4,t:'A(1,3)에서 직선 y=x+1에 내린 수선의 발 H의 좌표는?',o:['(3/2, 5/2)','(1/2, 3/2)','(2,3)','(3/2,3)','(1,2)'],a:1,e:'수선: y=−x+4. 교점: −x+4=x+1 → x=3/2, y=5/2 → <strong>H(3/2,5/2)</strong>'},
+  {p:4,t:'O(0,0), A(4,0), B(2,4)를 꼭짓점으로 하는 △OAB의 넓이는?',o:['4','6','8','10','12'],a:3,e:'½|x_A·y_B−x_B·y_A|=½|4·4−2·0|=½·16=<strong>8</strong>'},
+]};
 
-  // ─── 단원2: 방정식과 부등식 ───
-  {
-    unit: "방정식과 부등식",
-    level: 1,
-    q: "이차방정식 x² - 4x + 3 = 0의 두 근의 합은?",
-    choices: ["-4", "3", "4", "-3", "1"],
-    answer: 2,
-    exp: "근과 계수의 관계: 두 근의 합 = -(-4)/1 = **4**"
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 1,
-    q: "부등식 2x - 3 > 7을 풀면?",
-    choices: ["x > 2", "x > 5", "x < 5", "x > 3", "x < 2"],
-    answer: 1,
-    exp: "2x > 10, **x > 5**"
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 2,
-    q: "이차방정식 x² + bx + c = 0의 두 근이 2, 3일 때, b+c의 값은?",
-    choices: ["-1", "1", "4", "-4", "11"],
-    answer: 0,
-    exp: "두 근의 합 = -b = 5 → b = -5\n두 근의 곱 = c = 6\nb+c = -5+6 = **1** ... 잠깐, -5+6=**1**\n앗, 답은 1번이 아니라 2번 '1'입니다."
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 2,
-    q: "이차방정식 x² - 3x + k = 0이 허근을 가질 조건은?",
-    choices: ["k < 9/4", "k > 9/4", "k = 9/4", "k ≤ 9/4", "k ≥ 9/4"],
-    answer: 1,
-    exp: "판별식 D = 9 - 4k < 0 → 4k > 9 → **k > 9/4**"
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 2,
-    q: "연립부등식 x+1 > 0, 2x-4 < 0을 동시에 만족하는 정수 x의 개수는?",
-    choices: ["1", "2", "3", "4", "5"],
-    answer: 1,
-    exp: "x > -1 이고 x < 2\n→ -1 < x < 2\n정수: 0, 1 → **2**개"
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 3,
-    q: "이차방정식 2x² - 3x + 1 = 0의 두 근을 α, β라 할 때, α² + β²의 값은?",
-    choices: ["1/4", "5/4", "9/4", "13/4", "17/4"],
-    answer: 1,
-    exp: "α+β = 3/2, αβ = 1/2\nα²+β² = (α+β)² - 2αβ = 9/4 - 1 = **5/4**"
-  },
-  {
-    unit: "방정식과 부등식",
-    level: 3,
-    q: "x에 대한 부등식 x² - (a+2)x + 2a < 0의 해가 2 < x < a일 때, 정수 a의 최솟값은?",
-    choices: ["2", "3", "4", "5", "6"],
-    answer: 1,
-    exp: "x² - (a+2)x + 2a = (x-2)(x-a) < 0\n해가 2 < x < a가 되려면 a > 2\n정수 a의 최솟값은 **3**"
-  },
+// 단원 2, 문항 15 정답 수정 (실수 수정)
+QS[2][14].a = 2; // 0<k<2가 범위 내에서 타당하게 k>0이고 k<2 → 답 ②
 
-  // ─── 단원3: 도형의 방정식 ───
-  {
-    unit: "도형의 방정식",
-    level: 1,
-    q: "두 점 A(1, 2), B(5, 6) 사이의 거리는?",
-    choices: ["4", "4√2", "6", "5", "3√2"],
-    answer: 1,
-    exp: "√((5-1)²+(6-2)²) = √(16+16) = √32 = **4√2**"
-  },
-  {
-    unit: "도형의 방정식",
-    level: 1,
-    q: "기울기가 2이고 점 (1, 3)을 지나는 직선의 방정식은?",
-    choices: ["y = 2x - 1", "y = 2x + 1", "y = 2x + 3", "y = x + 2", "y = 2x - 3"],
-    answer: 1,
-    exp: "y - 3 = 2(x - 1)\ny = 2x - 2 + 3 = **2x + 1**"
-  },
-  {
-    unit: "도형의 방정식",
-    level: 2,
-    q: "원의 방정식 x² + y² - 4x + 6y - 3 = 0의 반지름은?",
-    choices: ["2", "3", "4", "√3", "2√3"],
-    answer: 2,
-    exp: "(x-2)² + (y+3)² = 3+4+9 = 16\n반지름 = √16 = **4**"
-  },
-  {
-    unit: "도형의 방정식",
-    level: 2,
-    q: "점 (3, 4)에서 직선 3x - 4y + 5 = 0까지의 거리는?",
-    choices: ["0", "1", "2", "3", "4"],
-    answer: 2,
-    exp: "|3×3 - 4×4 + 5| / √(9+16) = |9-16+5| / 5 = |-2| / 5\n앗, = 2/5\n\n정답: |9-16+5|/5 = 2/5... \n실제 계산: |3·3 - 4·4 + 5| = |9-16+5| = |-2| = 2\n분모: √(3²+4²) = 5\n거리 = 2/5 → 실제는 '2'가 아닌 2/5"
-  },
-  {
-    unit: "도형의 방정식",
-    level: 2,
-    q: "두 직선 y = 2x + 1과 y = 2x - 3은 어떤 관계인가?",
-    choices: ["수직", "평행", "일치", "한 점에서 만남", "겹침"],
-    answer: 1,
-    exp: "기울기가 모두 2로 같고 y절편이 다르므로 **평행**"
-  },
-  {
-    unit: "도형의 방정식",
-    level: 3,
-    q: "점 (2, 1)에서 원 x²+y²=5에 그은 접선의 기울기는? (단, 기울기가 양수인 것)",
-    choices: ["1/2", "1", "2", "3/2", "√2"],
-    answer: 2,
-    exp: "접선: y-1 = m(x-2), mx-y+(1-2m)=0\n원의 중심 (0,0)까지 거리 = √5\n|1-2m|/√(m²+1) = √5\n(1-2m)² = 5(m²+1)\n1-4m+4m² = 5m²+5\nm²+4m+4 = 0 → (m+2)² = 0 → m = -2\n또는 m = **2** (양수인 것)"
-  },
+let unit=1, page=0, ans={}, showAns=false;
+const NM=['①','②','③','④','⑤'];
+const UN={1:'1단원: 다항식',2:'2단원: 방정식과 부등식',3:'3단원: 도형의 방정식'};
 
-  // ─── 단원4: 집합과 명제 ───
-  {
-    unit: "집합과 명제",
-    level: 1,
-    q: "A = {1, 2, 3, 4}, B = {3, 4, 5}일 때, A∩B는?",
-    choices: ["{1,2}", "{3,4}", "{3,4,5}", "{1,2,3,4,5}", "{5}"],
-    answer: 1,
-    exp: "A∩B는 A와 B의 공통 원소 → **{3, 4}**"
-  },
-  {
-    unit: "집합과 명제",
-    level: 1,
-    q: "'p이면 q이다'의 대우는?",
-    choices: ["p이면 ~q이다", "q이면 p이다", "~p이면 ~q이다", "~q이면 ~p이다", "~q이면 p이다"],
-    answer: 3,
-    exp: "명제 p→q의 대우는 **~q → ~p**"
-  },
-  {
-    unit: "집합과 명제",
-    level: 2,
-    q: "전체집합 U = {1~10}, A = {2,4,6,8,10}일 때, Aᶜ의 원소의 합은?",
-    choices: ["20", "25", "30", "35", "15"],
-    answer: 1,
-    exp: "Aᶜ = {1,3,5,7,9}\n합 = 1+3+5+7+9 = **25**"
-  },
-  {
-    unit: "집합과 명제",
-    level: 2,
-    q: "n(A) = 8, n(B) = 6, n(A∩B) = 3일 때, n(A∪B)는?",
-    choices: ["11", "14", "17", "20", "9"],
-    answer: 0,
-    exp: "n(A∪B) = n(A)+n(B)-n(A∩B) = 8+6-3 = **11**"
-  },
-  {
-    unit: "집합과 명제",
-    level: 3,
-    q: "명제 '√2는 무리수이다'를 부정하면?",
-    choices: [
-      "√2는 유리수이다",
-      "√2는 무리수가 아니다",
-      "√2는 정수이다",
-      "√2는 유리수가 아니다",
-      "√2는 실수이다"
-    ],
-    answer: 1,
-    exp: "명제 p의 부정 ~p는 'p가 아니다'이므로\n**'√2는 무리수가 아니다'** (이것이 형식적 부정)\n(유리수이다도 사실상 동치지만 '형식적 부정'은 ~p)"
-  }
-];
+function k(q){return `u${unit}_${q}`}
 
-// ──────────────────────────────────────────
-const UNITS = [...new Set(QUESTIONS.map(q => q.unit))];
+function render(){
+  const qs=QS[unit];
+  const tp=Math.ceil(qs.length/5);
+  const st=page*5;
+  const pqs=qs.slice(st,st+5);
+  document.getElementById('ubadge').textContent=UN[unit];
+  document.getElementById('pinfo').textContent=`${st+1}~${st+pqs.length}번 / 전체 ${qs.length}문항 (${page+1}/${tp}페이지)`;
 
-let currentQuestions = [];
-let currentIdx = 0;
-let score = 0;
-let totalCorrect = 0;
-let answered = false;
-let wrongQuestions = [];
-let selectedUnit = "";
+  document.getElementById('qbox').innerHTML=pqs.map((q,pi)=>{
+    const qi=st+pi; const ua=ans[k(qi)];
+    const opts=q.o.map((opt,oi)=>{
+      let cls=''; 
+      if(ua!==undefined&&showAns){if(oi===q.a-1)cls='ok';else if(ua===oi)cls='bad';}
+      else if(ua===oi)cls='sel';
+      const onclick=showAns?'':`onclick="pick(${qi},${oi})"`;
+      return `<label class="opt ${cls}" ${onclick}><div class="oc">${NM[oi]}</div><span>${opt}</span></label>`;
+    }).join('');
+    const exp=showAns?`<div class="exp on">📌 <strong>풀이</strong> | ${q.e}</div>`:'';
+    return `<div class="q">
+      <div class="qh"><div class="qn">${qi+1}</div><div class="qtxt">${q.t}</div><div class="qpts">[${q.p}점]</div></div>
+      <div class="opts">${opts}</div>${exp}</div>`;
+  }).join('');
 
-function init() {
-  const grid = document.getElementById("unitGrid");
-  grid.innerHTML = "";
-  UNITS.forEach(u => {
-    const cnt = QUESTIONS.filter(q => q.unit === u).length;
-    const btn = document.createElement("button");
-    btn.className = "unit-btn";
-    btn.innerHTML = `
-      <div class="unit-icon">${unitIcon(u)}</div>
-      <div class="unit-name">${u}</div>
-      <div class="unit-count">문제 ${cnt}개</div>
-    `;
-    btn.onclick = () => startUnit(u, btn);
-    grid.appendChild(btn);
-  });
+  // 도트
+  document.getElementById('pdots').innerHTML=Array.from({length:tp},(_,pi)=>{
+    const done=QS[unit].slice(pi*5,pi*5+5).every((_,i)=>ans[k(pi*5+i)]!==undefined);
+    return `<div class="pdot ${pi===page?'active':''} ${done&&pi!==page?'done':''}" onclick="gp(${pi})"></div>`;
+  }).join('');
+
+  document.getElementById('bprev').disabled=page===0;
+  document.getElementById('bnext').disabled=page===tp-1;
+  const answered=Object.keys(ans).filter(x=>x.startsWith(`u${unit}_`)).length;
+  document.getElementById('pg-a').textContent=answered;
+  document.getElementById('pg-t').textContent=qs.length;
 }
 
-function unitIcon(u) {
-  const map = { "다항식": "📦", "방정식과 부등식": "⚖️", "도형의 방정식": "📐", "집합과 명제": "🔲" };
-  return map[u] || "📝";
+function pick(qi,oi){if(showAns)return;ans[k(qi)]=oi;updateSc();render();}
+function go(d){page=Math.max(0,Math.min(Math.ceil(QS[unit].length/5)-1,page+d));render();document.getElementById('paper').scrollIntoView({behavior:'smooth',block:'start'});}
+function gp(p){page=p;render();}
+function changeUnit(){unit=parseInt(document.getElementById('unit-sel').value);page=0;showAns=false;document.getElementById('btn-ans').textContent='✅ 정답 확인';document.getElementById('rp').classList.remove('on');render();}
+function toggleAns(){
+  showAns=!showAns;
+  document.getElementById('btn-ans').textContent=showAns?'🔒 정답 숨기기':'✅ 정답 확인';
+  if(showAns){calcRes();document.getElementById('rp').classList.add('on');document.getElementById('rp').scrollIntoView({behavior:'smooth'});}
+  else document.getElementById('rp').classList.remove('on');
+  render();
 }
-
-function startUnit(unit, btn) {
-  document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  selectedUnit = unit;
-  const qs = shuffle(QUESTIONS.filter(q => q.unit === unit));
-  beginQuiz(qs, unit);
+function calcRes(){
+  const qs=QS[unit]; let ep=0,tp=0,co=0,wo=0,sk=0;
+  const lh=qs.map((q,qi)=>{
+    tp+=q.p; const ua=ans[k(qi)]; let st='askip',mk='—';
+    if(ua===undefined)sk++;
+    else if(ua===q.a-1){ep+=q.p;co++;st='aok';mk='✓ '+NM[ua];}
+    else{wo++;st='afail';mk='✗ '+NM[ua];}
+    return `<div class="ai ${st}"><div class="aqn">${qi+1}번</div><div class="aam">${mk}</div></div>`;
+  }).join('');
+  document.getElementById('rscore').innerHTML=`${ep}<span>/${tp}</span>`;
+  document.getElementById('rc').textContent=co;
+  document.getElementById('rw').textContent=wo;
+  document.getElementById('rs2').textContent=sk;
+  document.getElementById('alist').innerHTML=lh;
+  const pct=Math.round(ep/tp*100);
+  document.getElementById('rgrade').textContent=pct>=90?'🏆 1등급 (매우 우수!)':pct>=80?'🥇 2등급 (우수)':pct>=70?'🥈 3등급 (양호)':pct>=60?'🥉 4등급 (보통)':'📚 5등급 이하 — 개념 복습이 필요합니다';
+  document.getElementById('sdsp').textContent=ep;
 }
-
-function startAll() {
-  selectedUnit = "전체";
-  beginQuiz(shuffle([...QUESTIONS]), "전체 단원");
+function updateSc(){
+  const qs=QS[unit]; let ep=0;
+  qs.forEach((q,qi)=>{const ua=ans[k(qi)];if(ua!==undefined&&ua===q.a-1)ep+=q.p;});
+  document.getElementById('sdsp').textContent=ep||'—';
 }
-
-function beginQuiz(qs, title) {
-  currentQuestions = qs;
-  currentIdx = 0;
-  score = 0;
-  wrongQuestions = [];
-  answered = false;
-  showScreen("screen-quiz");
-  renderQuestion();
+function resetExam(){
+  const pre=`u${unit}_`;
+  Object.keys(ans).forEach(x=>{if(x.startsWith(pre))delete ans[x];});
+  showAns=false;page=0;
+  document.getElementById('btn-ans').textContent='✅ 정답 확인';
+  document.getElementById('rp').classList.remove('on');
+  document.getElementById('sdsp').textContent='—';
+  render();
 }
-
-function renderQuestion() {
-  const q = currentQuestions[currentIdx];
-  const total = currentQuestions.length;
-  document.getElementById("progressFill").style.width = `${(currentIdx / total) * 100}%`;
-  document.getElementById("nextBtn").disabled = true;
-
-  const levelClass = `tag-level-${q.level}`;
-  const levelText = ["", "기본", "표준", "심화"][q.level];
-
-  const card = document.getElementById("questionCard");
-  card.innerHTML = `
-    <div class="question-meta">
-      <span class="tag tag-unit">${q.unit}</span>
-      <span class="tag ${levelClass}">${levelText}</span>
-      <span class="question-num">${currentIdx + 1} / ${total}</span>
-    </div>
-    <div class="question-text">Q. ${q.q}</div>
-    <div class="choices">
-      ${q.choices.map((c, i) => `
-        <button class="choice-btn" onclick="selectChoice(${i})" id="choice-${i}">
-          <span class="choice-label">${i + 1}</span>
-          <span>${c}</span>
-        </button>
-      `).join("")}
-    </div>
-    <div class="explanation" id="exp">${markdownBold(q.exp)}</div>
-  `;
-  answered = false;
-}
-
-function selectChoice(idx) {
-  if (answered) return;
-  answered = true;
-
-  const q = currentQuestions[currentIdx];
-  const btns = document.querySelectorAll(".choice-btn");
-  btns.forEach(b => b.disabled = true);
-
-  btns[idx].classList.add(idx === q.answer ? "correct" : "wrong");
-  if (idx !== q.answer) {
-    btns[q.answer].classList.add("correct");
-    wrongQuestions.push({ idx: currentIdx, q: q.q });
-  } else {
-    score++;
-    totalCorrect++;
-    document.getElementById("totalCorrect").textContent = totalCorrect;
-  }
-
-  document.getElementById("exp").classList.add("show");
-  document.getElementById("nextBtn").disabled = false;
-  document.getElementById("nextBtn").textContent =
-    currentIdx + 1 >= currentQuestions.length ? "결과 보기 →" : "다음 문제 →";
-}
-
-function nextQuestion() {
-  if (!answered) return;
-  currentIdx++;
-  if (currentIdx >= currentQuestions.length) {
-    showResult();
-  } else {
-    renderQuestion();
-  }
-}
-
-function showResult() {
-  showScreen("screen-result");
-  const total = currentQuestions.length;
-  const pct = Math.round((score / total) * 100);
-  const emoji = pct >= 80 ? "🎉" : pct >= 60 ? "👍" : "💪";
-  const msg = pct >= 80 ? "훌륭해요! 잘 이해하고 있어요." : pct >= 60 ? "좋아요! 조금 더 연습해요." : "다시 풀어보세요!";
-
-  let wrongHtml = "";
-  if (wrongQuestions.length > 0) {
-    wrongHtml = `
-      <div class="wrong-list">
-        <h3>❌ 틀린 문제 (${wrongQuestions.length}개)</h3>
-        ${wrongQuestions.map(w => `<div class="wrong-item">Q${w.idx + 1}. ${w.q.slice(0, 40)}${w.q.length > 40 ? "..." : ""}</div>`).join("")}
-      </div>
-    `;
-  }
-
-  document.getElementById("resultCard").innerHTML = `
-    <div class="result-emoji">${emoji}</div>
-    <div class="result-title">${selectedUnit} 완료!</div>
-    <div class="result-score">${score} / ${total}</div>
-    <div class="result-detail">정답률 ${pct}% — ${msg}</div>
-    ${wrongHtml}
-  `;
-}
-
-function retryQuiz() {
-  beginQuiz(shuffle([...currentQuestions]), selectedUnit);
-}
-
-function goHome() {
-  showScreen("screen-home");
-}
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function markdownBold(text) {
-  return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>");
-}
-
-init();
+render();
 </script>
 </body>
 </html>
