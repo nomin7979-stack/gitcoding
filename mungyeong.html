@@ -5,211 +5,419 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>문경 여행 가이드</title>
   <style>
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --bg:#0f0c08;--bg2:#1a1508;--card:#221c0a;--border:#3a2e10;
-      --accent:#e8891a;--accent2:#4a8c3f;--accent3:#c4952a;
-      --text:#f5efe6;--muted:#a09070;--danger:#ef4444;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #131008;
+      --bg2:     #1c1608;
+      --card:    #221c0a;
+      --border:  #3a2e10;
+      --accent:  #e8891a;
+      --accent2: #4a8c3f;
+      --accent3: #c4952a;
+      --text:    #f5efe6;
+      --muted:   #a09070;
     }
-    body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;min-height:100vh}
-    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
     /* ── HERO ── */
-    .hero{position:relative;min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:80px 24px 160px}
-    .hero-slides{position:absolute;inset:0;z-index:0}
-    .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.8s ease-in-out;animation:kb 16s ease-in-out infinite alternate}
-    .hero-slide.active{opacity:1}
-    @keyframes kb{from{transform:scale(1)}to{transform:scale(1.08)}}
-    .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(10,8,2,.04) 20%,rgba(15,10,5,.35) 60%,var(--bg) 100%)}
-    .hero-bokeh{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
-    .bk{position:absolute;border-radius:50%;filter:blur(var(--bl,70px));animation:bkF var(--d,18s) ease-in-out infinite var(--dl,0s) alternate;opacity:var(--op,.1)}
-    @keyframes bkF{0%{transform:translate(0,0) scale(1)}50%{transform:translate(var(--tx,20px),var(--ty,-15px)) scale(1.1)}100%{transform:translate(var(--tx2,-10px),var(--ty2,20px)) scale(.95)}}
-    /* 활동 티커 */
-    .hero-ticker{position:absolute;top:0;left:0;right:0;z-index:5;overflow:hidden;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent);padding:14px 0 20px}
-    .ticker-track{display:flex;white-space:nowrap;animation:tickS 30s linear infinite}
-    .ticker-track span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:rgba(255,255,255,.78);letter-spacing:.5px;padding:0 28px;border-right:1px solid rgba(255,255,255,.15)}
-    @keyframes tickS{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    /* 빛 스윕 */
-    .hero-ls{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,220,100,.04) 50%,transparent 70%);background-size:200% 100%;animation:lsw 8s ease-in-out infinite}
-    @keyframes lsw{0%{background-position:200% 0}100%{background-position:-100% 0}}
-    /* 파티클 + 별 */
-    .hero-particles{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
-    .pt{position:absolute;border-radius:50%;animation:ptF var(--d,8s) ease-in-out infinite var(--dl,0s)}
-    @keyframes ptF{0%{transform:translateY(0) scale(.8);opacity:0}12%{opacity:1}88%{opacity:.9}100%{transform:translateY(-130px) scale(.2);opacity:0}}
-    .star{position:absolute;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:starT var(--d,4s) ease-in-out infinite var(--dl,0s)}
-    @keyframes starT{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1) rotate(15deg)}}
-    /* 히어로 콘텐츠 */
-    .hero-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center}
-    .hero-glow{position:absolute;width:520px;height:180px;border-radius:50%;background:radial-gradient(ellipse,rgba(232,137,26,.18) 0%,transparent 70%);filter:blur(30px);animation:glP 4s ease-in-out infinite alternate;pointer-events:none;z-index:0}
-    @keyframes glP{from{transform:scale(.8);opacity:.6}to{transform:scale(1.2);opacity:1}}
-    .hero h1{position:relative;z-index:1;font-size:clamp(42px,8vw,82px);font-weight:900;letter-spacing:-2px;line-height:1.0;color:#fff;text-shadow:0 0 60px rgba(232,137,26,.4),0 4px 24px rgba(0,0,0,.7);margin-bottom:18px}
-    .hero h1 .w1{display:inline-block;animation:wordI .8s cubic-bezier(.22,1,.36,1) both}
-    .hero h1 .w2{display:block;animation:wordI .8s .2s cubic-bezier(.22,1,.36,1) both}
-    @keyframes wordI{from{opacity:0;transform:translateY(32px) skewY(4deg)}to{opacity:1;transform:translateY(0) skewY(0)}}
-    .hero h1 em{font-style:normal;background:linear-gradient(90deg,#f5c842 0%,#e8891a 30%,#06d6a0 60%,#f5c842 100%);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gF 4s linear infinite;filter:drop-shadow(0 0 16px rgba(232,137,26,.5))}
-    @keyframes gF{0%{background-position:0% center}100%{background-position:300% center}}
-    .hero-sub{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,.85);line-height:1.65;max-width:520px;margin-bottom:32px;text-shadow:0 2px 10px rgba(0,0,0,.6);animation:wordI .8s .4s cubic-bezier(.22,1,.36,1) both}
-    /* 검색 바 */
-    .search-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;background:rgba(255,255,255,.1);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:14px 18px;animation:wordI .8s .55s cubic-bezier(.22,1,.36,1) both}
-    .search-bar select,.search-bar input{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;font-family:inherit;outline:none;cursor:pointer;min-width:140px}
-    .search-bar select:focus,.search-bar input:focus{border-color:#f5c842}
-    .search-bar select option{background:#1a1508;color:#f5efe6}
-    .search-bar input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1)}
-    /* 도트 */
-    .hero-dots{position:absolute;bottom:130px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
-    .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);transition:.3s;cursor:pointer;border:1.5px solid rgba(255,255,255,.2)}
-    .hero-dot.active{background:var(--accent);width:28px;border-radius:4px;box-shadow:0 0 12px var(--accent);border-color:var(--accent)}
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 80px 24px 160px;
+    }
+
+    .hero-slides { position: absolute; inset: 0; z-index: 0; }
+    .hero-slide {
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.8s ease-in-out;
+      animation: kb 14s ease-in-out infinite alternate;
+    }
+    .hero-slide.active { opacity: 1; }
+    @keyframes kb { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,.4) 0%,
+        rgba(0,0,0,.15) 35%,
+        rgba(19,16,8,.8) 78%,
+        var(--bg) 100%
+      );
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+
+    .hero-season {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,137,26,.15);
+      border: 1px solid rgba(232,137,26,.4);
+      border-radius: 30px; padding: 7px 20px;
+      font-size: 13px; font-weight: 600;
+      color: var(--accent); margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 80px);
+      font-weight: 900; letter-spacing: -3px; line-height: 1;
+      color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.6);
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #f5c842, #e8891a);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,.78);
+      line-height: 1.7; margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.5);
+    }
+
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: #fff;
+      padding: 14px 32px; border-radius: 50px;
+      font-size: 15px; font-weight: 700;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 8px 24px rgba(232,137,26,.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(232,137,26,.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff; padding: 14px 28px;
+      border-radius: 50px; font-size: 15px; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.2); transform: translateY(-3px); }
+
+    /* 슬라이드 도트 */
+    .hero-dots {
+      position: absolute; bottom: 120px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 3;
+    }
+    .hero-dot {
+      width: 28px; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,.3);
+      transition: background .3s, width .3s; cursor: pointer;
+    }
+    .hero-dot.active { background: var(--accent); width: 44px; }
+
     /* 웨이브 */
-    .hero-waves{position:absolute;bottom:-2px;left:0;right:0;z-index:3;height:150px;pointer-events:none}
-    .wave-svg{position:absolute;bottom:0;left:0;width:200%;height:100%}
-    .wave-svg.w1{animation:wS 9s linear infinite}
-    .wave-svg.w2{animation:wS 13s linear infinite reverse}
-    .wave-svg.w3{animation:wS 17s linear infinite}
-    @keyframes wS{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .hero-wave {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      z-index: 3; line-height: 0;
+    }
 
-    /* ── TAB ── */
-    .tab-wrap{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border)}
-    .tabs{display:flex;max-width:1100px;margin:0 auto;padding:0 24px;overflow-x:auto}
-    .tab-btn{display:flex;align-items:center;gap:8px;padding:16px 24px;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap;font-family:inherit}
-    .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-    .tab-btn:hover{color:var(--text)}
-    .tab-count{background:rgba(232,137,26,.2);color:var(--accent);font-size:11px;padding:2px 7px;border-radius:10px}
+    /* ── STATS ── */
+    .stats-wrap {
+      display: flex; justify-content: center; gap: 0;
+      max-width: 800px; margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .stat-item {
+      flex: 1; text-align: center;
+      padding: 28px 16px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-size: 32px; font-weight: 900;
+      color: var(--accent); display: block;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    /* ── MAIN ── */
-    .main{max-width:1100px;margin:0 auto;padding:32px 24px 100px}
-    .panel{display:none}.panel.active{display:block}
-    .sec-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
-    .sec-label{font-size:12px;text-transform:uppercase;letter-spacing:3px;color:var(--accent);font-weight:700;margin-bottom:6px}
-    .sec-title{font-size:26px;font-weight:800}
-    .info-bar{background:rgba(232,137,26,.07);border:1px solid rgba(232,137,26,.2);border-radius:12px;padding:12px 20px;font-size:13px;color:var(--muted);margin-bottom:28px}
-    .info-bar span{color:var(--accent);font-weight:600}
-    .sort-bar{display:flex;gap:8px}
-    .sort-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:.2s;font-family:inherit}
-    .sort-btn.active,.sort-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+    /* ── SECTION ── */
+    .section { max-width: 1100px; margin: 0 auto; padding: 0 24px 72px; }
+    .section-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 32px; gap: 12px; flex-wrap: wrap;
+    }
+    .section-label {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 3px;
+      color: var(--accent); font-weight: 700; margin-bottom: 6px;
+    }
+    .section-title { font-size: 28px; font-weight: 800; }
 
-    /* ── 교통 카드 ── */
-    .trans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-    .trans-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;transition:.2s}
-    .trans-card:hover{border-color:var(--accent);transform:translateY(-3px)}
-    .trans-icon{font-size:36px;margin-bottom:14px}
-    .trans-title{font-size:17px;font-weight:700;margin-bottom:10px}
-    .trans-info{font-size:13px;color:var(--muted);line-height:1.75}
-    .trans-info strong{color:var(--text)}
-    .trans-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(232,137,26,.15);border:1px solid rgba(232,137,26,.3);color:var(--accent);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;margin-top:10px}
+    /* ── ATTRACTION CARDS ── */
+    .attr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .attr-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+    .attr-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 16px 48px rgba(232,137,26,.12);
+    }
+    .attr-photo-wrap {
+      position: relative; height: 200px; overflow: hidden;
+      background: #2a1f08; cursor: zoom-in;
+    }
+    .attr-photo {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s;
+    }
+    .attr-card:hover .attr-photo { transform: scale(1.05); }
+    .attr-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.55) 100%);
+    }
+    .attr-cat-badge {
+      position: absolute; top: 12px; right: 12px;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .cat-nature  { background: rgba(74,140,63,.25); color: #6dcc60; border: 1px solid rgba(74,140,63,.4); }
+    .cat-culture { background: rgba(232,137,26,.2); color: var(--accent); border: 1px solid rgba(232,137,26,.3); }
+    .cat-leisure { background: rgba(100,160,255,.2); color: #7ab4ff; border: 1px solid rgba(100,160,255,.3); }
+    .cat-food    { background: rgba(220,80,80,.2); color: #ff8080; border: 1px solid rgba(220,80,80,.3); }
+    .cat-free-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--accent2); color: #fff;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .attr-body { padding: 20px; }
+    .attr-name { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .attr-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .attr-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .attr-info { display: flex; gap: 14px; flex-wrap: wrap; }
+    .attr-meta { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .attr-price { font-size: 18px; font-weight: 800; color: var(--accent); }
+    .attr-price.free { color: #6dcc60; font-size: 15px; }
 
-    /* ── 숙소 카드 ── */
-    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
-    .hotel-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:.2s}
-    .hotel-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 16px 48px rgba(232,137,26,.12)}
-    .hotel-photo-wrap{position:relative;height:200px;overflow:hidden;background:#2a1f08;cursor:zoom-in}
-    .hotel-photo{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-    .hotel-card:hover .hotel-photo{transform:scale(1.05)}
-    .hotel-photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.55) 100%)}
-    .hotel-grade{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:4px 10px;border-radius:20px;font-size:12px;color:#ffd700;z-index:2}
-    .hotel-lowest{position:absolute;top:12px;left:12px;background:var(--danger);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;z-index:2}
-    .hotel-thumbs{position:absolute;bottom:10px;left:10px;display:flex;gap:6px;z-index:2}
-    .hotel-thumb{width:52px;height:40px;border-radius:6px;object-fit:cover;border:2px solid rgba(255,255,255,.3);cursor:pointer;transition:.2s}
-    .hotel-thumb:hover{border-color:#fff;transform:scale(1.08)}
-    .hotel-body{padding:18px 20px 20px}
-    .hotel-name{font-size:17px;font-weight:700;margin-bottom:6px}
-    .hotel-rating-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-    .rating-score{font-size:22px;font-weight:900;color:var(--accent);line-height:1}
-    .rating-stars{color:#ffd700;font-size:14px;letter-spacing:1px}
-    .rating-label{font-size:12px;font-weight:600;color:var(--accent);background:rgba(232,137,26,.12);padding:2px 8px;border-radius:6px}
-    .rating-count{font-size:12px;color:var(--muted)}
-    .hotel-loc{font-size:13px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:4px}
-    .hotel-features{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-    .feat-tag{font-size:11px;background:rgba(255,255,255,.06);border-radius:6px;padding:3px 9px;color:var(--muted)}
-    .hotel-reviews{border-top:1px solid var(--border);padding-top:14px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
-    .review-item{display:flex;flex-direction:column;gap:5px}
-    .review-header{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-    .reviewer-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0f0c08;flex-shrink:0}
-    .reviewer-name{font-size:13px;font-weight:600}
-    .review-score{font-size:12px;font-weight:700;background:var(--accent);color:#0f0c08;padding:2px 7px;border-radius:6px;margin-left:auto}
-    .review-date{font-size:11px;color:var(--muted)}
-    .review-text{font-size:13px;color:var(--muted);line-height:1.55;font-style:italic}
-    .hotel-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
-    .hotel-price .per{font-size:11px;color:var(--muted)}.hotel-price .amt{font-size:22px;font-weight:800;color:var(--accent3)}.hotel-price .note{font-size:11px;color:var(--muted)}
-    .hotel-btns{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-    .btn-book{padding:8px 16px;background:rgba(232,137,26,.2);border:1px solid var(--accent);color:var(--accent);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap;font-family:inherit}
-    .btn-book:hover,.btn-book.selected{background:var(--accent);color:#0f0c08}
-    .btn-booking-site{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-size:12px;text-decoration:none;transition:.2s}
-    .btn-booking-site:hover{border-color:var(--accent3);color:var(--accent3)}
+    /* ── FOOD SECTION ── */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .food-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: transform .2s, border-color .2s;
+    }
+    .food-card:hover { transform: translateY(-3px); border-color: var(--accent3); }
+    .food-img {
+      height: 150px; position: relative; overflow: hidden; background: #2a1c08;
+    }
+    .food-img img { width: 100%; height: 100%; object-fit: cover; }
+    .food-emoji { font-size: 52px; display: flex; align-items: center; justify-content: center; height: 100%; }
+    .food-body { padding: 16px; }
+    .food-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .food-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
 
-    /* ── 관광지 ── */
-    .attr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-    .attr-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:.2s}
-    .attr-card:hover{border-color:var(--accent2);transform:translateY(-4px)}
-    .attr-photo-wrap{position:relative;height:180px;overflow:hidden;background:#1a2010;cursor:zoom-in}
-    .attr-photo{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-    .attr-card:hover .attr-photo{transform:scale(1.05)}
-    .attr-photo-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.55) 100%)}
-    .attr-cat-badge{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
-    .cat-nature{background:rgba(74,140,63,.25);color:#6dcc60;border:1px solid rgba(74,140,63,.4)}
-    .cat-culture{background:rgba(232,137,26,.2);color:var(--accent);border:1px solid rgba(232,137,26,.3)}
-    .cat-leisure{background:rgba(100,160,255,.2);color:#7ab4ff;border:1px solid rgba(100,160,255,.3)}
-    .attr-body{padding:18px}
-    .attr-name{font-size:16px;font-weight:700;margin-bottom:6px}
-    .attr-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-    .attr-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-    .attr-price{font-size:18px;font-weight:800;color:var(--accent2)}
-    .attr-price.free{color:#6dcc60;font-size:15px}
-    .attr-meta{font-size:12px;color:var(--muted)}
-    .btn-add{padding:7px 16px;background:rgba(74,140,63,.15);border:1px solid var(--accent2);color:var(--accent2);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit}
-    .btn-add:hover,.btn-add.added{background:var(--accent2);color:#0f0c08}
+    /* ── TRANSPORT ── */
+    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .transport-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .transport-icon { font-size: 32px; margin-bottom: 12px; }
+    .transport-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .transport-info { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .transport-info strong { color: var(--text); }
 
-    /* ── 쇼핑·음식 카드 ── */
-    .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .shop-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:.2s}
-    .shop-card:hover{border-color:var(--accent3);transform:translateY(-3px)}
-    .shop-img-wrap{position:relative;height:170px;overflow:hidden;background:#2a1f08}
-    .shop-img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-    .shop-card:hover .shop-img{transform:scale(1.05)}
-    .shop-rank{position:absolute;top:10px;left:10px;background:var(--accent);color:#0f0c08;font-size:11px;font-weight:800;padding:3px 9px;border-radius:20px}
-    .shop-hot{position:absolute;top:10px;right:10px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
-    .shop-body{padding:14px 16px 16px}
-    .shop-name{font-size:15px;font-weight:700;margin-bottom:6px}
-    .shop-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px}
-    .shop-price{font-size:17px;font-weight:800;color:var(--accent3);margin-bottom:8px}
-    .shop-price span{font-size:12px;font-weight:400;color:var(--muted)}
-    .shop-tags{display:flex;gap:6px;flex-wrap:wrap}
-    .shop-tag{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
-    .tag-where{background:rgba(74,140,63,.12);color:var(--accent2)}
-    .tag-tip{background:rgba(196,149,42,.12);color:var(--accent3)}
+    /* ── SEASONS BANNER ── */
+    .seasons {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-bottom: 72px; padding: 0 24px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .season-card {
+      border-radius: 16px; padding: 24px 20px;
+      text-align: center; border: 1px solid var(--border);
+    }
+    .season-icon { font-size: 32px; margin-bottom: 10px; }
+    .season-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .season-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .season-card { cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .2s; }
+    .season-card:hover { transform: translateY(-4px); }
+    .season-card.active { transform: translateY(-4px); }
+    .s-spring { background: linear-gradient(135deg, #1a1208, #1a2010); }
+    .s-spring:hover, .s-spring.active { border-color: #7ec97e; box-shadow: 0 8px 28px rgba(100,200,100,.2); }
+    .s-summer { background: linear-gradient(135deg, #1a1208, #0e1f10); }
+    .s-summer:hover, .s-summer.active { border-color: #4fc97e; box-shadow: 0 8px 28px rgba(40,180,100,.2); }
+    .s-autumn { background: linear-gradient(135deg, #1a1208, #2a1408); border-color: rgba(232,137,26,.3); }
+    .s-autumn:hover, .s-autumn.active { border-color: var(--accent); box-shadow: 0 8px 28px rgba(232,137,26,.25); }
+    .s-winter { background: linear-gradient(135deg, #1a1208, #101525); }
+    .s-winter:hover, .s-winter.active { border-color: #7eb4e8; box-shadow: 0 8px 28px rgba(100,160,220,.2); }
 
-    /* ── 라이트박스 ── */
-    #lightbox{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
-    #lightbox.show{display:flex}
-    .lb-header{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);z-index:2}
-    .lb-title{font-size:16px;font-weight:700;color:#fff}
-    .lb-counter{font-size:13px;color:rgba(255,255,255,.5)}
-    .lb-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.4);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-    .lb-close:hover{background:rgba(255,255,255,.15)}
-    .lb-img-wrap{display:flex;align-items:center;justify-content:center;width:100%;max-width:960px;max-height:80vh;position:relative}
-    #lb-img{max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;box-shadow:0 24px 80px rgba(0,0,0,.6);transition:opacity .2s}
-    .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-    .lb-nav:hover{background:rgba(255,255,255,.2)}
-    #lb-prev{left:-56px}#lb-next{right:-56px}
-    .lb-dots{display:flex;gap:8px;margin-top:4px}
-    .lb-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:.2s}
-    .lb-dot.active{background:#fff}
+    /* ── 계절 콘텐츠 패널 ── */
+    .season-panel-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 24px; overflow: hidden;
+    }
+    .season-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s ease, opacity .4s ease;
+      opacity: 0;
+    }
+    .season-panel.open {
+      max-height: 2000px;
+      opacity: 1;
+      margin-bottom: 56px;
+    }
+    .season-panel-inner {
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid var(--border);
+    }
+    .sp-spring { background: linear-gradient(135deg, #151d0f, #111a0a); border-color: rgba(100,200,100,.2); }
+    .sp-summer { background: linear-gradient(135deg, #0c180e, #0d1f10); border-color: rgba(40,180,100,.2); }
+    .sp-autumn { background: linear-gradient(135deg, #1e1208, #221408); border-color: rgba(232,137,26,.2); }
+    .sp-winter { background: linear-gradient(135deg, #101520, #0e1828); border-color: rgba(100,160,220,.2); }
+    .sp-title {
+      font-size: 20px; font-weight: 800; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sp-sub-title {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
+      font-weight: 700; margin-bottom: 16px; margin-top: 28px;
+    }
+    .sp-spring .sp-sub-title { color: #7ec97e; }
+    .sp-summer .sp-sub-title { color: #4fc97e; }
+    .sp-autumn .sp-sub-title { color: var(--accent); }
+    .sp-winter .sp-sub-title { color: #7eb4e8; }
 
-    /* ── 예산 바 ── */
-    .budget-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,12,8,.96);border-top:1px solid var(--border);backdrop-filter:blur(12px);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;z-index:200}
-    .budget-items{display:flex;gap:24px;flex-wrap:wrap}
-    .budget-item{font-size:13px;color:var(--muted)}
-    .budget-item strong{color:var(--text);font-size:15px}
-    .budget-total{display:flex;align-items:center;gap:16px}
-    .total-label{font-size:14px;color:var(--muted)}
-    .total-price{font-size:26px;font-weight:800;color:var(--accent)}
-    .btn-reserve{padding:12px 28px;background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;border-radius:12px;color:#0f0c08;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;font-family:inherit}
-    .btn-reserve:hover{opacity:.9;transform:scale(1.03)}
+    /* 계절 볼거리 */
+    .sp-spots { display: flex; flex-direction: column; gap: 12px; }
+    .sp-spot {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(255,255,255,.04); border-radius: 14px;
+      padding: 14px 16px; border: 1px solid rgba(255,255,255,.06);
+    }
+    .sp-spot-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+    .sp-spot-info { flex: 1; }
+    .sp-spot-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .sp-spot-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .sp-spot-tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 9px; border-radius: 20px; margin-top: 6px;
+    }
+    .sp-spring .sp-spot-tag { background: rgba(100,200,100,.15); color: #7ec97e; }
+    .sp-summer .sp-spot-tag { background: rgba(40,180,100,.15); color: #4fc97e; }
+    .sp-autumn .sp-spot-tag { background: rgba(232,137,26,.15); color: var(--accent); }
+    .sp-winter .sp-spot-tag { background: rgba(100,160,220,.15); color: #7eb4e8; }
 
-    @media(max-width:640px){
-      .hotel-grid{grid-template-columns:1fr}
-      .budget-bar{flex-direction:column}
-      .tab-btn{padding:14px 14px;font-size:13px}
-      #lb-prev{left:0}#lb-next{right:0}
+    /* 계절 먹거리 */
+    .sp-foods { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .sp-food {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px; padding: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sp-food-icon { font-size: 28px; flex-shrink: 0; }
+    .sp-food-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .sp-food-tip  { font-size: 12px; color: var(--muted); }
+
+    .sp-divider {
+      height: 1px; background: rgba(255,255,255,.07); margin: 24px 0;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(0,0,0,.92); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; padding: 20px;
+    }
+    #lightbox.show { display: flex; }
+    .lb-header {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px;
+      background: linear-gradient(to bottom, rgba(0,0,0,.7), transparent);
+      z-index: 2;
+    }
+    .lb-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .lb-counter { font-size: 13px; color: rgba(255,255,255,.5); }
+    .lb-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(0,0,0,.4); color: #fff; font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lb-close:hover { background: rgba(255,255,255,.15); }
+    .lb-img-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; max-width: 960px; max-height: 80vh; position: relative;
+    }
+    #lb-img {
+      max-width: 100%; max-height: 80vh;
+      border-radius: 12px; object-fit: contain;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6); transition: opacity .2s;
+    }
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,.2); }
+    #lb-prev { left: -56px; } #lb-next { right: -56px; }
+    .lb-dots { display: flex; gap: 8px; margin-top: 4px; }
+    .lb-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.3); cursor: pointer; transition: background .2s;
+    }
+    .lb-dot.active { background: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px; text-align: center;
+    }
+    .footer-logo { font-size: 24px; font-weight: 900; color: var(--accent); margin-bottom: 10px; }
+    .footer-sub { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .footer-links { display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .seasons { grid-template-columns: repeat(2, 1fr); }
+      .stats-wrap { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); min-width: 120px; }
+      #lb-prev { left: 0; } #lb-next { right: 0; }
     }
   </style>
 </head>
@@ -218,475 +426,550 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-slides" id="hero-slides">
-    <div class="hero-slide active" style="background-image:url('images/mungyeong/hero_saejae_tourist.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/mungyeong/mg_imweb2.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/mungyeong/hero_omija1.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/mungyeong/mg_omija_fest.jpg')"></div>
+    <div class="hero-slide active" style="background-image:url('images/mungyeong/hero_omija1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/mungyeong/hero_saejae_tourist.jpg')"></div>
     <div class="hero-slide" style="background-image:url('images/mungyeong/hero_saejae_road.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/mungyeong/mg_imweb1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/mungyeong/hero_openset.jpg')"></div>
     <div class="hero-slide" style="background-image:url('images/mungyeong/hero_mountains.jpg')"></div>
-    <div class="hero-slide" style="background-image:url('images/mungyeong/mg_imweb5.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/mungyeong/hero_morning.jpg')"></div>
   </div>
   <div class="hero-overlay"></div>
-  <div class="hero-bokeh">
-    <div class="bk" style="width:300px;height:300px;left:-5%;top:10%;background:rgba(232,137,26,.25);--bl:90px;--d:20s;--dl:0s;--op:.1;--tx:40px;--ty:-30px;--tx2:-15px;--ty2:25px"></div>
-    <div class="bk" style="width:240px;height:240px;right:-3%;top:20%;background:rgba(74,140,63,.3);--bl:80px;--d:25s;--dl:3s;--op:.09;--tx:-30px;--ty:20px;--tx2:20px;--ty2:-20px"></div>
-    <div class="bk" style="width:200px;height:200px;left:40%;top:8%;background:rgba(196,149,42,.25);--bl:70px;--d:18s;--dl:6s;--op:.08;--tx:20px;--ty:30px;--tx2:-20px;--ty2:-10px"></div>
-    <div class="bk" style="width:260px;height:260px;right:15%;bottom:25%;background:rgba(232,137,26,.2);--bl:85px;--d:22s;--dl:9s;--op:.09;--tx:-35px;--ty:-20px;--tx2:25px;--ty2:20px"></div>
-  </div>
-  <div class="hero-ticker">
-    <div class="ticker-track">
-      <span>🍁 문경새재 — 조선의 관문</span><span>🍇 오미자 — 다섯 가지 맛의 보약</span><span>🚃 레일바이크 — 영강 계곡을 달려요</span><span>♨️ 문경 온천 — 피로 회복 필수</span><span>🏯 오픈세트장 — 사극의 성지</span><span>🍎 문경 사과 — 전국 최고 당도</span><span>🐗 약돌돼지 — 문경 특산 별미</span><span>🎢 에코랄라 — 짜릿한 집라인</span>
-      <span>🍁 문경새재 — 조선의 관문</span><span>🍇 오미자 — 다섯 가지 맛의 보약</span><span>🚃 레일바이크 — 영강 계곡을 달려요</span><span>♨️ 문경 온천 — 피로 회복 필수</span><span>🏯 오픈세트장 — 사극의 성지</span><span>🍎 문경 사과 — 전국 최고 당도</span><span>🐗 약돌돼지 — 문경 특산 별미</span><span>🎢 에코랄라 — 짜릿한 집라인</span>
-    </div>
-  </div>
-  <div class="hero-ls"></div>
-  <div class="hero-particles">
-    <div class="pt" style="width:5px;height:5px;left:7%;top:72%;background:radial-gradient(circle,rgba(232,137,26,.95),transparent);--d:7s;--dl:0s"></div>
-    <div class="pt" style="width:7px;height:7px;left:18%;top:68%;background:radial-gradient(circle,rgba(196,149,42,.85),transparent);--d:9s;--dl:1.2s"></div>
-    <div class="pt" style="width:4px;height:4px;left:33%;top:75%;background:radial-gradient(circle,rgba(74,140,63,.9),transparent);--d:8s;--dl:2.5s"></div>
-    <div class="pt" style="width:6px;height:6px;left:48%;top:65%;background:radial-gradient(circle,rgba(232,137,26,.9),transparent);--d:10s;--dl:.8s"></div>
-    <div class="pt" style="width:5px;height:5px;left:62%;top:73%;background:radial-gradient(circle,rgba(196,149,42,.85),transparent);--d:7s;--dl:3.5s"></div>
-    <div class="pt" style="width:8px;height:8px;left:76%;top:70%;background:radial-gradient(circle,rgba(74,140,63,.9),transparent);--d:11s;--dl:1s"></div>
-    <div class="pt" style="width:4px;height:4px;left:88%;top:66%;background:radial-gradient(circle,rgba(232,137,26,.8),transparent);--d:8s;--dl:4s"></div>
-    <div class="star" style="width:10px;height:10px;left:5%;top:30%;background:rgba(255,220,100,.9);--d:3s;--dl:0s"></div>
-    <div class="star" style="width:8px;height:8px;left:22%;top:25%;background:rgba(232,137,26,.95);--d:4s;--dl:1s"></div>
-    <div class="star" style="width:12px;height:12px;left:42%;top:22%;background:rgba(255,255,255,.85);--d:5s;--dl:2s"></div>
-    <div class="star" style="width:8px;height:8px;left:65%;top:28%;background:rgba(74,140,63,.9);--d:3.5s;--dl:.5s"></div>
-    <div class="star" style="width:10px;height:10px;left:80%;top:24%;background:rgba(196,149,42,.9);--d:4.5s;--dl:3s"></div>
-    <div class="star" style="width:7px;height:7px;left:93%;top:32%;background:rgba(232,137,26,.85);--d:3s;--dl:1.5s"></div>
-  </div>
+
   <div class="hero-content">
-    <div class="hero-glow"></div>
-    <h1><span class="w1">자연이 품은 고장</span><span class="w2"><em>문경</em></span></h1>
-    <p class="hero-sub">천년의 역사 새재부터 붉게 물드는 오미자까지<br>사계절 내내 다채로운 경북의 보석 같은 여행지</p>
-    <div class="search-bar">
-      <input type="date" id="dep-date" title="출발일">
-      <input type="date" id="arr-date" title="도착일">
-      <select id="sel-people">
-        <option value="1">1명</option>
-        <option value="2" selected>2명</option>
-        <option value="3">3명</option>
-        <option value="4">4명</option>
-      </select>
+    <div class="hero-season">🍂 경북 북부 대표 관광지</div>
+    <h1>자연이 품은 도시<br><em>문경</em></h1>
+    <p class="hero-desc">
+      천년의 역사 문경새재부터 짜릿한 레일바이크, 오미자 향 가득한 골목까지<br>
+      사계절 내내 다채로운 매력을 품은 경북의 보석 같은 여행지
+    </p>
+    <div class="hero-btns">
+      <a href="#attractions" class="btn-primary">🗺️ 관광지 보기</a>
+      <a href="#transport" class="btn-secondary">🚌 교통 안내</a>
     </div>
   </div>
+
   <div class="hero-dots" id="hero-dots"></div>
-  <div class="hero-waves">
-    <svg class="wave-svg w1" viewBox="0 0 2880 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <defs><linearGradient id="wg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e8891a" stop-opacity=".25"/><stop offset="40%" stop-color="#4a8c3f" stop-opacity=".2"/><stop offset="80%" stop-color="#c4952a" stop-opacity=".25"/></linearGradient></defs>
-      <path d="M0,65 C200,105 400,25 600,65 C800,105 1000,25 1200,65 C1400,105 1600,25 1800,65 C2000,105 2200,25 2400,65 C2600,105 2800,25 2880,65 L2880,150 L0,150 Z" fill="url(#wg1)"/>
-    </svg>
-    <svg class="wave-svg w2" viewBox="0 0 2880 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path d="M0,80 C240,40 480,120 720,80 C960,40 1200,120 1440,80 C1680,40 1920,120 2160,80 C2400,40 2640,120 2880,80 L2880,150 L0,150 Z" fill="rgba(74,140,63,.15)"/>
-    </svg>
-    <svg class="wave-svg w3" viewBox="0 0 2880 150" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path d="M0,55 C360,95 720,15 1080,55 C1440,95 1800,15 2160,55 C2520,95 2880,15 2880,55 L2880,150 L0,150 Z" fill="rgba(15,12,8,.7)"/>
-      <path d="M0,100 C320,70 640,130 960,100 C1280,70 1600,130 1920,100 C2240,70 2560,130 2880,100 L2880,150 L0,150 Z" fill="#0f0c08"/>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:80px;">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#131008"/>
     </svg>
   </div>
 </div>
 
-<!-- TABS -->
-<div class="tab-wrap">
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('trans',this)">🚌 교통 안내</button>
-    <button class="tab-btn" onclick="switchTab('hotel',this)">🏨 숙소 <span class="tab-count">8</span></button>
-    <button class="tab-btn" onclick="switchTab('attr',this)">🍁 관광지 <span class="tab-count">10</span></button>
-    <button class="tab-btn" onclick="switchTab('shop',this)">🛍️ 쇼핑 <span class="tab-count">10</span></button>
-    <button class="tab-btn" onclick="switchTab('food',this)">🍜 먹거리 <span class="tab-count">10</span></button>
+<!-- STATS -->
+<div class="stats-wrap">
+  <div class="stat-item"><span class="stat-num">8+</span><span class="stat-label">주요 관광지</span></div>
+  <div class="stat-item"><span class="stat-num">2,000원~</span><span class="stat-label">최저 입장료</span></div>
+  <div class="stat-item"><span class="stat-num">서울 2h</span><span class="stat-label">고속버스 거리</span></div>
+  <div class="stat-item"><span class="stat-num">사계절</span><span class="stat-label">여행 가능</span></div>
+</div>
+
+<!-- SEASONS -->
+<div class="seasons">
+  <div class="season-card s-spring" onclick="selectSeason('spring', this)">
+    <div class="season-icon">🌸</div>
+    <div class="season-name">봄 (3~5월)</div>
+    <div class="season-desc">벚꽃과 진달래로 물드는 새재 계곡. 트레킹 최적 시즌</div>
+  </div>
+  <div class="season-card s-summer" onclick="selectSeason('summer', this)">
+    <div class="season-icon">🌿</div>
+    <div class="season-name">여름 (6~8월)</div>
+    <div class="season-desc">울창한 녹음 속 레일바이크와 계곡 물놀이가 인기</div>
+  </div>
+  <div class="season-card s-autumn" onclick="selectSeason('autumn', this)">
+    <div class="season-icon">🍁</div>
+    <div class="season-name">가을 (9~11월)</div>
+    <div class="season-desc">오미자 수확 계절. 단풍으로 붉게 물드는 문경새재 절경</div>
+  </div>
+  <div class="season-card s-winter" onclick="selectSeason('winter', this)">
+    <div class="season-icon">❄️</div>
+    <div class="season-name">겨울 (12~2월)</div>
+    <div class="season-desc">눈 덮인 새재의 고요한 설경. 온천으로 피로 회복</div>
   </div>
 </div>
 
-<div class="main">
-
-  <!-- 교통 패널 -->
-  <div id="panel-trans" class="panel active">
-    <div class="sec-header"><div><div class="sec-label">How to Get There</div><div class="sec-title">🚌 문경 교통 안내</div></div></div>
-    <div class="info-bar">ℹ️ 문경은 직행 KTX가 없어 대부분 <span>자가용</span> 또는 <span>고속버스</span>로 이동합니다. 서울에서 약 2시간 30분 소요.</div>
-    <div class="trans-grid" id="trans-list"></div>
+<!-- 계절 콘텐츠 패널 -->
+<div class="season-panel-wrap">
+  <div class="season-panel" id="season-panel">
+    <div class="season-panel-inner" id="season-panel-inner"></div>
   </div>
-
-  <!-- 숙소 패널 -->
-  <div id="panel-hotel" class="panel">
-    <div class="sec-header">
-      <div><div class="sec-label">Accommodation</div><div class="sec-title">🏨 문경 숙소</div></div>
-      <div class="sort-bar">
-        <button class="sort-btn active" onclick="sortHotel('price',this)">가격순</button>
-        <button class="sort-btn" onclick="sortHotel('rating',this)">평점순</button>
-      </div>
-    </div>
-    <div class="info-bar">ℹ️ 가격은 1박 1인 기준 예상 가격입니다.</div>
-    <div class="hotel-grid" id="hotel-list"></div>
-  </div>
-
-  <!-- 관광지 패널 -->
-  <div id="panel-attr" class="panel">
-    <div class="sec-header">
-      <div><div class="sec-label">Tourist Spots</div><div class="sec-title">🍁 문경 관광지</div></div>
-      <div class="sort-bar">
-        <button class="sort-btn active" onclick="sortAttr('price',this)">가격순</button>
-        <button class="sort-btn" onclick="sortAttr('name',this)">이름순</button>
-      </div>
-    </div>
-    <div class="info-bar">ℹ️ 입장료는 1인 기준. 원하는 관광지를 추가해 예산을 계산하세요.</div>
-    <div class="attr-grid" id="attr-list"></div>
-  </div>
-
-  <!-- 쇼핑 패널 -->
-  <div id="panel-shop" class="panel">
-    <div class="sec-header">
-      <div><div class="sec-label">Local Shopping</div><div class="sec-title">🛍️ 문경 특산품 쇼핑</div></div>
-      <div class="sort-bar">
-        <button class="sort-btn active" onclick="sortShop('rank',this)">인기순</button>
-        <button class="sort-btn" onclick="sortShop('price',this)">가격순</button>
-      </div>
-    </div>
-    <div class="info-bar">ℹ️ 문경 특산품을 가장 저렴하게 구입할 수 있는 곳과 꿀팁을 확인하세요.</div>
-    <div class="shop-grid" id="shop-list"></div>
-  </div>
-
-  <!-- 먹거리 패널 -->
-  <div id="panel-food" class="panel">
-    <div class="sec-header">
-      <div><div class="sec-label">Local Food</div><div class="sec-title">🍜 문경 먹거리</div></div>
-      <div class="sort-bar">
-        <button class="sort-btn active" onclick="sortFood('rank',this)">인기순</button>
-        <button class="sort-btn" onclick="sortFood('price',this)">가격순</button>
-      </div>
-    </div>
-    <div class="info-bar">ℹ️ 가격은 1인분 기준 예상 가격입니다.</div>
-    <div class="shop-grid" id="food-list"></div>
-  </div>
-
 </div>
 
-<!-- 라이트박스 -->
+<!-- ATTRACTIONS -->
+<section class="section" id="attractions">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Tourist Spots</div>
+      <div class="section-title">🗺️ 문경 관광지</div>
+    </div>
+  </div>
+  <div class="attr-grid" id="attr-grid"></div>
+</section>
+
+<!-- FOOD -->
+<section class="section" id="food">
+  <div class="section-head">
+    <div>
+      <div class="section-label">Local Food</div>
+      <div class="section-title">🍽️ 문경 먹거리</div>
+    </div>
+  </div>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍎</div></div>
+      <div class="food-body">
+        <div class="food-name">문경 사과</div>
+        <div class="food-desc">일교차가 큰 청정 산간 지역에서 재배되는 문경 사과. 당도가 높고 아삭한 식감으로 전국에서 인정받는 특산품입니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍇</div></div>
+      <div class="food-body">
+        <div class="food-name">오미자 음료 & 막걸리</div>
+        <div class="food-desc">단·쓴·짠·신·매운 다섯 가지 맛을 품은 오미자로 만든 청과 막걸리. 문경 여행의 시작과 끝을 함께하는 맛입니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🌿</div></div>
+      <div class="food-body">
+        <div class="food-name">산채비빔밥</div>
+        <div class="food-desc">새재 트레킹 후 즐기는 신선한 산나물 비빔밥. 고사리, 취나물, 도라지 등 문경 산에서 난 재료로 가득합니다.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-img"><div class="food-emoji">🍜</div></div>
+      <div class="food-body">
+        <div class="food-name">도리뱅뱅이</div>
+        <div class="food-desc">영강에서 잡은 피라미를 바삭하게 튀겨 양념에 조린 문경 향토 음식. 달콤 짭조름한 맛이 밥도둑입니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPORT -->
+<section class="section" id="transport">
+  <div class="section-head">
+    <div>
+      <div class="section-label">How to Get There</div>
+      <div class="section-title">🚌 교통 안내</div>
+    </div>
+  </div>
+  <div class="transport-grid">
+    <div class="transport-card">
+      <div class="transport-icon">🚌</div>
+      <div class="transport-title">고속버스</div>
+      <div class="transport-info">
+        <strong>서울 → 점촌</strong><br>
+        동서울터미널 출발<br>
+        소요시간 약 <strong>2시간 30분</strong><br>
+        1일 다수 운행
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🚆</div>
+      <div class="transport-title">기차 (KTX·무궁화)</div>
+      <div class="transport-info">
+        <strong>서울 → 점촌역</strong><br>
+        청량리역 출발 (무궁화호)<br>
+        소요시간 약 <strong>2시간 40분</strong><br>
+        코레일 예약 필수
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🚗</div>
+      <div class="transport-title">자가용</div>
+      <div class="transport-info">
+        <strong>서울 → 문경새재</strong><br>
+        경부고속도로 → 중부내륙고속도로<br>
+        문경새재IC 하차<br>
+        소요시간 약 <strong>2시간 30분</strong>
+      </div>
+    </div>
+    <div class="transport-card">
+      <div class="transport-icon">🏨</div>
+      <div class="transport-title">추천 숙박</div>
+      <div class="transport-info">
+        <strong>문경 온천 인근</strong><br>
+        호텔·펜션·게스트하우스 다수<br>
+        문경새재 인근 숙박<br>
+        평균 <strong>6~12만원/박</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
 <div id="lightbox" onclick="if(event.target===this)closeLb()">
-  <div class="lb-header"><span class="lb-title" id="lb-title"></span><span class="lb-counter" id="lb-counter"></span><button class="lb-close" onclick="closeLb()">✕</button></div>
-  <div class="lb-img-wrap"><button class="lb-nav" id="lb-prev" onclick="lbPrev()">‹</button><img id="lb-img" src="" alt=""><button class="lb-nav" id="lb-next" onclick="lbNext()">›</button></div>
+  <div class="lb-header">
+    <span class="lb-title" id="lb-title"></span>
+    <span class="lb-counter" id="lb-counter"></span>
+    <button class="lb-close" onclick="closeLb()">✕</button>
+  </div>
+  <div class="lb-img-wrap">
+    <button class="lb-nav" id="lb-prev" onclick="lbPrev()">‹</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lb-nav" id="lb-next" onclick="lbNext()">›</button>
+  </div>
   <div class="lb-dots" id="lb-dots"></div>
 </div>
 
-<!-- 예산 바 -->
-<div class="budget-bar">
-  <div class="budget-items">
-    <div class="budget-item">🏨 숙소 <strong id="b-hotel">-</strong></div>
-    <div class="budget-item">🍁 관광지 <strong id="b-attr">0원</strong></div>
-    <div class="budget-item">🛍️ 쇼핑+먹거리 <strong id="b-shop">0원</strong></div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🍁 문경</div>
+  <div class="footer-sub">
+    경상북도 문경시 · 자연과 역사가 공존하는 여행지<br>
+    문경시 공식 관광 안내 · 1544-9191
   </div>
-  <div class="budget-total">
-    <span class="total-label">총 예상 비용</span>
-    <span class="total-price" id="b-total">0원</span>
-    <button class="btn-reserve">여행 계획 완성 🍁</button>
+  <div class="footer-links">
+    <a href="https://www.mungyeong.go.kr" target="_blank">문경시 공식 홈페이지</a>
+    <a href="https://korean.visitkorea.or.kr" target="_blank">대한민국 구석구석</a>
+    <a href="index.html">← 프로젝트 홈</a>
   </div>
-</div>
+</footer>
 
 <script>
-// ── 데이터 ──
-const transport = [
-  {icon:'🚗',title:'자가용',info:'<strong>서울 → 문경</strong><br>경부고속도로 → 중부내륙고속도로<br>문경새재IC 하차<br>소요시간 약 <strong>2시간 30분</strong>',badge:'추천'},
-  {icon:'🚌',title:'고속버스',info:'<strong>동서울 → 점촌</strong><br>동서울터미널 출발<br>1일 다수 운행<br>소요시간 약 <strong>2시간 30분</strong>',badge:'편리'},
-  {icon:'🚆',title:'기차 (무궁화호)',info:'<strong>청량리 → 점촌역</strong><br>무궁화호 이용<br>소요시간 약 <strong>2시간 40분</strong><br>코레일 사전 예약 권장',badge:''},
-  {icon:'🚍',title:'시내 교통',info:'점촌시외버스터미널에서<br>문경새재까지 <strong>시내버스 30분</strong><br>문경시 농촌버스·콜택시 이용<br>렌터카 추천 (관광지 분산)',badge:''},
-];
+  // ── 관광지 데이터 ──
+  const attractions = [
+    {
+      name: '문경새재 도립공원', cat: 'nature', catName: '자연', free: true,
+      desc: '조선시대 한양으로 가는 관문이었던 옛길. 3개의 관문과 맑은 계곡, 빼어난 산세가 어우러진 문경 대표 명소.',
+      price: 0, duration: '2~4시간', tip: '제1·2·3관문 트레킹 코스 추천',
+      photos: [
+        'images/mungyeong/hero_saejae_tourist.jpg',
+        'images/mungyeong/hero_saejae_road.jpg',
+        'images/mungyeong/hero_mountains.jpg',
+        'https://picsum.photos/seed/saejae01/800/500',
+        'https://picsum.photos/seed/saejae02/800/500',
+      ]
+    },
+    {
+      name: '문경새재 오픈세트장', cat: 'culture', catName: '문화', free: false,
+      desc: '왕건·태종·킹덤 등 수십 편의 사극이 촬영된 대형 오픈세트장. 광화문·경복궁·한옥마을이 재현되어 있어 시간 여행을 즐길 수 있습니다.',
+      price: 2000, duration: '1~2시간', tip: '주말엔 역사 체험 행사 진행',
+      photos: [
+        'images/mungyeong/hero_openset.jpg',
+        'images/mungyeong/attr_openset1.jpg',
+        'images/mungyeong/hero_saejae_tourist.jpg',
+        'https://picsum.photos/seed/openset01/800/500',
+        'https://picsum.photos/seed/openset02/800/500',
+      ]
+    },
+    {
+      name: '문경 레일바이크', cat: 'leisure', catName: '레저', free: false,
+      desc: '폐철로를 활용한 짜릿한 레일바이크 체험. 영강 계곡을 따라 달리며 문경의 자연을 두 눈으로 즐길 수 있습니다.',
+      price: 25000, duration: '1~2시간', tip: '2인용·4인용 선택 가능, 사전 예약 추천',
+      photos: [
+        'images/mungyeong/attr_river1.jpg',
+        'images/mungyeong/hero_morning.jpg',
+        'images/mungyeong/hero_mountains.jpg',
+        'https://picsum.photos/seed/railbike01/800/500',
+        'https://picsum.photos/seed/railbike02/800/500',
+      ]
+    },
+    {
+      name: '문경 에코랄라', cat: 'leisure', catName: '레저', free: false,
+      desc: '가족 단위 여행객에게 인기 있는 복합 테마파크. 집라인, 반딧불이 생태 체험, 미로정원 등 다양한 즐길 거리가 가득.',
+      price: 15000, duration: '반나절', tip: '아이와 함께라면 필수 코스!',
+      photos: [
+        'images/mungyeong/hero_mountains.jpg',
+        'images/mungyeong/hero_saejae_road.jpg',
+        'https://picsum.photos/seed/ecolala01/800/500',
+        'https://picsum.photos/seed/ecolala02/800/500',
+        'https://picsum.photos/seed/ecolala03/800/500',
+      ]
+    },
+    {
+      name: '문경 석탄박물관', cat: 'culture', catName: '문화', free: false,
+      desc: '석탄 산업의 역사와 광부들의 삶을 생생하게 체험할 수 있는 박물관. 실제 탄광 갱도 체험이 특히 인기.',
+      price: 3000, duration: '1~2시간', tip: '실제 갱도 체험 코스 강추',
+      photos: [
+        'https://picsum.photos/seed/coal01/800/500',
+        'https://picsum.photos/seed/coal02/800/500',
+        'https://picsum.photos/seed/coal03/800/500',
+        'images/mungyeong/hero_morning.jpg',
+        'images/mungyeong/hero_openset.jpg',
+      ]
+    },
+    {
+      name: '오미자 테마터널', cat: 'culture', catName: '문화', free: true,
+      desc: '문경 특산물 오미자를 테마로 조성한 아름다운 터널. 빨갛게 익은 오미자 포토존과 야간 조명이 SNS에서 큰 인기입니다.',
+      price: 0, duration: '30분~1시간', tip: '야간 조명 방문이 더욱 아름다워요',
+      photos: [
+        'images/mungyeong/hero_omija1.jpg',
+        'https://picsum.photos/seed/omija01/800/500',
+        'https://picsum.photos/seed/omija02/800/500',
+        'https://picsum.photos/seed/omija03/800/500',
+        'https://picsum.photos/seed/omija04/800/500',
+      ]
+    },
+    {
+      name: '문경 활공랜드 (파라글라이딩)', cat: 'leisure', catName: '레저', free: false,
+      desc: '산 정상에서 뛰어내려 문경 시내와 소백산맥을 한눈에 내려다보는 탠덤 파라글라이딩. 짜릿한 하늘 위 문경 전경.',
+      price: 120000, duration: '30분~1시간', tip: '사전 예약 필수, 체중 제한 있음',
+      photos: [
+        'images/mungyeong/hero_mountains.jpg',
+        'images/mungyeong/hero_saejae_tourist.jpg',
+        'images/mungyeong/hero_morning.jpg',
+        'https://picsum.photos/seed/paraglide01/800/500',
+        'https://picsum.photos/seed/paraglide02/800/500',
+      ]
+    },
+    {
+      name: '문경 전통시장', cat: 'culture', catName: '문화', free: true,
+      desc: '점촌 중앙시장에서 신선한 오미자·사과·도자기 등 문경 특산품을 저렴하게 구입하고 현지 먹거리를 즐겨보세요.',
+      price: 0, duration: '1~2시간', tip: '매월 5·10일 오일장이 열려요',
+      photos: [
+        'https://picsum.photos/seed/market01/800/500',
+        'https://picsum.photos/seed/market02/800/500',
+        'images/mungyeong/hero_omija1.jpg',
+        'images/mungyeong/hero_morning.jpg',
+        'https://picsum.photos/seed/market03/800/500',
+      ]
+    },
+  ];
 
-const hotels = [
-  {id:0,name:'문경새재 관광호텔',loc:'문경새재 도보 10분',grade:3,features:['조식포함','주차','Wi-Fi'],price:65000,isLowest:false,
-    photo:'images/mungyeong/mg_imweb2.jpg',thumbs:['images/mungyeong/hero_mountains.jpg','images/mungyeong/hero_saejae_road.jpg','images/mungyeong/mg_imweb3.jpg'],
-    rating:8.2,ratingLabel:'매우 좋음',reviewCount:412,avatarColor:'#e8891a',
-    reviews:[{name:'정**',flag:'🇰🇷',score:8.5,date:'2025.10',text:'"새재 걸어서 10분! 아침에 안개 낀 새재를 혼자 걷는 경험이 최고였어요."'},{name:'오**',flag:'🇰🇷',score:7.8,date:'2025.09',text:'"가격 대비 깨끗하고 위치가 정말 좋아요. 주차장도 넓어서 편했습니다."'}],
-    bookSite:'네이버 예약',bookUrl:'https://booking.naver.com/booking/6/bizes/'},
-  {id:1,name:'문경 온천 호텔',loc:'온천 단지 내',grade:3,features:['온천욕','주차','레스토랑'],price:75000,isLowest:false,
-    photo:'images/mungyeong/mg_imweb1.jpg',thumbs:['images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb4.jpg','images/mungyeong/hero_omija1.jpg'],
-    rating:8.4,ratingLabel:'매우 좋음',reviewCount:789,avatarColor:'#4a8c3f',
-    reviews:[{name:'김**',flag:'🇰🇷',score:8.8,date:'2025.11',text:'"온천이 객실과 연결돼 있어서 너무 편해요. 저녁에 온천 후 사과 막걸리 한 잔이 최고!"'},{name:'박**',flag:'🇰🇷',score:8.0,date:'2025.10',text:'"피로 회복에 온천만 한 게 없죠. 시설이 깔끔하고 직원분들도 친절했어요."'}],
-    bookSite:'네이버 예약',bookUrl:'https://booking.naver.com/booking/6/bizes/'},
-  {id:2,name:'새재 뷰 펜션',loc:'문경새재 뷰',grade:2,features:['바베큐','주차','계곡뷰'],price:45000,isLowest:true,
-    photo:'images/mungyeong/hero_mountains.jpg',thumbs:['images/mungyeong/hero_saejae_road.jpg','images/mungyeong/mg_imweb5.jpg','images/mungyeong/attr_openset1.jpg'],
-    rating:8.6,ratingLabel:'매우 좋음',reviewCount:234,avatarColor:'#c4952a',
-    reviews:[{name:'이**',flag:'🇰🇷',score:9.0,date:'2025.10',text:'"창문 열면 새재 풍경이 그대로 보여요. 이 가격에 이 뷰라니, 말이 안 되는 가성비!"'},{name:'최**',flag:'🇰🇷',score:8.2,date:'2025.09',text:'"바베큐 시설이 잘 돼 있어서 가족끼리 오기 딱 좋아요. 아이들이 너무 좋아했어요."'}],
-    bookSite:'에어비앤비',bookUrl:'https://www.airbnb.co.kr/'},
-  {id:3,name:'라이즈마운트 리조트',loc:'문경 시내',grade:4,features:['수영장','조식','스파','주차'],price:112000,isLowest:false,
-    photo:'images/mungyeong/mg_imweb5.jpg',thumbs:['images/mungyeong/mg_imweb1.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb3.jpg'],
-    rating:8.8,ratingLabel:'훌륭함',reviewCount:1245,avatarColor:'#2c3e50',
-    reviews:[{name:'한**',flag:'🇰🇷',score:9.0,date:'2025.11',text:'"4성급인데 서울 4성급보다 서비스가 더 좋아요. 조식도 정말 맛있고 가격도 합리적!"'},{name:'강**',flag:'🇰🇷',score:8.5,date:'2025.10',text:'"수영장에서 바라보는 문경 산세가 정말 예쁘더라고요. 힐링 여행으로 최고!"'}],
-    bookSite:'Booking.com',bookUrl:'https://www.booking.com/searchresults.ko.html?ss=Mungyeong'},
-  {id:4,name:'오미자 농촌체험 민박',loc:'오미자 농장 내',grade:1,features:['체험프로그램','오미자차','주차'],price:38000,isLowest:false,
-    photo:'images/mungyeong/hero_omija1.jpg',thumbs:['images/mungyeong/mg_omija_fest.jpg','images/mungyeong/mg_imweb4.jpg','images/mungyeong/hero_morning.jpg'],
-    rating:9.1,ratingLabel:'훌륭함',reviewCount:156,avatarColor:'#8e44ad',
-    reviews:[{name:'윤**',flag:'🇰🇷',score:9.3,date:'2025.10',text:'"오미자 수확 체험부터 오미자 막걸리 담그기까지! 아이들에게 최고의 체험이었어요."'},{name:'조**',flag:'🇰🇷',score:8.9,date:'2025.09',text:'"주인분이 직접 만들어주신 오미자 청이 너무 맛있어서 여러 병 사왔어요!"'}],
-    bookSite:'한국농촌',bookUrl:'https://www.ruralnuri.net/'},
-  {id:5,name:'문경 CC 리조트',loc:'골프장 내',grade:4,features:['골프','수영장','레스토랑'],price:135000,isLowest:false,
-    photo:'images/mungyeong/mg_imweb3.jpg',thumbs:['images/mungyeong/hero_mountains.jpg','images/mungyeong/mg_imweb2.jpg','images/mungyeong/mg_imweb1.jpg'],
-    rating:8.5,ratingLabel:'매우 좋음',reviewCount:678,avatarColor:'#27ae60',
-    reviews:[{name:'배**',flag:'🇰🇷',score:8.7,date:'2025.10',text:'"골프 치고 온천하고 맛있는 밥까지. 아빠들한테 최고의 선물 같은 리조트예요!"'},{name:'안**',flag:'🇰🇷',score:8.3,date:'2025.09',text:'"골프 비회원도 이용 가능하고 코스가 아름다워요. 산 풍경 보면서 라운딩 최고!"'}],
-    bookSite:'네이버 예약',bookUrl:'https://booking.naver.com/booking/6/bizes/'},
-  {id:6,name:'포레스트 게스트하우스',loc:'문경새재 입구',grade:1,features:['조식','Wi-Fi','공용주방'],price:25000,isLowest:true,
-    photo:'images/mungyeong/hero_saejae_road.jpg',thumbs:['images/mungyeong/mg_imweb5.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/attr_river1.jpg'],
-    rating:7.9,ratingLabel:'좋음',reviewCount:89,avatarColor:'#e67e22',
-    reviews:[{name:'문**',flag:'🇰🇷',score:8.1,date:'2025.09',text:'"혼자 여행하기 딱 좋아요. 주인분이 맛집 지도도 만들어주시고 너무 친절해요!"'},{name:'서**',flag:'🇰🇷',score:7.7,date:'2025.08',text:'"배낭여행자에겐 최고의 가성비. 새재 입구라 일찍 일어나서 걷기 좋아요."'}],
-    bookSite:'에어비앤비',bookUrl:'https://www.airbnb.co.kr/'},
-  {id:7,name:'문경 스파텔',loc:'온천 지구',grade:3,features:['스파','조식','주차','헬스장'],price:82000,isLowest:false,
-    photo:'images/mungyeong/mg_imweb4.jpg',thumbs:['images/mungyeong/hero_omija1.jpg','images/mungyeong/mg_omija_fest.jpg','images/mungyeong/hero_mountains.jpg'],
-    rating:8.3,ratingLabel:'매우 좋음',reviewCount:521,avatarColor:'#1abc9c',
-    reviews:[{name:'탁**',flag:'🇰🇷',score:8.5,date:'2025.11',text:'"온천수 스파가 정말 좋아요. 여행 다음날 몸이 가뿐해져서 돌아오는 기분이 최고!"'},{name:'장**',flag:'🇰🇷',score:8.0,date:'2025.10',text:'"시설이 깔끔하고 조식이 맛있어요. 문경 구경하기 딱 좋은 위치입니다."'}],
-    bookSite:'Booking.com',bookUrl:'https://www.booking.com/searchresults.ko.html?ss=Mungyeong'},
-];
-
-const attractions = [
-  {id:0,name:'문경새재 도립공원',cat:'nature',catName:'자연',free:true,
-    photo:'images/mungyeong/hero_saejae_tourist.jpg',
-    gallery:['images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/hero_saejae_road.jpg','images/mungyeong/hero_mountains.jpg','images/mungyeong/mg_imweb2.jpg','images/mungyeong/attr_openset1.jpg'],
-    desc:'조선시대 영남대로의 핵심 고갯길. 제1·2·3관문과 맑은 계곡이 어우러진 문경 대표 명소. 봄 벚꽃, 가을 단풍이 절경.',price:0,duration:'2~4시간'},
-  {id:1,name:'문경새재 오픈세트장',cat:'culture',catName:'문화',free:false,
-    photo:'images/mungyeong/hero_openset.jpg',
-    gallery:['images/mungyeong/hero_openset.jpg','images/mungyeong/attr_openset1.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb5.jpg','images/mungyeong/mg_imweb1.jpg'],
-    desc:'왕건·태종·킹덤 등 수십 편 사극 촬영지. 광화문·경복궁·한옥마을이 실제처럼 재현. 역사 체험 코스로 인기.',price:2000,duration:'1~2시간'},
-  {id:2,name:'문경 레일바이크',cat:'leisure',catName:'레저',free:false,
-    photo:'images/mungyeong/attr_river1.jpg',
-    gallery:['images/mungyeong/attr_river1.jpg','images/mungyeong/hero_morning.jpg','images/mungyeong/hero_mountains.jpg','images/mungyeong/mg_imweb2.jpg','images/mungyeong/mg_imweb3.jpg'],
-    desc:'폐철로를 활용한 레일바이크. 영강 계곡을 따라 달리며 문경 자연을 만끽. 2인용·4인용 선택 가능.',price:25000,duration:'1~2시간'},
-  {id:3,name:'문경 에코랄라',cat:'leisure',catName:'레저',free:false,
-    photo:'images/mungyeong/mg_imweb5.jpg',
-    gallery:['images/mungyeong/mg_imweb5.jpg','images/mungyeong/mg_imweb1.jpg','images/mungyeong/hero_mountains.jpg','images/mungyeong/mg_imweb3.jpg','images/mungyeong/hero_saejae_road.jpg'],
-    desc:'집라인·반딧불이 체험·미로정원 등 복합 테마파크. 가족 여행 필수 코스. 여름 밤 반딧불이 체험이 특히 인기.',price:15000,duration:'반나절'},
-  {id:4,name:'오미자 테마터널',cat:'culture',catName:'문화',free:true,
-    photo:'images/mungyeong/hero_omija1.jpg',
-    gallery:['images/mungyeong/hero_omija1.jpg','images/mungyeong/mg_omija_fest.jpg','images/mungyeong/mg_imweb4.jpg','images/mungyeong/mg_imweb3.jpg','images/mungyeong/mg_imweb1.jpg'],
-    desc:'문경 특산물 오미자를 테마로 조성한 아름다운 구터널. 빨간 오미자 포토존과 야간 조명이 SNS 인증샷 명소.',price:0,duration:'30분~1시간'},
-  {id:5,name:'문경 석탄박물관',cat:'culture',catName:'문화',free:false,
-    photo:'images/mungyeong/mg_imweb3.jpg',
-    gallery:['images/mungyeong/mg_imweb3.jpg','images/mungyeong/mg_imweb4.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb1.jpg','images/mungyeong/mg_imweb5.jpg'],
-    desc:'실제 탄광 갱도 체험이 가능한 박물관. 석탄 산업의 역사와 광부의 삶을 생생하게 체험. 아이들 교육 여행으로 인기.',price:3000,duration:'1~2시간'},
-  {id:6,name:'문경 활공랜드 (파라글라이딩)',cat:'leisure',catName:'레저',free:false,
-    photo:'images/mungyeong/hero_mountains.jpg',
-    gallery:['images/mungyeong/hero_mountains.jpg','images/mungyeong/mg_imweb2.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb5.jpg','images/mungyeong/hero_morning.jpg'],
-    desc:'소백산맥 정상에서 문경 시내를 내려다보는 탠덤 파라글라이딩. 하늘 위에서 만나는 가을 문경은 압도적.',price:120000,duration:'30분~1시간'},
-  {id:7,name:'양베이 폭포',cat:'nature',catName:'자연',free:false,
-    photo:'images/mungyeong/mg_imweb2.jpg',
-    gallery:['images/mungyeong/mg_imweb2.jpg','images/mungyeong/hero_morning.jpg','images/mungyeong/attr_river1.jpg','images/mungyeong/mg_imweb5.jpg','images/mungyeong/hero_saejae_road.jpg'],
-    desc:'정글 속 3단 폭포. 수달·타조·원숭이를 볼 수 있는 작은 동물원도 있음. 더운 여름 시원한 물놀이 명소.',price:12000,duration:'3~4시간'},
-  {id:8,name:'문경 전통시장 (오일장)',cat:'culture',catName:'문화',free:true,
-    photo:'images/mungyeong/mg_imweb4.jpg',
-    gallery:['images/mungyeong/mg_imweb4.jpg','images/mungyeong/mg_imweb1.jpg','images/mungyeong/hero_omija1.jpg','images/mungyeong/mg_omija_fest.jpg','images/mungyeong/hero_morning.jpg'],
-    desc:'매월 5·10일 열리는 오일장. 신선한 오미자·사과·산나물과 약돌돼지 등 문경 특산품을 가장 저렴하게 구입.',price:0,duration:'1~2시간'},
-  {id:9,name:'문경 온천',cat:'leisure',catName:'레저',free:false,
-    photo:'images/mungyeong/mg_imweb1.jpg',
-    gallery:['images/mungyeong/mg_imweb1.jpg','images/mungyeong/mg_imweb3.jpg','images/mungyeong/mg_imweb5.jpg','images/mungyeong/hero_saejae_tourist.jpg','images/mungyeong/mg_imweb2.jpg'],
-    desc:'미네랄이 풍부한 문경 천연 온천. 여행 피로 해소 최고. 연중 운영, 겨울 방문 시 특히 인기.',price:12000,duration:'1~3시간'},
-];
-
-const shopping = [
-  {rank:1,name:'오미자 청 & 막걸리',price:15000,hot:true,img:'images/mungyeong/hero_omija1.jpg',desc:'문경 오미자 100% 원액. 직접 담근 오미자 청과 막걸리. 전국 최대 오미자 산지에서 직구하는 최고 품질.',where:'오미자테마공원·전통시장',tip:'농가 직구매 시 더 저렴'},
-  {rank:2,name:'문경 사과',price:20000,hot:true,img:'images/mungyeong/mg_imweb5.jpg',desc:'일교차 큰 산간 지역의 고품질 사과. 당도가 높고 아삭한 식감으로 전국 손꼽히는 명품 사과.',where:'사과농원·전통시장',tip:'10월 수확 시즌 방문 추천'},
-  {rank:3,name:'약돌돼지 선물 세트',price:35000,hot:true,img:'images/mungyeong/mg_imweb3.jpg',desc:'문경 특산 약돌에서 길러낸 돼지. 일반 돼지보다 지방이 적고 고소한 맛. 선물용 냉장 세트 인기.',where:'정육점·온라인몰',tip:'냉장 배송으로 주문 가능'},
-  {rank:4,name:'오미자 사탕 & 초콜릿',price:8000,hot:false,img:'images/mungyeong/mg_omija_fest.jpg',desc:'오미자 원액으로 만든 새콤달콤 사탕. 개별 포장되어 직장 선물용으로 완벽. 인기 기념품 1위.',where:'오미자테마공원·기념품점',tip:'여러 맛 비교 후 구매'},
-  {rank:5,name:'도자기 (문경 전통)',price:25000,hot:false,img:'images/mungyeong/mg_imweb1.jpg',desc:'문경 전통 가마에서 구운 도자기. 그릇·찻잔 등 실용적이면서 아름다운 공예품. 도자기 축제 기간 특가.',where:'도자기 공방·기념품점',tip:'도자기 체험 행사 참여 추천'},
-  {rank:6,name:'오미자 음료 & 차',price:6000,hot:false,img:'images/mungyeong/mg_imweb4.jpg',desc:'냉장 오미자 음료부터 건조 오미자 차까지. 현지에서 직접 마시는 오미자 음료가 편의점보다 10배 맛있음.',where:'카페·테마공원',tip:'직접 마셔보고 구매'},
-  {rank:7,name:'사과즙 & 건조사과',price:12000,hot:false,img:'images/mungyeong/hero_omija1.jpg',desc:'문경 사과 100% 착즙. 무첨가 사과즙과 쫀득한 건조사과. 건강 선물로 인기.',where:'사과농원·마트',tip:'냉장 착즙 제품 추천'},
-  {rank:8,name:'전통 한과 & 약과',price:10000,hot:false,img:'images/mungyeong/mg_imweb2.jpg',desc:'문경 전통 방식으로 만든 한과. 오미자·사과 등 지역 재료를 활용한 특색 있는 맛.',where:'전통시장·기념품점',tip:'수제 한과는 유통기한 확인'},
-  {rank:9,name:'약돌 소금 & 간장',price:9000,hot:false,img:'images/mungyeong/mg_imweb5.jpg',desc:'문경 약돌로 만든 건강 소금과 발효 간장. 미네랄이 풍부하고 음식 맛을 살려줌. 요리사 추천 제품.',where:'전통시장·농산물직판장',tip:'소금은 원산지 확인 필수'},
-  {rank:10,name:'오미자 비누 & 화장품',price:12000,hot:false,img:'images/mungyeong/hero_omija1.jpg',desc:'오미자 추출물로 만든 천연 화장품. 피부 미용 효과. 여성 여행객에게 특히 인기 있는 미용 기념품.',where:'테마공원·화장품 매장',tip:'성분표 확인 후 구매'},
-];
-
-const foods = [
-  {rank:1,name:'약돌돼지 바비큐',price:18000,hot:true,img:'images/mungyeong/mg_imweb5.jpg',desc:'문경 대표 특산 음식. 약돌에서 자란 돼지를 숯불에 구워 먹는 고소하고 담백한 바비큐. 지방이 적어 부담 없이 먹을 수 있음.',where:'문경 시내 고기집',tip:'점심때 방문하면 대기 없이 가능'},
-  {rank:2,name:'오미자 막걸리',price:5000,hot:true,img:'images/mungyeong/hero_omija1.jpg',desc:'문경 오미자를 넣어 새콤달콤하게 빚은 막걸리. 일반 막걸리보다 향이 풍부하고 숙취가 덜함. 현지에서만 맛볼 수 있는 맛.',where:'전통시장·식당',tip:'오미자 농가 직접 방문 추천'},
-  {rank:3,name:'산채비빔밥',price:10000,hot:true,img:'images/mungyeong/mg_imweb2.jpg',desc:'새재 트레킹 후 즐기는 신선한 산나물 비빔밥. 고사리·취나물·도라지 등 문경 산에서 난 재료로 가득. 구수한 된장찌개 포함.',where:'새재 입구 식당가',tip:'오전 11시 전 방문이 가장 신선'},
-  {rank:4,name:'도리뱅뱅이',price:12000,hot:true,img:'images/mungyeong/attr_river1.jpg',desc:'영강에서 잡은 피라미를 바삭하게 튀겨 양념에 조린 문경 향토 음식. 달콤 짭조름한 맛이 밥도둑. 맥주 안주로도 최고.',where:'영강 주변 식당',tip:'저녁 시간에 술안주로 최고'},
-  {rank:5,name:'오미자 화채 & 냉음료',price:6000,hot:false,img:'images/mungyeong/mg_omija_fest.jpg',desc:'오미자 원액으로 만든 새콤달콤 화채. 여름 문경 여행 필수 음료. 시중 오미자 음료와는 차원이 다른 진짜 오미자 맛.',where:'카페·테마공원',tip:'오미자 농장 카페가 가장 맛있음'},
-  {rank:6,name:'문경 사과 떡',price:8000,hot:false,img:'images/mungyeong/mg_imweb4.jpg',desc:'문경 사과를 넣어 만든 전통 떡. 달콤하고 촉촉한 식감. 아침 식사 대용 또는 간식으로 인기.',where:'전통시장·방앗간',tip:'당일 제조 확인 후 구매'},
-  {rank:7,name:'두릅 나물 요리',price:9000,hot:false,img:'images/mungyeong/hero_saejae_road.jpg',desc:'봄 문경의 별미. 새재 인근 산에서 난 두릅으로 만든 나물 요리. 향긋하고 쌉싸름한 봄의 맛. 3~4월 한정.',where:'새재 식당가',tip:'3~4월에만 맛볼 수 있는 계절식'},
-  {rank:8,name:'버섯 전골',price:14000,hot:false,img:'images/mungyeong/mg_imweb1.jpg',desc:'문경 산에서 난 표고·능이·송이버섯으로 끓인 진한 전골. 가을·겨울 문경 여행의 필수 보양식.',where:'문경 시내 식당',tip:'가을 버섯 제철 시즌 방문 추천'},
-  {rank:9,name:'사과 막국수',price:9000,hot:false,img:'images/mungyeong/hero_omija1.jpg',desc:'문경 사과를 갈아 넣은 시원하고 달콤한 막국수. 독특한 핑크빛 면이 특징. 여름 더위를 날려주는 시원한 한 그릇.',where:'막국수 전문점',tip:'면 탄력이 좋은 점심 시간 추천'},
-  {rank:10,name:'오미자 뱅쇼',price:7000,hot:false,img:'images/mungyeong/mg_imweb3.jpg',desc:'오미자를 뜨겁게 끓여 만든 베트남의 뱅쇼처럼 달콤하고 새콤한 겨울 음료. 눈 오는 날 문경 카페에서 마시면 최고.',where:'문경 카페',tip:'오미자 농장 카페 방문 추천'},
-];
-
-// ── 상태 ──
-let selHotel=null, selAttrs=new Set(), selShop=new Set(), selFood=new Set();
-let lbImages=[], lbIdx=0, currentAttrIdx=0;
-
-// ── 탭 ──
-function switchTab(tab,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+tab).classList.add('active');
-  btn.classList.add('active');
-}
-
-// ── 교통 렌더 ──
-function renderTrans(){
-  document.getElementById('trans-list').innerHTML=transport.map(t=>`
-    <div class="trans-card">
-      <div class="trans-icon">${t.icon}</div>
-      <div class="trans-title">${t.title}</div>
-      <div class="trans-info">${t.info}</div>
-      ${t.badge?`<div class="trans-badge">✓ ${t.badge}</div>`:''}
-    </div>`).join('');
-}
-
-// ── 숙소 렌더 ──
-function renderHotels(list){
-  const el=document.getElementById('hotel-list');
-  el.innerHTML=list.map(h=>{
-    const sf=Math.round(h.rating/2);
-    const stars='★'.repeat(sf)+'☆'.repeat(5-sf);
-    const gs='⭐'.repeat(h.grade);
-    return `<div class="hotel-card">
-      <div class="hotel-photo-wrap" onclick="openHotelLb(${h.id},0)">
-        <img class="hotel-photo" src="${h.photo}" alt="${h.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/h${h.id}/600/260'">
-        <div class="hotel-photo-overlay"></div>
-        ${h.isLowest?'<div class="hotel-lowest">최저가</div>':''}
-        <div class="hotel-grade">${gs}</div>
-        <div class="hotel-thumbs">${h.thumbs.map((t,ti)=>`<img class="hotel-thumb" src="${t}" loading="lazy" onclick="event.stopPropagation();openHotelLb(${h.id},${ti+1})" onerror="this.style.display='none'">`).join('')}</div>
-      </div>
-      <div class="hotel-body">
-        <div class="hotel-name">${h.name}</div>
-        <div class="hotel-rating-row"><span class="rating-score">${h.rating.toFixed(1)}</span><span class="rating-stars">${stars}</span><span class="rating-label">${h.ratingLabel}</span><span class="rating-count">리뷰 ${h.reviewCount.toLocaleString()}개</span></div>
-        <div class="hotel-loc">📍 ${h.loc}</div>
-        <div class="hotel-features">${h.features.map(f=>`<span class="feat-tag">${f}</span>`).join('')}</div>
-        <div class="hotel-reviews">${h.reviews.map(r=>`<div class="review-item"><div class="review-header"><span class="reviewer-avatar" style="background:${h.avatarColor}">${r.name[0]}</span><span class="reviewer-name">${r.name}</span><span class="reviewer-flag">${r.flag}</span><span class="review-date">${r.date}</span><span class="review-score">${r.score}</span></div><div class="review-text">${r.text}</div></div>`).join('')}</div>
-        <div class="hotel-footer">
-          <div class="hotel-price"><div class="per">1박 1인 기준</div><div class="amt">${fmt(h.price)}</div></div>
-          <div class="hotel-btns">
-            <button class="btn-book ${selHotel===h.id?'selected':''}" onclick="selHotelFn(${h.id})">${selHotel===h.id?'✓ 선택됨':'📌 선택'}</button>
-            <a class="btn-booking-site" href="${h.bookUrl}" target="_blank">🌐 ${h.bookSite}</a>
+  // ── 렌더링 ──
+  function renderAttractions() {
+    const grid = document.getElementById('attr-grid');
+    grid.innerHTML = attractions.map((a, i) => `
+      <div class="attr-card">
+        <div class="attr-photo-wrap" onclick="openLb(${i}, 0)">
+          <img class="attr-photo" src="${a.photos[0]}" alt="${a.name}" loading="lazy"
+               onerror="this.src='https://picsum.photos/seed/mg${i}/600/300'">
+          <div class="attr-photo-overlay"></div>
+          <span class="attr-cat-badge cat-${a.cat}">${a.catName}</span>
+          ${a.free ? '<span class="cat-free-badge">무료</span>' : ''}
+        </div>
+        <div class="attr-body">
+          <div class="attr-name">${a.name}</div>
+          <div class="attr-desc">${a.desc}</div>
+          <div class="attr-footer">
+            <div class="attr-info">
+              <span class="attr-meta">⏱ ${a.duration}</span>
+              <span class="attr-meta">💡 ${a.tip}</span>
+            </div>
+            <div class="${a.free ? 'attr-price free' : 'attr-price'}">
+              ${a.free ? '무료' : a.price.toLocaleString() + '원~'}
+            </div>
           </div>
         </div>
       </div>
-    </div>`;
-  }).join('');
-}
+    `).join('');
+  }
 
-// ── 관광지 렌더 ──
-function renderAttrs(list){
-  document.getElementById('attr-list').innerHTML=list.map(a=>`
-    <div class="attr-card">
-      <div class="attr-photo-wrap" onclick="openAttrLb(${a.id})">
-        <img class="attr-photo" src="${a.photo}" alt="${a.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/a${a.id}/600/260'">
-        <div class="attr-photo-overlay"></div>
-        <span class="attr-cat-badge cat-${a.cat}">${a.catName}</span>
-        ${a.free?'<span style="position:absolute;bottom:10px;left:10px;background:#4a8c3f;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;z-index:2">무료</span>':''}
-      </div>
-      <div class="attr-body">
-        <div class="attr-name">${a.name}</div>
-        <div class="attr-desc">${a.desc}</div>
-        <div class="attr-footer">
-          <div>
-            <div class="${a.free?'attr-price free':'attr-price'}">${a.free?'무료':fmt(a.price)+'~'}</div>
-            <div class="attr-meta">⏱ ${a.duration}</div>
-          </div>
-          <button class="btn-add ${selAttrs.has(a.id)?'added':''}" onclick="toggleAttr(${a.id})">${selAttrs.has(a.id)?'✓ 추가됨':'+ 추가'}</button>
-        </div>
-      </div>
-    </div>`).join('');
-}
+  // ── 라이트박스 ──
+  let lbAttrIdx = 0, lbImgIdx = 0;
 
-// ── 쇼핑 렌더 ──
-function renderShop(list){
-  document.getElementById('shop-list').innerHTML=list.map(s=>`
-    <div class="shop-card" onclick="toggleShopItem(${s.rank},'shop')">
-      <div class="shop-img-wrap">
-        <img class="shop-img" src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/s${s.rank}/400/300'">
-        <span class="shop-rank">#${s.rank}</span>
-        ${s.hot?'<span class="shop-hot">🔥 HOT</span>':''}
-      </div>
-      <div class="shop-body">
-        <div class="shop-name">${s.name}</div>
-        <div class="shop-desc">${s.desc}</div>
-        <div class="shop-price">${fmt(s.price)}~ <span>예상 가격</span></div>
-        <div class="shop-tags"><span class="shop-tag tag-where">📍 ${s.where}</span><span class="shop-tag tag-tip">💡 ${s.tip}</span></div>
-      </div>
-    </div>`).join('');
-}
+  function openLb(attrIdx, imgIdx) {
+    lbAttrIdx = attrIdx; lbImgIdx = imgIdx;
+    const a = attractions[attrIdx];
+    document.getElementById('lb-title').textContent = a.name;
+    updateLb();
+    document.getElementById('lightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
 
-// ── 음식 렌더 ──
-function renderFood(list){
-  document.getElementById('food-list').innerHTML=list.map(f=>`
-    <div class="shop-card" onclick="toggleShopItem(${f.rank},'food')">
-      <div class="shop-img-wrap">
-        <img class="shop-img" src="${f.img}" alt="${f.name}" loading="lazy" onerror="this.src='https://picsum.photos/seed/f${f.rank}/400/300'">
-        <span class="shop-rank">#${f.rank}</span>
-        ${f.hot?'<span class="shop-hot">🔥 HOT</span>':''}
-      </div>
-      <div class="shop-body">
-        <div class="shop-name">${f.name}</div>
-        <div class="shop-desc">${f.desc}</div>
-        <div class="shop-price">${fmt(f.price)}~ <span>1인분 예상</span></div>
-        <div class="shop-tags"><span class="shop-tag tag-where">📍 ${f.where}</span><span class="shop-tag tag-tip">💡 ${f.tip}</span></div>
-      </div>
-    </div>`).join('');
-}
+  function updateLb() {
+    const imgs = attractions[lbAttrIdx].photos;
+    const img = document.getElementById('lb-img');
+    img.style.opacity = '0';
+    img.src = imgs[lbImgIdx];
+    img.onload = () => { img.style.opacity = '1'; };
+    img.onerror = () => { img.style.opacity = '1'; };
+    document.getElementById('lb-counter').textContent = imgs.length > 1 ? `${lbImgIdx + 1} / ${imgs.length}` : '';
+    document.getElementById('lb-prev').style.display = imgs.length > 1 ? 'flex' : 'none';
+    document.getElementById('lb-next').style.display = imgs.length > 1 ? 'flex' : 'none';
+    document.getElementById('lb-dots').innerHTML = imgs.length > 1
+      ? imgs.map((_, i) => `<div class="lb-dot ${i===lbImgIdx?'active':''}" onclick="lbGoto(${i})"></div>`).join('')
+      : '';
+  }
 
-// ── 선택 핸들러 ──
-function selHotelFn(id){selHotel=selHotel===id?null:id;updateBudget();renderHotels(hotels)}
-function toggleAttr(id){selAttrs.has(id)?selAttrs.delete(id):selAttrs.add(id);updateBudget();renderAttrs(attractions)}
-function toggleShopItem(rank,type){if(type==='shop'){selShop.has(rank)?selShop.delete(rank):selShop.add(rank);}else{selFood.has(rank)?selFood.delete(rank):selFood.add(rank);}updateBudget();}
+  function closeLb() {
+    document.getElementById('lightbox').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function lbNext() { const l = attractions[lbAttrIdx].photos.length; lbImgIdx = (lbImgIdx+1)%l; updateLb(); }
+  function lbPrev() { const l = attractions[lbAttrIdx].photos.length; lbImgIdx = (lbImgIdx-1+l)%l; updateLb(); }
+  function lbGoto(i) { lbImgIdx = i; updateLb(); }
 
-// ── 예산 ──
-function updateBudget(){
-  const h=selHotel!==null?hotels.find(x=>x.id===selHotel):null;
-  const attrTotal=[...selAttrs].reduce((s,id)=>s+attractions.find(a=>a.id===id).price,0);
-  const shopTotal=[...selShop].reduce((s,r)=>s+shopping.find(x=>x.rank===r).price,0);
-  const foodTotal=[...selFood].reduce((s,r)=>s+foods.find(x=>x.rank===r).price,0);
-  document.getElementById('b-hotel').textContent=h?fmt(h.price):'-';
-  document.getElementById('b-attr').textContent=fmt(attrTotal);
-  document.getElementById('b-shop').textContent=fmt(shopTotal+foodTotal);
-  document.getElementById('b-total').textContent=fmt((h?h.price:0)+attrTotal+shopTotal+foodTotal);
-}
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowRight') lbNext();
+    if (e.key === 'ArrowLeft') lbPrev();
+  });
 
-// ── 정렬 ──
-function sortHotel(by,btn){btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderHotels([...hotels].sort((a,b)=>by==='price'?a.price-b.price:b.rating-a.rating))}
-function sortAttr(by,btn){btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAttrs([...attractions].sort((a,b)=>by==='price'?a.price-b.price:a.name.localeCompare(b.name,'ko')))}
-function sortShop(by,btn){btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderShop([...shopping].sort((a,b)=>by==='rank'?a.rank-b.rank:a.price-b.price))}
-function sortFood(by,btn){btn.closest('.sort-bar').querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderFood([...foods].sort((a,b)=>by==='rank'?a.rank-b.rank:a.price-b.price))}
-
-// ── 라이트박스 ──
-function openHotelLb(hid,idx){const h=hotels.find(x=>x.id===hid);openLb([h.photo,...h.thumbs],idx,h.name)}
-function openAttrLb(aid){const a=attractions.find(x=>x.id===aid);openLb(a.gallery,0,a.name)}
-function openLb(imgs,idx,title){
-  lbImages=imgs;lbIdx=idx||0;
-  document.getElementById('lb-title').textContent=title||'';
-  updateLb();
-  document.getElementById('lightbox').classList.add('show');
-  document.body.style.overflow='hidden';
-}
-function updateLb(){
-  const img=document.getElementById('lb-img');
-  img.style.opacity='0';img.src=lbImages[lbIdx];
-  img.onload=()=>{img.style.opacity='1'};img.onerror=()=>{img.style.opacity='1'};
-  document.getElementById('lb-counter').textContent=lbImages.length>1?`${lbIdx+1}/${lbImages.length}`:'';
-  document.getElementById('lb-prev').style.display=lbImages.length>1?'flex':'none';
-  document.getElementById('lb-next').style.display=lbImages.length>1?'flex':'none';
-  document.getElementById('lb-dots').innerHTML=lbImages.length>1?lbImages.map((_,i)=>`<div class="lb-dot ${i===lbIdx?'active':''}" onclick="lbGoto(${i})"></div>`).join(''):'';
-}
-function closeLb(){document.getElementById('lightbox').classList.remove('show');document.body.style.overflow=''}
-function lbNext(){lbIdx=(lbIdx+1)%lbImages.length;updateLb()}
-function lbPrev(){lbIdx=(lbIdx-1+lbImages.length)%lbImages.length;updateLb()}
-function lbGoto(i){lbIdx=i;updateLb()}
-document.addEventListener('keydown',e=>{if(!document.getElementById('lightbox').classList.contains('show'))return;if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')lbNext();if(e.key==='ArrowLeft')lbPrev()});
-
-// ── 히어로 슬라이드쇼 ──
-(function(){
-  const slides=document.querySelectorAll('.hero-slide');
-  const dots=document.getElementById('hero-dots');
-  let cur=0;
-  dots.innerHTML=[...slides].map((_,i)=>`<div class="hero-dot ${i===0?'active':''}" onclick="heroGo(${i})"></div>`).join('');
-  window.heroGo=function(idx){
-    slides[cur].classList.remove('active');
-    document.querySelectorAll('.hero-dot')[cur].classList.remove('active');
-    cur=idx;
-    slides[cur].classList.add('active');
-    document.querySelectorAll('.hero-dot')[cur].classList.add('active');
+  // ── 계절별 데이터 ──
+  const seasonData = {
+    spring: {
+      label: '🌸 봄 문경 — 3월 ~ 5월',
+      cls: 'sp-spring',
+      spots: [
+        { icon:'🌸', name:'문경새재 벚꽃 트레킹',
+          desc:'4월이면 제1관문 입구부터 새재 계곡까지 벚꽃 터널이 펼쳐집니다. 이른 아침 안개와 어우러진 풍경은 환상적입니다.',
+          tag:'4월 절정' },
+        { icon:'🪁', name:'활공랜드 파라글라이딩',
+          desc:'맑고 따뜻한 봄 하늘 아래 문경 시내를 내려다보며 날아오릅니다. 바람이 안정적인 봄이 파라글라이딩 최적 시즌입니다.',
+          tag:'3~5월 추천' },
+        { icon:'🌿', name:'오미자 테마터널 봄 나들이',
+          desc:'오미자 덩굴이 싹을 틔우는 봄에는 연둣빛 잎이 터널을 가득 채웁니다. 가족 나들이 명소로 제격입니다.',
+          tag:'5월 초록빛' },
+      ],
+      foods: [
+        { icon:'🌱', name:'두릅 나물 요리', tip:'3~4월 봄 두릅 제철' },
+        { icon:'🥗', name:'봄 산채비빔밥', tip:'고사리·취나물·냉이 가득' },
+        { icon:'🍵', name:'오미자 봄 화채', tip:'상큼달콤 봄 음료' },
+        { icon:'🍡', name:'문경 봄 약과', tip:'전통 한과 선물용 인기' },
+      ]
+    },
+    summer: {
+      label: '🌿 여름 문경 — 6월 ~ 8월',
+      cls: 'sp-summer',
+      spots: [
+        { icon:'🚃', name:'문경 레일바이크',
+          desc:'영강 계곡을 따라 시원한 바람을 가르며 달리는 레일바이크. 초록이 우거진 여름이 가장 아름다운 코스입니다.',
+          tag:'여름 인기 1위' },
+        { icon:'🎢', name:'에코랄라 — 집라인·반딧불이',
+          desc:'8월 밤에는 반딧불이 체험이 운영됩니다. 낮에는 집라인으로 하늘을 날고, 밤에는 반딧불이 불빛을 감상하세요.',
+          tag:'7~8월 야간 특별' },
+        { icon:'🏊', name:'영강 계곡 물놀이',
+          desc:'맑고 시원한 영강 계곡에서 더위를 식히세요. 물이 깨끗하고 수심이 얕아 어린이와 함께하기 좋습니다.',
+          tag:'무료 피서지' },
+      ],
+      foods: [
+        { icon:'🐟', name:'도리뱅뱅이', tip:'영강 민물고기 여름 향토식' },
+        { icon:'🍧', name:'오미자 화채', tip:'얼음 동동 새콤 여름 음료' },
+        { icon:'🍜', name:'메밀 냉국수', tip:'더위 식히는 시원한 한 그릇' },
+        { icon:'🥒', name:'문경 채소 쌈밥', tip:'텃밭 채소로 만든 건강식' },
+      ]
+    },
+    autumn: {
+      label: '🍁 가을 문경 — 9월 ~ 11월',
+      cls: 'sp-autumn',
+      spots: [
+        { icon:'🍁', name:'문경새재 단풍 트레킹',
+          desc:'10월 중순~11월 초, 새재 계곡이 붉고 노랗게 물드는 가장 아름다운 시즌. 전국 단풍 명소 TOP 10에 꼽힙니다.',
+          tag:'10~11월 단풍 절정' },
+        { icon:'🍇', name:'오미자 수확 체험',
+          desc:'9~10월이면 빨갛게 익은 오미자를 직접 수확할 수 있습니다. 수확한 오미자로 청 담그기 체험도 함께 진행됩니다.',
+          tag:'9~10월 한정 체험' },
+        { icon:'🍎', name:'사과 농장 체험',
+          desc:'10월은 문경 사과 수확 시즌. 농장에서 직접 사과를 따고, 갓 딴 사과를 바로 맛볼 수 있습니다.',
+          tag:'10월 수확 시즌' },
+      ],
+      foods: [
+        { icon:'🍎', name:'문경 햇사과', tip:'10월 수확 당도 최고점' },
+        { icon:'🍶', name:'오미자 막걸리', tip:'수확 후 담근 가을 막걸리' },
+        { icon:'🍄', name:'버섯 전골', tip:'가을 송이·표고버섯 듬뿍' },
+        { icon:'🥘', name:'오미자 한정식', tip:'오미자 풀코스 가을 특선' },
+      ]
+    },
+    winter: {
+      label: '❄️ 겨울 문경 — 12월 ~ 2월',
+      cls: 'sp-winter',
+      spots: [
+        { icon:'♨️', name:'문경 온천',
+          desc:'추운 겨울, 따뜻한 문경 온천에서 여행의 피로를 풀어보세요. 미네랄이 풍부한 온천수가 몸과 마음을 녹여드립니다.',
+          tag:'연중 운영 · 겨울 최고' },
+        { icon:'⛏️', name:'문경 석탄박물관',
+          desc:'실내 관광지로 추운 겨울에 제격입니다. 탄광 갱도 체험과 광부의 삶을 생생하게 느낄 수 있습니다.',
+          tag:'전천후 실내 관광' },
+        { icon:'❄️', name:'문경새재 설경',
+          desc:'눈 덮인 문경새재는 또 다른 세상입니다. 고즈넉한 겨울 고갯길을 걸으며 조선시대 선비의 발자취를 따라가 보세요.',
+          tag:'눈 오는 날 강추' },
+      ],
+      foods: [
+        { icon:'🍲', name:'버섯 전골 · 한우국밥', tip:'겨울 몸 녹이는 뜨끈한 국물' },
+        { icon:'🥚', name:'온천 달걀', tip:'온천수에 익힌 노란 달걀' },
+        { icon:'🍎', name:'문경 사과즙', tip:'사과 저장품으로 겨울 건강' },
+        { icon:'🍵', name:'오미자 뱅쇼', tip:'오미자 따뜻하게 끓인 겨울 차' },
+      ]
+    }
   };
-  setInterval(()=>heroGo((cur+1)%slides.length),5000);
-})();
 
-function fmt(n){return n.toLocaleString('ko-KR')+'원'}
+  let currentSeason = null;
 
-// ── 초기 렌더 ──
-renderTrans();renderHotels(hotels);renderAttrs(attractions);renderShop(shopping);renderFood(foods);updateBudget();
+  function selectSeason(season, el) {
+    const panel = document.getElementById('season-panel');
+    const inner = document.getElementById('season-panel-inner');
+
+    // 같은 계절 다시 클릭 → 닫기
+    if (currentSeason === season) {
+      panel.classList.remove('open');
+      el.classList.remove('active');
+      currentSeason = null;
+      return;
+    }
+
+    // 이전 선택 해제
+    document.querySelectorAll('.season-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    currentSeason = season;
+
+    const d = seasonData[season];
+
+    inner.className = 'season-panel-inner ' + d.cls;
+    inner.innerHTML = `
+      <div class="sp-title">${d.label}</div>
+
+      <div class="sp-sub-title">📍 이 계절 볼거리</div>
+      <div class="sp-spots">
+        ${d.spots.map(s => `
+          <div class="sp-spot">
+            <div class="sp-spot-icon">${s.icon}</div>
+            <div class="sp-spot-info">
+              <div class="sp-spot-name">${s.name}</div>
+              <div class="sp-spot-desc">${s.desc}</div>
+              <span class="sp-spot-tag">${s.tag}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="sp-divider"></div>
+
+      <div class="sp-sub-title">🍽️ 이 계절 먹거리</div>
+      <div class="sp-foods">
+        ${d.foods.map(f => `
+          <div class="sp-food">
+            <div class="sp-food-icon">${f.icon}</div>
+            <div>
+              <div class="sp-food-name">${f.name}</div>
+              <div class="sp-food-tip">${f.tip}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    panel.classList.add('open');
+    // 패널로 부드럽게 스크롤
+    setTimeout(() => {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+
+  // ── 히어로 슬라이드쇼 ──
+  (function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dotsEl = document.getElementById('hero-dots');
+    let cur = 0;
+    dotsEl.innerHTML = [...slides].map((_,i) =>
+      `<div class="hero-dot ${i===0?'active':''}" onclick="heroGoto(${i})"></div>`
+    ).join('');
+    window.heroGoto = function(idx) {
+      slides[cur].classList.remove('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.remove('active');
+      cur = idx;
+      slides[cur].classList.add('active');
+      document.querySelectorAll('.hero-dot')[cur].classList.add('active');
+    };
+    setInterval(() => heroGoto((cur + 1) % slides.length), 5000);
+  })();
+
+  // ── 초기화 ──
+  renderAttractions();
 </script>
 </body>
 </html>
