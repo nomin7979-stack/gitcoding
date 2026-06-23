@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고졸검정고시 영어 단어장</title>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--accent:#3b82f6;--accent2:#22c55e;--accent3:#f59e0b;--text:#f1f5f9;--muted:#94a3b8;--danger:#ef4444}
+    body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Segoe UI','Noto Sans KR',sans-serif;min-height:100vh}
+
+    /* 헤더 */
+    .header{background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:20px 24px;text-align:center}
+    .header h1{font-size:22px;font-weight:800;margin-bottom:4px}
+    .header p{font-size:13px;color:rgba(255,255,255,.7)}
+
+    /* 탭 */
+    .mode-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+    .mode-tab{flex:1;padding:14px 10px;text-align:center;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;font-family:inherit;transition:.2s}
+    .mode-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+    .mode-tab:hover{color:var(--text)}
+
+    /* 카테고리 선택 */
+    .cat-bar{padding:12px 16px;display:flex;gap:8px;overflow-x:auto;background:var(--bg);border-bottom:1px solid var(--border)}
+    .cat-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.2s}
+    .cat-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    /* 진행 바 */
+    .prog-bar{padding:10px 16px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+    .prog-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+    .prog-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width .3s}
+
+    /* 메인 영역 */
+    .main{max-width:600px;margin:0 auto;padding:16px}
+
+    /* ── 단어 목록 모드 ── */
+    .word-list{display:flex;flex-direction:column;gap:8px}
+    .word-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}
+    .word-item:hover{border-color:var(--accent)}
+    .word-item.memorized{border-color:var(--accent2);background:rgba(34,197,94,.06)}
+    .word-num{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:var(--muted)}
+    .word-item.memorized .word-num{background:var(--accent2);color:#fff}
+    .word-eng{font-size:17px;font-weight:700;color:var(--text)}
+    .word-pron{font-size:13px;color:var(--accent);font-weight:600;margin-left:6px}
+    .word-kor{font-size:14px;color:var(--muted);margin-top:3px}
+    .word-info{flex:1}
+    .word-star{font-size:20px;cursor:pointer;color:var(--border);transition:.2s;flex-shrink:0;background:none;border:none}
+    .word-star.on{color:var(--accent3)}
+    .word-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;font-size:14px;color:transparent}
+    .word-check.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+
+    /* ── 플래시카드 모드 ── */
+    .flash-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0}
+    .flash-counter{font-size:14px;color:var(--muted)}
+    .flash-counter span{color:var(--text);font-weight:700}
+    .flash-card{width:100%;max-width:400px;height:280px;perspective:1000px;cursor:pointer}
+    .flash-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+    .flash-card.flipped .flash-inner{transform:rotateY(180deg)}
+    .flash-front,.flash-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+    .flash-front{background:linear-gradient(145deg,#1e3a8a,#2563eb);border:2px solid rgba(59,130,246,.4)}
+    .flash-back{background:var(--card);border:2px solid var(--accent2);transform:rotateY(180deg)}
+    .flash-eng{font-size:36px;font-weight:900;color:#fff;margin-bottom:8px}
+    .flash-pron{font-size:18px;color:rgba(255,255,255,.7);font-weight:600}
+    .flash-hint{font-size:12px;color:rgba(255,255,255,.4);margin-top:16px}
+    .flash-kor{font-size:32px;font-weight:800;color:var(--accent2);margin-bottom:8px}
+    .flash-ex{font-size:14px;color:var(--muted);text-align:center;line-height:1.5}
+    .flash-btns{display:flex;gap:12px;width:100%;max-width:400px}
+    .flash-btn{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+    .fbtn-know{background:var(--accent2);color:#fff}
+    .fbtn-know:hover{background:#16a34a}
+    .fbtn-dont{background:var(--danger);color:#fff}
+    .fbtn-dont:hover{background:#dc2626}
+    .fbtn-next{background:var(--accent);color:#fff}
+    .fbtn-next:hover{background:#2563eb}
+    .flash-nav{display:flex;gap:12px;width:100%;max-width:400px}
+    .fnav-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s}
+    .fnav-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* ── 퀴즈 모드 ── */
+    .quiz-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px 0}
+    .quiz-q{font-size:14px;color:var(--muted);margin-bottom:4px}
+    .quiz-word{font-size:38px;font-weight:900;color:var(--accent);margin-bottom:4px}
+    .quiz-pron{font-size:16px;color:var(--muted);font-weight:600;margin-bottom:16px}
+    .quiz-opts{display:flex;flex-direction:column;gap:10px;width:100%;max-width:400px}
+    .quiz-opt{padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:inherit;transition:.2s}
+    .quiz-opt:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}
+    .quiz-opt.correct{border-color:var(--accent2);background:rgba(34,197,94,.15);color:var(--accent2)}
+    .quiz-opt.wrong{border-color:var(--danger);background:rgba(239,68,68,.1);color:var(--danger)}
+    .quiz-result{text-align:center;padding:24px;background:var(--card);border-radius:16px;width:100%;max-width:400px}
+    .quiz-score{font-size:48px;font-weight:900;color:var(--accent)}
+    .quiz-score span{font-size:20px;color:var(--muted)}
+    .quiz-msg{font-size:16px;font-weight:700;margin-top:8px}
+    .quiz-again{margin-top:16px;padding:12px 32px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+
+    /* 검색 */
+    .search-wrap{padding:12px 16px 0}
+    .search-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none}
+    .search-input:focus{border-color:var(--accent)}
+    .search-input::placeholder{color:var(--muted)}
+
+    /* 통계 바 */
+    .stats-bar{display:flex;gap:8px;padding:8px 0;justify-content:center}
+    .stat-chip{font-size:12px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--muted)}
+    .stat-chip strong{color:var(--text)}
+
+    @media(max-width:480px){.flash-eng{font-size:28px}.quiz-word{font-size:30px}}
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>📖 고졸검정고시 영어 단어장</h1>
+  <p>기본 단어 200개 · 한글 발음 포함 · 플래시카드 & 퀴즈</p>
+</div>
+
+<div class="mode-tabs">
+  <button class="mode-tab active" onclick="setMode('list',this)">📝 단어 목록</button>
+  <button class="mode-tab" onclick="setMode('flash',this)">🃏 플래시카드</button>
+  <button class="mode-tab" onclick="setMode('quiz',this)">❓ 퀴즈</button>
+</div>
+
+<div class="cat-bar" id="cat-bar"></div>
+
+<div class="prog-bar">
+  <span id="prog-text">0 / 200 외움</span>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <span id="prog-pct">0%</span>
+</div>
+
+<div class="main" id="main-area"></div>
+
+<script>
+const WORDS=[
+// ── 일상생활 ──
+{c:'일상생활',e:'hello',p:'헬로',k:'안녕하세요'},
+{c:'일상생활',e:'goodbye',p:'굿바이',k:'안녕히 가세요'},
+{c:'일상생활',e:'thank you',p:'땡큐',k:'감사합니다'},
+{c:'일상생활',e:'please',p:'플리즈',k:'부탁합니다'},
+{c:'일상생활',e:'sorry',p:'쏘리',k:'미안합니다'},
+{c:'일상생활',e:'excuse me',p:'익스큐즈 미',k:'실례합니다'},
+{c:'일상생활',e:'yes',p:'예스',k:'네'},
+{c:'일상생활',e:'no',p:'노',k:'아니요'},
+{c:'일상생활',e:'name',p:'네임',k:'이름'},
+{c:'일상생활',e:'friend',p:'프렌드',k:'친구'},
+{c:'일상생활',e:'family',p:'패밀리',k:'가족'},
+{c:'일상생활',e:'mother',p:'마더',k:'어머니'},
+{c:'일상생활',e:'father',p:'파더',k:'아버지'},
+{c:'일상생활',e:'brother',p:'브라더',k:'형제'},
+{c:'일상생활',e:'sister',p:'시스터',k:'자매'},
+{c:'일상생활',e:'home',p:'홈',k:'집'},
+{c:'일상생활',e:'water',p:'워터',k:'물'},
+{c:'일상생활',e:'money',p:'머니',k:'돈'},
+{c:'일상생활',e:'phone',p:'폰',k:'전화기'},
+{c:'일상생활',e:'today',p:'투데이',k:'오늘'},
+// ── 학교/교육 ──
+{c:'학교/교육',e:'school',p:'스쿨',k:'학교'},
+{c:'학교/교육',e:'teacher',p:'티처',k:'선생님'},
+{c:'학교/교육',e:'student',p:'스튜던트',k:'학생'},
+{c:'학교/교육',e:'book',p:'북',k:'책'},
+{c:'학교/교육',e:'class',p:'클래스',k:'수업/반'},
+{c:'학교/교육',e:'test',p:'테스트',k:'시험'},
+{c:'학교/교육',e:'question',p:'퀘스천',k:'질문'},
+{c:'학교/교육',e:'answer',p:'앤서',k:'답'},
+{c:'학교/교육',e:'study',p:'스터디',k:'공부하다'},
+{c:'학교/교육',e:'learn',p:'런',k:'배우다'},
+{c:'학교/교육',e:'read',p:'리드',k:'읽다'},
+{c:'학교/교육',e:'write',p:'라이트',k:'쓰다'},
+{c:'학교/교육',e:'know',p:'노우',k:'알다'},
+{c:'학교/교육',e:'think',p:'띵크',k:'생각하다'},
+{c:'학교/교육',e:'understand',p:'언더스탠드',k:'이해하다'},
+{c:'학교/교육',e:'remember',p:'리멤버',k:'기억하다'},
+{c:'학교/교육',e:'forget',p:'포겟',k:'잊다'},
+{c:'학교/교육',e:'example',p:'이그잼플',k:'예시'},
+{c:'학교/교육',e:'problem',p:'프라블럼',k:'문제'},
+{c:'학교/교육',e:'important',p:'임포턴트',k:'중요한'},
+// ── 감정/성격 ──
+{c:'감정/성격',e:'happy',p:'해피',k:'행복한'},
+{c:'감정/성격',e:'sad',p:'새드',k:'슬픈'},
+{c:'감정/성격',e:'angry',p:'앵그리',k:'화난'},
+{c:'감정/성격',e:'afraid',p:'어프레이드',k:'두려운'},
+{c:'감정/성격',e:'tired',p:'타이어드',k:'피곤한'},
+{c:'감정/성격',e:'surprised',p:'서프라이즈드',k:'놀란'},
+{c:'감정/성격',e:'excited',p:'익사이티드',k:'신나는'},
+{c:'감정/성격',e:'nervous',p:'너버스',k:'긴장된'},
+{c:'감정/성격',e:'kind',p:'카인드',k:'친절한'},
+{c:'감정/성격',e:'brave',p:'브레이브',k:'용감한'},
+{c:'감정/성격',e:'honest',p:'아니스트',k:'정직한'},
+{c:'감정/성격',e:'polite',p:'폴라이트',k:'예의바른'},
+{c:'감정/성격',e:'lonely',p:'론리',k:'외로운'},
+{c:'감정/성격',e:'proud',p:'프라우드',k:'자랑스러운'},
+{c:'감정/성격',e:'jealous',p:'젤러스',k:'질투하는'},
+{c:'감정/성격',e:'confident',p:'컨피던트',k:'자신감 있는'},
+{c:'감정/성격',e:'careful',p:'케어풀',k:'조심하는'},
+{c:'감정/성격',e:'curious',p:'큐리어스',k:'호기심 많은'},
+{c:'감정/성격',e:'patient',p:'페이션트',k:'참을성 있는'},
+{c:'감정/성격',e:'lazy',p:'레이지',k:'게으른'},
+// ── 음식/건강 ──
+{c:'음식/건강',e:'food',p:'푸드',k:'음식'},
+{c:'음식/건강',e:'breakfast',p:'브렉퍼스트',k:'아침식사'},
+{c:'음식/건강',e:'lunch',p:'런치',k:'점심식사'},
+{c:'음식/건강',e:'dinner',p:'디너',k:'저녁식사'},
+{c:'음식/건강',e:'rice',p:'라이스',k:'쌀/밥'},
+{c:'음식/건강',e:'bread',p:'브레드',k:'빵'},
+{c:'음식/건강',e:'meat',p:'미트',k:'고기'},
+{c:'음식/건강',e:'fruit',p:'프루트',k:'과일'},
+{c:'음식/건강',e:'vegetable',p:'베저터블',k:'채소'},
+{c:'음식/건강',e:'milk',p:'밀크',k:'우유'},
+{c:'음식/건강',e:'sugar',p:'슈거',k:'설탕'},
+{c:'음식/건강',e:'salt',p:'솔트',k:'소금'},
+{c:'음식/건강',e:'health',p:'헬스',k:'건강'},
+{c:'음식/건강',e:'hospital',p:'하스피틀',k:'병원'},
+{c:'음식/건강',e:'doctor',p:'닥터',k:'의사'},
+{c:'음식/건강',e:'medicine',p:'메디슨',k:'약'},
+{c:'음식/건강',e:'sick',p:'식',k:'아픈'},
+{c:'음식/건강',e:'pain',p:'페인',k:'통증'},
+{c:'음식/건강',e:'exercise',p:'엑서사이즈',k:'운동'},
+{c:'음식/건강',e:'sleep',p:'슬립',k:'잠/자다'},
+// ── 직업/사회 ──
+{c:'직업/사회',e:'work',p:'워크',k:'일/일하다'},
+{c:'직업/사회',e:'job',p:'잡',k:'직업'},
+{c:'직업/사회',e:'office',p:'오피스',k:'사무실'},
+{c:'직업/사회',e:'company',p:'컴퍼니',k:'회사'},
+{c:'직업/사회',e:'boss',p:'보스',k:'사장/상사'},
+{c:'직업/사회',e:'meeting',p:'미팅',k:'회의'},
+{c:'직업/사회',e:'police',p:'폴리스',k:'경찰'},
+{c:'직업/사회',e:'news',p:'뉴스',k:'뉴스/소식'},
+{c:'직업/사회',e:'government',p:'거번먼트',k:'정부'},
+{c:'직업/사회',e:'society',p:'소사이어티',k:'사회'},
+{c:'직업/사회',e:'culture',p:'컬쳐',k:'문화'},
+{c:'직업/사회',e:'country',p:'컨트리',k:'나라'},
+{c:'직업/사회',e:'city',p:'시티',k:'도시'},
+{c:'직업/사회',e:'market',p:'마켓',k:'시장'},
+{c:'직업/사회',e:'price',p:'프라이스',k:'가격'},
+{c:'직업/사회',e:'cheap',p:'칩',k:'싼'},
+{c:'직업/사회',e:'expensive',p:'익스펜시브',k:'비싼'},
+{c:'직업/사회',e:'bank',p:'뱅크',k:'은행'},
+{c:'직업/사회',e:'airport',p:'에어포트',k:'공항'},
+{c:'직업/사회',e:'travel',p:'트래블',k:'여행'},
+// ── 자연/날씨 ──
+{c:'자연/날씨',e:'weather',p:'웨더',k:'날씨'},
+{c:'자연/날씨',e:'rain',p:'레인',k:'비'},
+{c:'자연/날씨',e:'snow',p:'스노우',k:'눈'},
+{c:'자연/날씨',e:'wind',p:'윈드',k:'바람'},
+{c:'자연/날씨',e:'cloud',p:'클라우드',k:'구름'},
+{c:'자연/날씨',e:'sun',p:'선',k:'태양'},
+{c:'자연/날씨',e:'moon',p:'문',k:'달'},
+{c:'자연/날씨',e:'star',p:'스타',k:'별'},
+{c:'자연/날씨',e:'hot',p:'핫',k:'더운'},
+{c:'자연/날씨',e:'cold',p:'콜드',k:'추운'},
+{c:'자연/날씨',e:'warm',p:'웜',k:'따뜻한'},
+{c:'자연/날씨',e:'cool',p:'쿨',k:'시원한'},
+{c:'자연/날씨',e:'mountain',p:'마운틴',k:'산'},
+{c:'자연/날씨',e:'river',p:'리버',k:'강'},
+{c:'자연/날씨',e:'sea',p:'씨',k:'바다'},
+{c:'자연/날씨',e:'flower',p:'플라워',k:'꽃'},
+{c:'자연/날씨',e:'tree',p:'트리',k:'나무'},
+{c:'자연/날씨',e:'animal',p:'애니멀',k:'동물'},
+{c:'자연/날씨',e:'bird',p:'버드',k:'새'},
+{c:'자연/날씨',e:'earth',p:'어스',k:'지구/땅'},
+// ── 기본 동사 ──
+{c:'기본 동사',e:'be',p:'비',k:'~이다/있다'},
+{c:'기본 동사',e:'have',p:'해브',k:'가지다'},
+{c:'기본 동사',e:'do',p:'두',k:'하다'},
+{c:'기본 동사',e:'go',p:'고',k:'가다'},
+{c:'기본 동사',e:'come',p:'컴',k:'오다'},
+{c:'기본 동사',e:'make',p:'메이크',k:'만들다'},
+{c:'기본 동사',e:'take',p:'테이크',k:'가져가다'},
+{c:'기본 동사',e:'give',p:'기브',k:'주다'},
+{c:'기본 동사',e:'get',p:'겟',k:'얻다'},
+{c:'기본 동사',e:'say',p:'세이',k:'말하다'},
+{c:'기본 동사',e:'tell',p:'텔',k:'말하다/알려주다'},
+{c:'기본 동사',e:'ask',p:'애스크',k:'묻다/요청하다'},
+{c:'기본 동사',e:'try',p:'트라이',k:'시도하다'},
+{c:'기본 동사',e:'need',p:'니드',k:'필요하다'},
+{c:'기본 동사',e:'want',p:'원트',k:'원하다'},
+{c:'기본 동사',e:'like',p:'라이크',k:'좋아하다'},
+{c:'기본 동사',e:'love',p:'러브',k:'사랑하다'},
+{c:'기본 동사',e:'help',p:'헬프',k:'돕다'},
+{c:'기본 동사',e:'start',p:'스타트',k:'시작하다'},
+{c:'기본 동사',e:'stop',p:'스탑',k:'멈추다'},
+{c:'기본 동사',e:'open',p:'오픈',k:'열다'},
+{c:'기본 동사',e:'close',p:'클로즈',k:'닫다'},
+{c:'기본 동사',e:'buy',p:'바이',k:'사다'},
+{c:'기본 동사',e:'sell',p:'셀',k:'팔다'},
+{c:'기본 동사',e:'eat',p:'잇',k:'먹다'},
+{c:'기본 동사',e:'drink',p:'드링크',k:'마시다'},
+{c:'기본 동사',e:'walk',p:'워크',k:'걷다'},
+{c:'기본 동사',e:'run',p:'런',k:'달리다'},
+{c:'기본 동사',e:'sit',p:'싯',k:'앉다'},
+{c:'기본 동사',e:'stand',p:'스탠드',k:'서다'},
+{c:'기본 동사',e:'wait',p:'웨이트',k:'기다리다'},
+{c:'기본 동사',e:'listen',p:'리슨',k:'듣다'},
+{c:'기본 동사',e:'look',p:'룩',k:'보다'},
+{c:'기본 동사',e:'watch',p:'워치',k:'보다/지켜보다'},
+{c:'기본 동사',e:'play',p:'플레이',k:'놀다/연주하다'},
+{c:'기본 동사',e:'use',p:'유즈',k:'사용하다'},
+{c:'기본 동사',e:'put',p:'풋',k:'놓다'},
+{c:'기본 동사',e:'bring',p:'브링',k:'가져오다'},
+{c:'기본 동사',e:'change',p:'체인지',k:'바꾸다/변하다'},
+{c:'기본 동사',e:'move',p:'무브',k:'움직이다'},
+// ── 기본 형용사 ──
+{c:'기본 형용사',e:'good',p:'굿',k:'좋은'},
+{c:'기본 형용사',e:'bad',p:'배드',k:'나쁜'},
+{c:'기본 형용사',e:'big',p:'빅',k:'큰'},
+{c:'기본 형용사',e:'small',p:'스몰',k:'작은'},
+{c:'기본 형용사',e:'long',p:'롱',k:'긴'},
+{c:'기본 형용사',e:'short',p:'쇼트',k:'짧은'},
+{c:'기본 형용사',e:'new',p:'뉴',k:'새로운'},
+{c:'기본 형용사',e:'old',p:'올드',k:'오래된/늙은'},
+{c:'기본 형용사',e:'young',p:'영',k:'젊은'},
+{c:'기본 형용사',e:'fast',p:'패스트',k:'빠른'},
+{c:'기본 형용사',e:'slow',p:'슬로우',k:'느린'},
+{c:'기본 형용사',e:'easy',p:'이지',k:'쉬운'},
+{c:'기본 형용사',e:'hard',p:'하드',k:'어려운/단단한'},
+{c:'기본 형용사',e:'beautiful',p:'뷰티풀',k:'아름다운'},
+{c:'기본 형용사',e:'different',p:'디퍼런트',k:'다른'},
+{c:'기본 형용사',e:'same',p:'세임',k:'같은'},
+{c:'기본 형용사',e:'right',p:'라이트',k:'맞는/오른쪽'},
+{c:'기본 형용사',e:'wrong',p:'롱',k:'틀린'},
+{c:'기본 형용사',e:'clean',p:'클린',k:'깨끗한'},
+{c:'기본 형용사',e:'dirty',p:'더티',k:'더러운'},
+// ── 시간/장소 ──
+{c:'시간/장소',e:'time',p:'타임',k:'시간'},
+{c:'시간/장소',e:'morning',p:'모닝',k:'아침'},
+{c:'시간/장소',e:'afternoon',p:'애프터눈',k:'오후'},
+{c:'시간/장소',e:'evening',p:'이브닝',k:'저녁'},
+{c:'시간/장소',e:'night',p:'나이트',k:'밤'},
+{c:'시간/장소',e:'tomorrow',p:'투모로우',k:'내일'},
+{c:'시간/장소',e:'yesterday',p:'예스터데이',k:'어제'},
+{c:'시간/장소',e:'week',p:'위크',k:'주'},
+{c:'시간/장소',e:'month',p:'먼쓰',k:'달/월'},
+{c:'시간/장소',e:'year',p:'이어',k:'년/해'},
+{c:'시간/장소',e:'always',p:'올웨이즈',k:'항상'},
+{c:'시간/장소',e:'never',p:'네버',k:'절대 ~않다'},
+{c:'시간/장소',e:'sometimes',p:'썸타임즈',k:'때때로'},
+{c:'시간/장소',e:'here',p:'히어',k:'여기'},
+{c:'시간/장소',e:'there',p:'데어',k:'저기'},
+{c:'시간/장소',e:'where',p:'웨어',k:'어디'},
+{c:'시간/장소',e:'when',p:'웬',k:'언제'},
+{c:'시간/장소',e:'how',p:'하우',k:'어떻게'},
+{c:'시간/장소',e:'why',p:'와이',k:'왜'},
+{c:'시간/장소',e:'what',p:'왓',k:'무엇'},
+];
+
+const CATS=['전체',...new Set(WORDS.map(w=>w.c))];
+let mode='list',curCat='전체',curFlash=0,flipped=false;
+let memorized=JSON.parse(localStorage.getItem('ged_mem')||'{}');
+let starred=JSON.parse(localStorage.getItem('ged_star')||'{}');
+let quizIdx=0,quizScore=0,quizDone=false,quizAnswered=false,searchTerm='';
+
+function save(){localStorage.setItem('ged_mem',JSON.stringify(memorized));localStorage.setItem('ged_star',JSON.stringify(starred))}
+function filtered(){let ws=curCat==='전체'?WORDS:WORDS.filter(w=>w.c===curCat);if(curCat==='⭐ 즐겨찾기')ws=WORDS.filter(w=>starred[w.e]);if(searchTerm)ws=ws.filter(w=>w.e.includes(searchTerm.toLowerCase())||w.k.includes(searchTerm)||w.p.includes(searchTerm));return ws}
+
+// 카테고리 바
+function renderCats(){
+  const cats=[...CATS,'⭐ 즐겨찾기'];
+  document.getElementById('cat-bar').innerHTML=cats.map(c=>`<button class="cat-btn ${c===curCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join('');
+}
+
+function setCat(c){curCat=c;curFlash=0;quizIdx=0;quizScore=0;quizDone=false;render()}
+function setMode(m,btn){mode=m;document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
+
+function updateProg(){
+  const total=WORDS.length;const done=Object.keys(memorized).length;
+  const pct=Math.round(done/total*100);
+  document.getElementById('prog-text').textContent=`${done} / ${total} 외움`;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+function render(){
+  updateProg();renderCats();
+  const el=document.getElementById('main-area');
+  const ws=filtered();
+  if(mode==='list') renderList(el,ws);
+  else if(mode==='flash') renderFlash(el,ws);
+  else if(mode==='quiz') renderQuiz(el,ws);
+}
+
+// ── 목록 모드 ──
+function renderList(el,ws){
+  el.innerHTML=`
+    <div class="search-wrap"><input class="search-input" placeholder="🔍 영어·한글·발음으로 검색..." value="${searchTerm}" oninput="searchTerm=this.value;render()"></div>
+    <div class="stats-bar"><div class="stat-chip">총 <strong>${ws.length}</strong>개</div><div class="stat-chip">외운 <strong>${ws.filter(w=>memorized[w.e]).length}</strong>개</div><div class="stat-chip">즐겨찾기 <strong>${ws.filter(w=>starred[w.e]).length}</strong>개</div></div>
+    <div class="word-list">${ws.map((w,i)=>`
+      <div class="word-item ${memorized[w.e]?'memorized':''}">
+        <div class="word-check ${memorized[w.e]?'on':''}" onclick="event.stopPropagation();toggleMem('${w.e}')">✓</div>
+        <div class="word-info">
+          <div><span class="word-eng">${w.e}</span><span class="word-pron">[${w.p}]</span></div>
+          <div class="word-kor">${w.k}</div>
+        </div>
+        <button class="word-star ${starred[w.e]?'on':''}" onclick="event.stopPropagation();toggleStar('${w.e}')">★</button>
+      </div>
+    `).join('')}</div>`;
+}
+
+function toggleMem(e){memorized[e]=!memorized[e];if(!memorized[e])delete memorized[e];save();render()}
+function toggleStar(e){starred[e]=!starred[e];if(!starred[e])delete starred[e];save();render()}
+
+// ── 플래시카드 모드 ──
+function renderFlash(el,ws){
+  if(!ws.length){el.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted)">이 카테고리에 단어가 없습니다</p>';return}
+  if(curFlash>=ws.length)curFlash=0;
+  const w=ws[curFlash];flipped=false;
+  el.innerHTML=`
+    <div class="flash-wrap">
+      <div class="flash-counter"><span>${curFlash+1}</span> / ${ws.length}</div>
+      <div class="flash-card" id="fcard" onclick="flipCard()">
+        <div class="flash-inner">
+          <div class="flash-front"><div class="flash-eng">${w.e}</div><div class="flash-pron">[${w.p}]</div><div class="flash-hint">탭하면 뜻이 보여요</div></div>
+          <div class="flash-back"><div class="flash-kor">${w.k}</div><div class="flash-ex">${w.e} [${w.p}]</div></div>
+        </div>
+      </div>
+      <div class="flash-btns">
+        <button class="flash-btn fbtn-dont" onclick="flashNext(ws,false)">❌ 모르겠어요</button>
+        <button class="flash-btn fbtn-know" onclick="flashNext(ws,true)">✅ 외웠어요</button>
+      </div>
+      <div class="flash-nav">
+        <button class="fnav-btn" onclick="curFlash=Math.max(0,curFlash-1);render()">◀ 이전</button>
+        <button class="fnav-btn" onclick="curFlash=0;render()">🔄 처음으로</button>
+        <button class="fnav-btn" onclick="shuffleFlash(ws)">🎲 섞기</button>
+      </div>
+    </div>`;
+}
+function flipCard(){document.getElementById('fcard').classList.toggle('flipped');flipped=!flipped}
+function flashNext(ws,know){
+  const w=ws[curFlash];
+  if(know){memorized[w.e]=true;save()}
+  curFlash=Math.min(curFlash+1,ws.length-1);
+  if(curFlash===ws.length-1&&know)curFlash=0;
+  render();
+}
+function shuffleFlash(ws){WORDS.sort(()=>Math.random()-.5);curFlash=0;render()}
+
+// ── 퀴즈 모드 ──
+function renderQuiz(el,ws){
+  if(!ws.length||ws.length<4){el.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted)">퀴즈에 최소 4개 이상 단어가 필요합니다</p>';return}
+  if(quizDone){
+    const total=Math.min(10,ws.length);const pct=Math.round(quizScore/total*100);
+    const msg=pct>=90?'🏆 완벽해요!':pct>=70?'👏 잘했어요!':pct>=50?'💪 조금만 더!':'📚 복습이 필요해요';
+    el.innerHTML=`<div class="quiz-wrap"><div class="quiz-result"><div class="quiz-score">${quizScore}<span>/${total}</span></div><div class="quiz-msg">${msg} (${pct}%)</div><button class="quiz-again" onclick="quizIdx=0;quizScore=0;quizDone=false;quizAnswered=false;render()">다시 풀기</button></div></div>`;
+    return;
+  }
+  const total=Math.min(10,ws.length);
+  if(quizIdx>=total){quizDone=true;render();return}
+  const w=ws[quizIdx];
+  const wrongs=WORDS.filter(x=>x.e!==w.e).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[...wrongs.map(x=>x.k),w.k].sort(()=>Math.random()-.5);
+  el.innerHTML=`
+    <div class="quiz-wrap">
+      <div class="quiz-q">Q${quizIdx+1} / ${total}</div>
+      <div class="quiz-word">${w.e}</div>
+      <div class="quiz-pron">[${w.p}]</div>
+      <div class="quiz-opts">${opts.map(o=>`<button class="quiz-opt" onclick="quizAnswer(this,'${o.replace(/'/g,"\\'")}','${w.k.replace(/'/g,"\\'")}')">${o}</button>`).join('')}</div>
+    </div>`;
+}
+function quizAnswer(btn,sel,ans){
+  if(quizAnswered)return;quizAnswered=true;
+  const btns=document.querySelectorAll('.quiz-opt');
+  btns.forEach(b=>{
+    if(b.textContent===ans)b.classList.add('correct');
+    else if(b===btn&&sel!==ans)b.classList.add('wrong');
+    b.style.pointerEvents='none';
+  });
+  if(sel===ans)quizScore++;
+  setTimeout(()=>{quizIdx++;quizAnswered=false;render()},1200);
+}
+
+render();
+</script>
+</body>
+</html>
