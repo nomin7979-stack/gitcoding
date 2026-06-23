@@ -3,83 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>고졸검정고시 영어 단어장</title>
+  <title>고졸검정고시 영어 기출 단어장</title>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{--bg:#0f172a;--card:#1e293b;--border:#334155;--accent:#3b82f6;--accent2:#22c55e;--accent3:#f59e0b;--text:#f1f5f9;--muted:#94a3b8;--danger:#ef4444}
-    body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Segoe UI','Noto Sans KR',sans-serif;min-height:100vh}
+    body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Segoe UI','Noto Sans KR',sans-serif;min-height:100vh;padding-bottom:80px}
 
-    /* 헤더 */
-    .header{background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:20px 24px;text-align:center}
+    .header{background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:24px;text-align:center}
     .header h1{font-size:22px;font-weight:800;margin-bottom:4px}
     .header p{font-size:13px;color:rgba(255,255,255,.7)}
+    .header .badge{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.15);font-size:11px;color:rgba(255,255,255,.9)}
 
-    /* 탭 */
     .mode-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-    .mode-tab{flex:1;padding:14px 10px;text-align:center;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;font-family:inherit;transition:.2s}
+    .mode-tab{flex:1;padding:14px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;font-family:inherit;transition:.2s}
     .mode-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
     .mode-tab:hover{color:var(--text)}
 
-    /* 카테고리 선택 */
     .cat-bar{padding:12px 16px;display:flex;gap:8px;overflow-x:auto;background:var(--bg);border-bottom:1px solid var(--border)}
+    .cat-bar::-webkit-scrollbar{height:0}
     .cat-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.2s}
     .cat-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .cat-btn .cnt{margin-left:4px;opacity:.6}
 
-    /* 진행 바 */
     .prog-bar{padding:10px 16px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
     .prog-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
     .prog-fill{height:100%;background:var(--accent2);border-radius:3px;transition:width .3s}
 
-    /* 메인 영역 */
     .main{max-width:600px;margin:0 auto;padding:16px}
 
-    /* ── 단어 목록 모드 ── */
+    /* 단어 목록 */
     .word-list{display:flex;flex-direction:column;gap:8px}
     .word-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}
     .word-item:hover{border-color:var(--accent)}
     .word-item.memorized{border-color:var(--accent2);background:rgba(34,197,94,.06)}
-    .word-num{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:var(--muted)}
-    .word-item.memorized .word-num{background:var(--accent2);color:#fff}
-    .word-eng{font-size:17px;font-weight:700;color:var(--text)}
-    .word-pron{font-size:13px;color:var(--accent);font-weight:600;margin-left:6px}
-    .word-kor{font-size:14px;color:var(--muted);margin-top:3px}
-    .word-info{flex:1}
-    .word-star{font-size:20px;cursor:pointer;color:var(--border);transition:.2s;flex-shrink:0;background:none;border:none}
-    .word-star.on{color:var(--accent3)}
-    .word-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;font-size:14px;color:transparent}
+    .word-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;font-size:14px;color:transparent;background:none}
     .word-check.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+    .word-info{flex:1;min-width:0}
+    .word-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+    .word-eng{font-size:17px;font-weight:700;color:var(--text)}
+    .word-pron{font-size:13px;color:var(--accent);font-weight:600}
+    .word-pos{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(59,130,246,.15);color:var(--accent);font-weight:600}
+    .word-kor{font-size:14px;color:var(--muted);margin-top:3px}
+    .word-ex{font-size:12px;color:var(--border);margin-top:4px;font-style:italic;display:none}
+    .word-item.expanded .word-ex{display:block;color:var(--muted)}
+    .word-star{font-size:20px;cursor:pointer;color:var(--border);transition:.2s;flex-shrink:0;background:none;border:none;font-family:inherit}
+    .word-star.on{color:var(--accent3)}
+    .word-freq{font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(245,158,11,.12);color:var(--accent3);font-weight:700;flex-shrink:0}
 
-    /* ── 플래시카드 모드 ── */
+    /* 플래시카드 */
     .flash-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 0}
     .flash-counter{font-size:14px;color:var(--muted)}
     .flash-counter span{color:var(--text);font-weight:700}
-    .flash-card{width:100%;max-width:400px;height:280px;perspective:1000px;cursor:pointer}
+    .flash-card{width:100%;max-width:400px;height:300px;perspective:1000px;cursor:pointer}
     .flash-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
     .flash-card.flipped .flash-inner{transform:rotateY(180deg)}
     .flash-front,.flash-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
     .flash-front{background:linear-gradient(145deg,#1e3a8a,#2563eb);border:2px solid rgba(59,130,246,.4)}
     .flash-back{background:var(--card);border:2px solid var(--accent2);transform:rotateY(180deg)}
-    .flash-eng{font-size:36px;font-weight:900;color:#fff;margin-bottom:8px}
-    .flash-pron{font-size:18px;color:rgba(255,255,255,.7);font-weight:600}
-    .flash-hint{font-size:12px;color:rgba(255,255,255,.4);margin-top:16px}
-    .flash-kor{font-size:32px;font-weight:800;color:var(--accent2);margin-bottom:8px}
-    .flash-ex{font-size:14px;color:var(--muted);text-align:center;line-height:1.5}
+    .flash-eng{font-size:34px;font-weight:900;color:#fff;margin-bottom:6px}
+    .flash-pron{font-size:17px;color:rgba(255,255,255,.7);font-weight:600}
+    .flash-pos-tag{font-size:12px;color:rgba(255,255,255,.5);margin-top:6px}
+    .flash-hint{font-size:12px;color:rgba(255,255,255,.35);margin-top:16px}
+    .flash-kor{font-size:30px;font-weight:800;color:var(--accent2);margin-bottom:8px}
+    .flash-ex-back{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;margin-top:8px}
     .flash-btns{display:flex;gap:12px;width:100%;max-width:400px}
     .flash-btn{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
     .fbtn-know{background:var(--accent2);color:#fff}
     .fbtn-know:hover{background:#16a34a}
     .fbtn-dont{background:var(--danger);color:#fff}
     .fbtn-dont:hover{background:#dc2626}
-    .fbtn-next{background:var(--accent);color:#fff}
-    .fbtn-next:hover{background:#2563eb}
     .flash-nav{display:flex;gap:12px;width:100%;max-width:400px}
     .fnav-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s}
     .fnav-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-    /* ── 퀴즈 모드 ── */
+    /* 퀴즈 */
     .quiz-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px 0}
     .quiz-q{font-size:14px;color:var(--muted);margin-bottom:4px}
-    .quiz-word{font-size:38px;font-weight:900;color:var(--accent);margin-bottom:4px}
+    .quiz-word{font-size:36px;font-weight:900;color:var(--accent);margin-bottom:4px}
     .quiz-pron{font-size:16px;color:var(--muted);font-weight:600;margin-bottom:16px}
     .quiz-opts{display:flex;flex-direction:column;gap:10px;width:100%;max-width:400px}
     .quiz-opt{padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;text-align:left;font-family:inherit;transition:.2s}
@@ -92,36 +92,48 @@
     .quiz-msg{font-size:16px;font-weight:700;margin-top:8px}
     .quiz-again{margin-top:16px;padding:12px 32px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 
-    /* 검색 */
-    .search-wrap{padding:12px 16px 0}
+    /* 오답노트 */
+    .wrong-wrap{padding:20px 0}
+    .wrong-title{font-size:16px;font-weight:700;margin-bottom:12px;color:var(--danger)}
+    .wrong-empty{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+    .wrong-item{background:var(--card);border:1px solid var(--danger);border-radius:12px;padding:14px 16px;margin-bottom:8px;opacity:.9}
+    .wrong-item .word-eng{color:var(--danger)}
+    .wrong-clear{margin-top:12px;padding:10px 20px;border-radius:10px;background:none;border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+
+    .search-wrap{padding:0 0 8px}
     .search-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-family:inherit;outline:none}
     .search-input:focus{border-color:var(--accent)}
     .search-input::placeholder{color:var(--muted)}
 
-    /* 통계 바 */
-    .stats-bar{display:flex;gap:8px;padding:8px 0;justify-content:center}
+    .stats-bar{display:flex;gap:8px;padding:8px 0;justify-content:center;flex-wrap:wrap}
     .stat-chip{font-size:12px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--muted)}
     .stat-chip strong{color:var(--text)}
 
-    @media(max-width:480px){.flash-eng{font-size:28px}.quiz-word{font-size:30px}}
+    .filter-bar{display:flex;gap:8px;padding:4px 0 8px;justify-content:center}
+    .filter-btn{padding:5px 12px;border-radius:16px;border:1px solid var(--border);background:none;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s}
+    .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+    @media(max-width:480px){.flash-eng{font-size:26px}.quiz-word{font-size:28px}.mode-tab{font-size:12px;padding:12px 6px}}
   </style>
 </head>
 <body>
 <div class="header">
-  <h1>📖 고졸검정고시 영어 단어장</h1>
-  <p>기본 단어 200개 · 한글 발음 포함 · 플래시카드 & 퀴즈</p>
+  <h1>📖 고졸검정고시 영어 기출 단어장</h1>
+  <p>실제 기출문제 빈출 단어 300개 · 한글 발음 · 예문 포함</p>
+  <div class="badge">2018~2024 기출 분석 기반</div>
 </div>
 
 <div class="mode-tabs">
-  <button class="mode-tab active" onclick="setMode('list',this)">📝 단어 목록</button>
-  <button class="mode-tab" onclick="setMode('flash',this)">🃏 플래시카드</button>
+  <button class="mode-tab active" onclick="setMode('list',this)">📝 단어목록</button>
+  <button class="mode-tab" onclick="setMode('flash',this)">🃏 카드학습</button>
   <button class="mode-tab" onclick="setMode('quiz',this)">❓ 퀴즈</button>
+  <button class="mode-tab" onclick="setMode('wrong',this)">📕 오답노트</button>
 </div>
 
 <div class="cat-bar" id="cat-bar"></div>
 
 <div class="prog-bar">
-  <span id="prog-text">0 / 200 외움</span>
+  <span id="prog-text">0 / 300 외움</span>
   <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   <span id="prog-pct">0%</span>
 </div>
@@ -130,230 +142,391 @@
 
 <script>
 const WORDS=[
-// ── 일상생활 ──
-{c:'일상생활',e:'hello',p:'헬로',k:'안녕하세요'},
-{c:'일상생활',e:'goodbye',p:'굿바이',k:'안녕히 가세요'},
-{c:'일상생활',e:'thank you',p:'땡큐',k:'감사합니다'},
-{c:'일상생활',e:'please',p:'플리즈',k:'부탁합니다'},
-{c:'일상생활',e:'sorry',p:'쏘리',k:'미안합니다'},
-{c:'일상생활',e:'excuse me',p:'익스큐즈 미',k:'실례합니다'},
-{c:'일상생활',e:'yes',p:'예스',k:'네'},
-{c:'일상생활',e:'no',p:'노',k:'아니요'},
-{c:'일상생활',e:'name',p:'네임',k:'이름'},
-{c:'일상생활',e:'friend',p:'프렌드',k:'친구'},
-{c:'일상생활',e:'family',p:'패밀리',k:'가족'},
-{c:'일상생활',e:'mother',p:'마더',k:'어머니'},
-{c:'일상생활',e:'father',p:'파더',k:'아버지'},
-{c:'일상생활',e:'brother',p:'브라더',k:'형제'},
-{c:'일상생활',e:'sister',p:'시스터',k:'자매'},
-{c:'일상생활',e:'home',p:'홈',k:'집'},
-{c:'일상생활',e:'water',p:'워터',k:'물'},
-{c:'일상생활',e:'money',p:'머니',k:'돈'},
-{c:'일상생활',e:'phone',p:'폰',k:'전화기'},
-{c:'일상생활',e:'today',p:'투데이',k:'오늘'},
-// ── 학교/교육 ──
-{c:'학교/교육',e:'school',p:'스쿨',k:'학교'},
-{c:'학교/교육',e:'teacher',p:'티처',k:'선생님'},
-{c:'학교/교육',e:'student',p:'스튜던트',k:'학생'},
-{c:'학교/교육',e:'book',p:'북',k:'책'},
-{c:'학교/교육',e:'class',p:'클래스',k:'수업/반'},
-{c:'학교/교육',e:'test',p:'테스트',k:'시험'},
-{c:'학교/교육',e:'question',p:'퀘스천',k:'질문'},
-{c:'학교/교육',e:'answer',p:'앤서',k:'답'},
-{c:'학교/교육',e:'study',p:'스터디',k:'공부하다'},
-{c:'학교/교육',e:'learn',p:'런',k:'배우다'},
-{c:'학교/교육',e:'read',p:'리드',k:'읽다'},
-{c:'학교/교육',e:'write',p:'라이트',k:'쓰다'},
-{c:'학교/교육',e:'know',p:'노우',k:'알다'},
-{c:'학교/교육',e:'think',p:'띵크',k:'생각하다'},
-{c:'학교/교육',e:'understand',p:'언더스탠드',k:'이해하다'},
-{c:'학교/교육',e:'remember',p:'리멤버',k:'기억하다'},
-{c:'학교/교육',e:'forget',p:'포겟',k:'잊다'},
-{c:'학교/교육',e:'example',p:'이그잼플',k:'예시'},
-{c:'학교/교육',e:'problem',p:'프라블럼',k:'문제'},
-{c:'학교/교육',e:'important',p:'임포턴트',k:'중요한'},
-// ── 감정/성격 ──
-{c:'감정/성격',e:'happy',p:'해피',k:'행복한'},
-{c:'감정/성격',e:'sad',p:'새드',k:'슬픈'},
-{c:'감정/성격',e:'angry',p:'앵그리',k:'화난'},
-{c:'감정/성격',e:'afraid',p:'어프레이드',k:'두려운'},
-{c:'감정/성격',e:'tired',p:'타이어드',k:'피곤한'},
-{c:'감정/성격',e:'surprised',p:'서프라이즈드',k:'놀란'},
-{c:'감정/성격',e:'excited',p:'익사이티드',k:'신나는'},
-{c:'감정/성격',e:'nervous',p:'너버스',k:'긴장된'},
-{c:'감정/성격',e:'kind',p:'카인드',k:'친절한'},
-{c:'감정/성격',e:'brave',p:'브레이브',k:'용감한'},
-{c:'감정/성격',e:'honest',p:'아니스트',k:'정직한'},
-{c:'감정/성격',e:'polite',p:'폴라이트',k:'예의바른'},
-{c:'감정/성격',e:'lonely',p:'론리',k:'외로운'},
-{c:'감정/성격',e:'proud',p:'프라우드',k:'자랑스러운'},
-{c:'감정/성격',e:'jealous',p:'젤러스',k:'질투하는'},
-{c:'감정/성격',e:'confident',p:'컨피던트',k:'자신감 있는'},
-{c:'감정/성격',e:'careful',p:'케어풀',k:'조심하는'},
-{c:'감정/성격',e:'curious',p:'큐리어스',k:'호기심 많은'},
-{c:'감정/성격',e:'patient',p:'페이션트',k:'참을성 있는'},
-{c:'감정/성격',e:'lazy',p:'레이지',k:'게으른'},
-// ── 음식/건강 ──
-{c:'음식/건강',e:'food',p:'푸드',k:'음식'},
-{c:'음식/건강',e:'breakfast',p:'브렉퍼스트',k:'아침식사'},
-{c:'음식/건강',e:'lunch',p:'런치',k:'점심식사'},
-{c:'음식/건강',e:'dinner',p:'디너',k:'저녁식사'},
-{c:'음식/건강',e:'rice',p:'라이스',k:'쌀/밥'},
-{c:'음식/건강',e:'bread',p:'브레드',k:'빵'},
-{c:'음식/건강',e:'meat',p:'미트',k:'고기'},
-{c:'음식/건강',e:'fruit',p:'프루트',k:'과일'},
-{c:'음식/건강',e:'vegetable',p:'베저터블',k:'채소'},
-{c:'음식/건강',e:'milk',p:'밀크',k:'우유'},
-{c:'음식/건강',e:'sugar',p:'슈거',k:'설탕'},
-{c:'음식/건강',e:'salt',p:'솔트',k:'소금'},
-{c:'음식/건강',e:'health',p:'헬스',k:'건강'},
-{c:'음식/건강',e:'hospital',p:'하스피틀',k:'병원'},
-{c:'음식/건강',e:'doctor',p:'닥터',k:'의사'},
-{c:'음식/건강',e:'medicine',p:'메디슨',k:'약'},
-{c:'음식/건강',e:'sick',p:'식',k:'아픈'},
-{c:'음식/건강',e:'pain',p:'페인',k:'통증'},
-{c:'음식/건강',e:'exercise',p:'엑서사이즈',k:'운동'},
-{c:'음식/건강',e:'sleep',p:'슬립',k:'잠/자다'},
-// ── 직업/사회 ──
-{c:'직업/사회',e:'work',p:'워크',k:'일/일하다'},
-{c:'직업/사회',e:'job',p:'잡',k:'직업'},
-{c:'직업/사회',e:'office',p:'오피스',k:'사무실'},
-{c:'직업/사회',e:'company',p:'컴퍼니',k:'회사'},
-{c:'직업/사회',e:'boss',p:'보스',k:'사장/상사'},
-{c:'직업/사회',e:'meeting',p:'미팅',k:'회의'},
-{c:'직업/사회',e:'police',p:'폴리스',k:'경찰'},
-{c:'직업/사회',e:'news',p:'뉴스',k:'뉴스/소식'},
-{c:'직업/사회',e:'government',p:'거번먼트',k:'정부'},
-{c:'직업/사회',e:'society',p:'소사이어티',k:'사회'},
-{c:'직업/사회',e:'culture',p:'컬쳐',k:'문화'},
-{c:'직업/사회',e:'country',p:'컨트리',k:'나라'},
-{c:'직업/사회',e:'city',p:'시티',k:'도시'},
-{c:'직업/사회',e:'market',p:'마켓',k:'시장'},
-{c:'직업/사회',e:'price',p:'프라이스',k:'가격'},
-{c:'직업/사회',e:'cheap',p:'칩',k:'싼'},
-{c:'직업/사회',e:'expensive',p:'익스펜시브',k:'비싼'},
-{c:'직업/사회',e:'bank',p:'뱅크',k:'은행'},
-{c:'직업/사회',e:'airport',p:'에어포트',k:'공항'},
-{c:'직업/사회',e:'travel',p:'트래블',k:'여행'},
-// ── 자연/날씨 ──
-{c:'자연/날씨',e:'weather',p:'웨더',k:'날씨'},
-{c:'자연/날씨',e:'rain',p:'레인',k:'비'},
-{c:'자연/날씨',e:'snow',p:'스노우',k:'눈'},
-{c:'자연/날씨',e:'wind',p:'윈드',k:'바람'},
-{c:'자연/날씨',e:'cloud',p:'클라우드',k:'구름'},
-{c:'자연/날씨',e:'sun',p:'선',k:'태양'},
-{c:'자연/날씨',e:'moon',p:'문',k:'달'},
-{c:'자연/날씨',e:'star',p:'스타',k:'별'},
-{c:'자연/날씨',e:'hot',p:'핫',k:'더운'},
-{c:'자연/날씨',e:'cold',p:'콜드',k:'추운'},
-{c:'자연/날씨',e:'warm',p:'웜',k:'따뜻한'},
-{c:'자연/날씨',e:'cool',p:'쿨',k:'시원한'},
-{c:'자연/날씨',e:'mountain',p:'마운틴',k:'산'},
-{c:'자연/날씨',e:'river',p:'리버',k:'강'},
-{c:'자연/날씨',e:'sea',p:'씨',k:'바다'},
-{c:'자연/날씨',e:'flower',p:'플라워',k:'꽃'},
-{c:'자연/날씨',e:'tree',p:'트리',k:'나무'},
-{c:'자연/날씨',e:'animal',p:'애니멀',k:'동물'},
-{c:'자연/날씨',e:'bird',p:'버드',k:'새'},
-{c:'자연/날씨',e:'earth',p:'어스',k:'지구/땅'},
-// ── 기본 동사 ──
-{c:'기본 동사',e:'be',p:'비',k:'~이다/있다'},
-{c:'기본 동사',e:'have',p:'해브',k:'가지다'},
-{c:'기본 동사',e:'do',p:'두',k:'하다'},
-{c:'기본 동사',e:'go',p:'고',k:'가다'},
-{c:'기본 동사',e:'come',p:'컴',k:'오다'},
-{c:'기본 동사',e:'make',p:'메이크',k:'만들다'},
-{c:'기본 동사',e:'take',p:'테이크',k:'가져가다'},
-{c:'기본 동사',e:'give',p:'기브',k:'주다'},
-{c:'기본 동사',e:'get',p:'겟',k:'얻다'},
-{c:'기본 동사',e:'say',p:'세이',k:'말하다'},
-{c:'기본 동사',e:'tell',p:'텔',k:'말하다/알려주다'},
-{c:'기본 동사',e:'ask',p:'애스크',k:'묻다/요청하다'},
-{c:'기본 동사',e:'try',p:'트라이',k:'시도하다'},
-{c:'기본 동사',e:'need',p:'니드',k:'필요하다'},
-{c:'기본 동사',e:'want',p:'원트',k:'원하다'},
-{c:'기본 동사',e:'like',p:'라이크',k:'좋아하다'},
-{c:'기본 동사',e:'love',p:'러브',k:'사랑하다'},
-{c:'기본 동사',e:'help',p:'헬프',k:'돕다'},
-{c:'기본 동사',e:'start',p:'스타트',k:'시작하다'},
-{c:'기본 동사',e:'stop',p:'스탑',k:'멈추다'},
-{c:'기본 동사',e:'open',p:'오픈',k:'열다'},
-{c:'기본 동사',e:'close',p:'클로즈',k:'닫다'},
-{c:'기본 동사',e:'buy',p:'바이',k:'사다'},
-{c:'기본 동사',e:'sell',p:'셀',k:'팔다'},
-{c:'기본 동사',e:'eat',p:'잇',k:'먹다'},
-{c:'기본 동사',e:'drink',p:'드링크',k:'마시다'},
-{c:'기본 동사',e:'walk',p:'워크',k:'걷다'},
-{c:'기본 동사',e:'run',p:'런',k:'달리다'},
-{c:'기본 동사',e:'sit',p:'싯',k:'앉다'},
-{c:'기본 동사',e:'stand',p:'스탠드',k:'서다'},
-{c:'기본 동사',e:'wait',p:'웨이트',k:'기다리다'},
-{c:'기본 동사',e:'listen',p:'리슨',k:'듣다'},
-{c:'기본 동사',e:'look',p:'룩',k:'보다'},
-{c:'기본 동사',e:'watch',p:'워치',k:'보다/지켜보다'},
-{c:'기본 동사',e:'play',p:'플레이',k:'놀다/연주하다'},
-{c:'기본 동사',e:'use',p:'유즈',k:'사용하다'},
-{c:'기본 동사',e:'put',p:'풋',k:'놓다'},
-{c:'기본 동사',e:'bring',p:'브링',k:'가져오다'},
-{c:'기본 동사',e:'change',p:'체인지',k:'바꾸다/변하다'},
-{c:'기본 동사',e:'move',p:'무브',k:'움직이다'},
-// ── 기본 형용사 ──
-{c:'기본 형용사',e:'good',p:'굿',k:'좋은'},
-{c:'기본 형용사',e:'bad',p:'배드',k:'나쁜'},
-{c:'기본 형용사',e:'big',p:'빅',k:'큰'},
-{c:'기본 형용사',e:'small',p:'스몰',k:'작은'},
-{c:'기본 형용사',e:'long',p:'롱',k:'긴'},
-{c:'기본 형용사',e:'short',p:'쇼트',k:'짧은'},
-{c:'기본 형용사',e:'new',p:'뉴',k:'새로운'},
-{c:'기본 형용사',e:'old',p:'올드',k:'오래된/늙은'},
-{c:'기본 형용사',e:'young',p:'영',k:'젊은'},
-{c:'기본 형용사',e:'fast',p:'패스트',k:'빠른'},
-{c:'기본 형용사',e:'slow',p:'슬로우',k:'느린'},
-{c:'기본 형용사',e:'easy',p:'이지',k:'쉬운'},
-{c:'기본 형용사',e:'hard',p:'하드',k:'어려운/단단한'},
-{c:'기본 형용사',e:'beautiful',p:'뷰티풀',k:'아름다운'},
-{c:'기본 형용사',e:'different',p:'디퍼런트',k:'다른'},
-{c:'기본 형용사',e:'same',p:'세임',k:'같은'},
-{c:'기본 형용사',e:'right',p:'라이트',k:'맞는/오른쪽'},
-{c:'기본 형용사',e:'wrong',p:'롱',k:'틀린'},
-{c:'기본 형용사',e:'clean',p:'클린',k:'깨끗한'},
-{c:'기본 형용사',e:'dirty',p:'더티',k:'더러운'},
-// ── 시간/장소 ──
-{c:'시간/장소',e:'time',p:'타임',k:'시간'},
-{c:'시간/장소',e:'morning',p:'모닝',k:'아침'},
-{c:'시간/장소',e:'afternoon',p:'애프터눈',k:'오후'},
-{c:'시간/장소',e:'evening',p:'이브닝',k:'저녁'},
-{c:'시간/장소',e:'night',p:'나이트',k:'밤'},
-{c:'시간/장소',e:'tomorrow',p:'투모로우',k:'내일'},
-{c:'시간/장소',e:'yesterday',p:'예스터데이',k:'어제'},
-{c:'시간/장소',e:'week',p:'위크',k:'주'},
-{c:'시간/장소',e:'month',p:'먼쓰',k:'달/월'},
-{c:'시간/장소',e:'year',p:'이어',k:'년/해'},
-{c:'시간/장소',e:'always',p:'올웨이즈',k:'항상'},
-{c:'시간/장소',e:'never',p:'네버',k:'절대 ~않다'},
-{c:'시간/장소',e:'sometimes',p:'썸타임즈',k:'때때로'},
-{c:'시간/장소',e:'here',p:'히어',k:'여기'},
-{c:'시간/장소',e:'there',p:'데어',k:'저기'},
-{c:'시간/장소',e:'where',p:'웨어',k:'어디'},
-{c:'시간/장소',e:'when',p:'웬',k:'언제'},
-{c:'시간/장소',e:'how',p:'하우',k:'어떻게'},
-{c:'시간/장소',e:'why',p:'와이',k:'왜'},
-{c:'시간/장소',e:'what',p:'왓',k:'무엇'},
+// ── 대화/의사소통 (30) ──
+{c:'대화/의사소통',e:'suggest',p:'서제스트',k:'제안하다',t:'v',x:'I suggest we take a break.',f:3},
+{c:'대화/의사소통',e:'recommend',p:'레커멘드',k:'추천하다',t:'v',x:'I recommend this restaurant.',f:3},
+{c:'대화/의사소통',e:'advice',p:'어드바이스',k:'조언, 충고',t:'n',x:'Thank you for your advice.',f:3},
+{c:'대화/의사소통',e:'apologize',p:'어팔러자이즈',k:'사과하다',t:'v',x:'I want to apologize for being late.',f:2},
+{c:'대화/의사소통',e:'refuse',p:'리퓨즈',k:'거절하다',t:'v',x:'She refused my offer.',f:2},
+{c:'대화/의사소통',e:'accept',p:'억셉트',k:'수락하다, 받아들이다',t:'v',x:'I accept your invitation.',f:3},
+{c:'대화/의사소통',e:'appreciate',p:'어프리시에이트',k:'감사하다, 높이 평가하다',t:'v',x:'I really appreciate your help.',f:3},
+{c:'대화/의사소통',e:'complain',p:'컴플레인',k:'불평하다',t:'v',x:'He complained about the noise.',f:2},
+{c:'대화/의사소통',e:'promise',p:'프라미스',k:'약속하다',t:'v',x:'I promise I will be there.',f:2},
+{c:'대화/의사소통',e:'opinion',p:'어피니언',k:'의견',t:'n',x:'What is your opinion?',f:3},
+{c:'대화/의사소통',e:'conversation',p:'칸버세이션',k:'대화',t:'n',x:'We had a long conversation.',f:2},
+{c:'대화/의사소통',e:'discuss',p:'디스커스',k:'토론하다',t:'v',x:'Let\'s discuss this problem.',f:2},
+{c:'대화/의사소통',e:'mention',p:'멘션',k:'언급하다',t:'v',x:'She mentioned your name.',f:2},
+{c:'대화/의사소통',e:'explain',p:'익스플레인',k:'설명하다',t:'v',x:'Can you explain this to me?',f:3},
+{c:'대화/의사소통',e:'invitation',p:'인비테이션',k:'초대',t:'n',x:'Thank you for the invitation.',f:2},
+{c:'대화/의사소통',e:'introduce',p:'인트러듀스',k:'소개하다',t:'v',x:'Let me introduce myself.',f:2},
+{c:'대화/의사소통',e:'express',p:'익스프레스',k:'표현하다',t:'v',x:'She expressed her feelings.',f:2},
+{c:'대화/의사소통',e:'agree',p:'어그리',k:'동의하다',t:'v',x:'I agree with you.',f:3},
+{c:'대화/의사소통',e:'disagree',p:'디스어그리',k:'동의하지 않다',t:'v',x:'I disagree with that idea.',f:2},
+{c:'대화/의사소통',e:'borrow',p:'바로우',k:'빌리다',t:'v',x:'Can I borrow your pen?',f:2},
+{c:'대화/의사소통',e:'lend',p:'렌드',k:'빌려주다',t:'v',x:'Can you lend me some money?',f:2},
+{c:'대화/의사소통',e:'appointment',p:'어포인트먼트',k:'약속, 예약',t:'n',x:'I have a doctor\'s appointment.',f:2},
+{c:'대화/의사소통',e:'reservation',p:'레저베이션',k:'예약',t:'n',x:'I\'d like to make a reservation.',f:3},
+{c:'대화/의사소통',e:'favor',p:'페이버',k:'부탁, 호의',t:'n',x:'Can you do me a favor?',f:3},
+{c:'대화/의사소통',e:'congratulation',p:'컨그래츄레이션',k:'축하',t:'n',x:'Congratulations on your success!',f:2},
+{c:'대화/의사소통',e:'respond',p:'리스판드',k:'응답하다',t:'v',x:'Please respond to my email.',f:2},
+{c:'대화/의사소통',e:'request',p:'리퀘스트',k:'요청하다, 요청',t:'v',x:'She requested more time.',f:2},
+{c:'대화/의사소통',e:'greet',p:'그릿',k:'인사하다',t:'v',x:'He greeted me with a smile.',f:1},
+{c:'대화/의사소통',e:'interrupt',p:'인터럽트',k:'방해하다',t:'v',x:'Don\'t interrupt me.',f:1},
+{c:'대화/의사소통',e:'encourage',p:'인커리지',k:'격려하다',t:'v',x:'My teacher encouraged me.',f:2},
+
+// ── 독해 핵심어 (35) ──
+{c:'독해 핵심어',e:'according to',p:'어코딩 투',k:'~에 따르면',t:'전치사구',x:'According to the article...',f:3},
+{c:'독해 핵심어',e:'purpose',p:'퍼퍼스',k:'목적',t:'n',x:'What is the purpose of this text?',f:3},
+{c:'독해 핵심어',e:'passage',p:'패시지',k:'지문, 통로',t:'n',x:'Read the following passage.',f:3},
+{c:'독해 핵심어',e:'paragraph',p:'패러그래프',k:'단락',t:'n',x:'Read the first paragraph.',f:2},
+{c:'독해 핵심어',e:'context',p:'컨텍스트',k:'문맥, 맥락',t:'n',x:'Understand it in context.',f:2},
+{c:'독해 핵심어',e:'refer to',p:'리퍼 투',k:'~을 가리키다',t:'v',x:'What does "it" refer to?',f:3},
+{c:'독해 핵심어',e:'imply',p:'임플라이',k:'암시하다',t:'v',x:'What does the author imply?',f:2},
+{c:'독해 핵심어',e:'infer',p:'인퍼',k:'추론하다',t:'v',x:'What can you infer from the text?',f:2},
+{c:'독해 핵심어',e:'main idea',p:'메인 아이디어',k:'주제, 요지',t:'n',x:'What is the main idea?',f:3},
+{c:'독해 핵심어',e:'topic',p:'타픽',k:'주제',t:'n',x:'The topic of this article is...',f:3},
+{c:'독해 핵심어',e:'conclusion',p:'컨클루전',k:'결론',t:'n',x:'In conclusion, we should act now.',f:2},
+{c:'독해 핵심어',e:'support',p:'서포트',k:'지지하다, 뒷받침하다',t:'v',x:'Facts support this theory.',f:2},
+{c:'독해 핵심어',e:'describe',p:'디스크라이브',k:'묘사하다',t:'v',x:'Describe your hometown.',f:2},
+{c:'독해 핵심어',e:'compare',p:'컴페어',k:'비교하다',t:'v',x:'Compare the two pictures.',f:2},
+{c:'독해 핵심어',e:'contrast',p:'컨트래스트',k:'대조, 대비',t:'n',x:'In contrast, she was quiet.',f:2},
+{c:'독해 핵심어',e:'cause',p:'코즈',k:'원인, 야기하다',t:'n/v',x:'The cause of the accident was...',f:3},
+{c:'독해 핵심어',e:'effect',p:'이펙트',k:'영향, 결과',t:'n',x:'The effect was immediate.',f:3},
+{c:'독해 핵심어',e:'result',p:'리절트',k:'결과',t:'n',x:'As a result, he failed.',f:3},
+{c:'독해 핵심어',e:'therefore',p:'데어포어',k:'그러므로',t:'부사',x:'Therefore, we need to change.',f:3},
+{c:'독해 핵심어',e:'however',p:'하우에버',k:'그러나',t:'부사',x:'However, it was not easy.',f:3},
+{c:'독해 핵심어',e:'although',p:'올도우',k:'비록 ~이지만',t:'접속사',x:'Although it was cold, we went out.',f:3},
+{c:'독해 핵심어',e:'moreover',p:'모어오버',k:'게다가',t:'부사',x:'Moreover, it is cheaper.',f:2},
+{c:'독해 핵심어',e:'instead of',p:'인스테드 오브',k:'~대신에',t:'전치사구',x:'Instead of driving, I walked.',f:3},
+{c:'독해 핵심어',e:'in spite of',p:'인 스파이트 오브',k:'~에도 불구하고',t:'전치사구',x:'In spite of the rain, we went.',f:2},
+{c:'독해 핵심어',e:'in addition',p:'인 어디션',k:'게다가',t:'부사구',x:'In addition, she speaks French.',f:2},
+{c:'독해 핵심어',e:'for example',p:'포 이그잼플',k:'예를 들어',t:'부사구',x:'For example, cats are popular.',f:3},
+{c:'독해 핵심어',e:'especially',p:'이스페셜리',k:'특히',t:'부사',x:'I love fruit, especially apples.',f:2},
+{c:'독해 핵심어',e:'probably',p:'프라버블리',k:'아마도',t:'부사',x:'It will probably rain tomorrow.',f:2},
+{c:'독해 핵심어',e:'recently',p:'리센틀리',k:'최근에',t:'부사',x:'I recently moved to Seoul.',f:2},
+{c:'독해 핵심어',e:'frequently',p:'프리퀀틀리',k:'자주',t:'부사',x:'He frequently visits the library.',f:2},
+{c:'독해 핵심어',e:'eventually',p:'이벤추얼리',k:'결국',t:'부사',x:'Eventually, she found the answer.',f:2},
+{c:'독해 핵심어',e:'immediately',p:'이미디엇리',k:'즉시',t:'부사',x:'Call the doctor immediately.',f:2},
+{c:'독해 핵심어',e:'unfortunately',p:'언포춘잇리',k:'불행히도',t:'부사',x:'Unfortunately, the store was closed.',f:2},
+{c:'독해 핵심어',e:'obviously',p:'아비어슬리',k:'분명히',t:'부사',x:'She is obviously tired.',f:1},
+{c:'독해 핵심어',e:'generally',p:'제너럴리',k:'일반적으로',t:'부사',x:'Generally, people prefer summer.',f:2},
+
+// ── 환경/과학 (30) ──
+{c:'환경/과학',e:'environment',p:'인바이런먼트',k:'환경',t:'n',x:'Protect the environment.',f:3},
+{c:'환경/과학',e:'pollution',p:'펄루션',k:'오염',t:'n',x:'Air pollution is getting worse.',f:3},
+{c:'환경/과학',e:'pollute',p:'펄루트',k:'오염시키다',t:'v',x:'Factories pollute the air.',f:2},
+{c:'환경/과학',e:'protect',p:'프로텍트',k:'보호하다',t:'v',x:'We should protect nature.',f:3},
+{c:'환경/과학',e:'recycle',p:'리사이클',k:'재활용하다',t:'v',x:'Please recycle plastic bottles.',f:3},
+{c:'환경/과학',e:'reduce',p:'리듀스',k:'줄이다',t:'v',x:'Reduce waste as much as possible.',f:3},
+{c:'환경/과학',e:'waste',p:'웨이스트',k:'낭비, 쓰레기',t:'n',x:'Don\'t waste water.',f:2},
+{c:'환경/과학',e:'energy',p:'에너지',k:'에너지',t:'n',x:'Save energy at home.',f:3},
+{c:'환경/과학',e:'temperature',p:'템퍼러쳐',k:'온도, 기온',t:'n',x:'The temperature is rising.',f:2},
+{c:'환경/과학',e:'climate',p:'클라이밋',k:'기후',t:'n',x:'Climate change is a big problem.',f:2},
+{c:'환경/과학',e:'global warming',p:'글로벌 워밍',k:'지구 온난화',t:'n',x:'Global warming affects everyone.',f:3},
+{c:'환경/과학',e:'species',p:'스피시즈',k:'(생물의) 종',t:'n',x:'Many species are endangered.',f:2},
+{c:'환경/과학',e:'endangered',p:'인데인저드',k:'멸종 위기의',t:'a',x:'Endangered animals need protection.',f:2},
+{c:'환경/과학',e:'ecosystem',p:'이코시스템',k:'생태계',t:'n',x:'The ecosystem is in danger.',f:2},
+{c:'환경/과학',e:'resource',p:'리소스',k:'자원',t:'n',x:'Natural resources are limited.',f:2},
+{c:'환경/과학',e:'solar',p:'솔라',k:'태양의',t:'a',x:'Solar energy is clean.',f:2},
+{c:'환경/과학',e:'technology',p:'테크놀러지',k:'기술',t:'n',x:'Technology is changing fast.',f:3},
+{c:'환경/과학',e:'develop',p:'디벨럽',k:'발전하다, 개발하다',t:'v',x:'We need to develop new energy.',f:3},
+{c:'환경/과학',e:'experiment',p:'익스페리먼트',k:'실험',t:'n',x:'The experiment was successful.',f:2},
+{c:'환경/과학',e:'discover',p:'디스커버',k:'발견하다',t:'v',x:'Scientists discovered a new planet.',f:2},
+{c:'환경/과학',e:'research',p:'리서치',k:'연구, 조사',t:'n',x:'More research is needed.',f:2},
+{c:'환경/과학',e:'scientist',p:'사이언티스트',k:'과학자',t:'n',x:'The scientist made a discovery.',f:2},
+{c:'환경/과학',e:'survive',p:'서바이브',k:'살아남다',t:'v',x:'Animals must survive in the wild.',f:2},
+{c:'환경/과학',e:'destroy',p:'디스트로이',k:'파괴하다',t:'v',x:'The fire destroyed the forest.',f:2},
+{c:'환경/과학',e:'disappear',p:'디스어피어',k:'사라지다',t:'v',x:'Many forests are disappearing.',f:2},
+{c:'환경/과학',e:'increase',p:'인크리스',k:'증가하다',t:'v',x:'The population is increasing.',f:3},
+{c:'환경/과학',e:'decrease',p:'디크리스',k:'감소하다',t:'v',x:'Sales decreased last month.',f:2},
+{c:'환경/과학',e:'prevent',p:'프리벤트',k:'예방하다, 막다',t:'v',x:'We can prevent this disease.',f:3},
+{c:'환경/과학',e:'conserve',p:'컨서브',k:'보존하다',t:'v',x:'Conserve water and energy.',f:1},
+{c:'환경/과학',e:'sustainable',p:'서스테이너블',k:'지속 가능한',t:'a',x:'We need sustainable development.',f:1},
+
+// ── 학교/교육 (30) ──
+{c:'학교/교육',e:'education',p:'에듀케이션',k:'교육',t:'n',x:'Education is very important.',f:3},
+{c:'학교/교육',e:'graduate',p:'그래주에이트',k:'졸업하다',t:'v',x:'I will graduate next year.',f:2},
+{c:'학교/교육',e:'opportunity',p:'아퍼튜니티',k:'기회',t:'n',x:'This is a great opportunity.',f:3},
+{c:'학교/교육',e:'experience',p:'익스피리언스',k:'경험',t:'n',x:'It was a great experience.',f:3},
+{c:'학교/교육',e:'achieve',p:'어치브',k:'달성하다, 성취하다',t:'v',x:'You can achieve your dream.',f:3},
+{c:'학교/교육',e:'succeed',p:'석시드',k:'성공하다',t:'v',x:'If you try hard, you will succeed.',f:2},
+{c:'학교/교육',e:'success',p:'석세스',k:'성공',t:'n',x:'Hard work leads to success.',f:2},
+{c:'학교/교육',e:'fail',p:'페일',k:'실패하다',t:'v',x:'Don\'t be afraid to fail.',f:2},
+{c:'학교/교육',e:'failure',p:'페일류어',k:'실패',t:'n',x:'Failure is part of learning.',f:2},
+{c:'학교/교육',e:'effort',p:'에포트',k:'노력',t:'n',x:'It requires a lot of effort.',f:3},
+{c:'학교/교육',e:'improve',p:'임프루브',k:'향상시키다',t:'v',x:'I want to improve my English.',f:3},
+{c:'학교/교육',e:'knowledge',p:'날리지',k:'지식',t:'n',x:'Knowledge is power.',f:2},
+{c:'학교/교육',e:'skill',p:'스킬',k:'기술, 능력',t:'n',x:'Reading is an important skill.',f:2},
+{c:'학교/교육',e:'practice',p:'프랙티스',k:'연습, 연습하다',t:'n/v',x:'Practice makes perfect.',f:3},
+{c:'학교/교육',e:'prepare',p:'프리페어',k:'준비하다',t:'v',x:'Prepare for the test.',f:2},
+{c:'학교/교육',e:'participate',p:'파티시페이트',k:'참여하다',t:'v',x:'Everyone should participate.',f:2},
+{c:'학교/교육',e:'volunteer',p:'발런티어',k:'자원봉사자, 자원하다',t:'n/v',x:'She volunteers at the hospital.',f:2},
+{c:'학교/교육',e:'activity',p:'액티비티',k:'활동',t:'n',x:'What activities do you enjoy?',f:2},
+{c:'학교/교육',e:'goal',p:'골',k:'목표',t:'n',x:'Set your goals clearly.',f:2},
+{c:'학교/교육',e:'challenge',p:'챌린지',k:'도전',t:'n',x:'It was a big challenge.',f:2},
+{c:'학교/교육',e:'creative',p:'크리에이티브',k:'창의적인',t:'a',x:'Be creative in your work.',f:2},
+{c:'학교/교육',e:'concentrate',p:'칸센트레이트',k:'집중하다',t:'v',x:'I can\'t concentrate.',f:1},
+{c:'학교/교육',e:'progress',p:'프라그레스',k:'진전, 발전',t:'n',x:'You are making progress.',f:2},
+{c:'학교/교육',e:'attend',p:'어텐드',k:'참석하다, 다니다',t:'v',x:'I attend school every day.',f:2},
+{c:'학교/교육',e:'course',p:'코스',k:'과정, 강좌',t:'n',x:'I\'m taking an English course.',f:2},
+{c:'학교/교육',e:'assignment',p:'어사인먼트',k:'과제',t:'n',x:'Finish your assignment by Friday.',f:1},
+{c:'학교/교육',e:'grade',p:'그레이드',k:'학년, 성적',t:'n',x:'What grade are you in?',f:2},
+{c:'학교/교육',e:'scholarship',p:'스칼러십',k:'장학금',t:'n',x:'She received a scholarship.',f:1},
+{c:'학교/교육',e:'ability',p:'어빌리티',k:'능력',t:'n',x:'He has the ability to lead.',f:2},
+{c:'학교/교육',e:'talent',p:'탤런트',k:'재능',t:'n',x:'She has a talent for music.',f:2},
+
+// ── 일상/생활 (30) ──
+{c:'일상/생활',e:'available',p:'어베일러블',k:'이용 가능한',t:'a',x:'Is this seat available?',f:3},
+{c:'일상/생활',e:'convenient',p:'컨비니언트',k:'편리한',t:'a',x:'This location is convenient.',f:2},
+{c:'일상/생활',e:'comfortable',p:'컴포터블',k:'편안한',t:'a',x:'This chair is comfortable.',f:2},
+{c:'일상/생활',e:'necessary',p:'네세서리',k:'필요한',t:'a',x:'Water is necessary for life.',f:3},
+{c:'일상/생활',e:'possible',p:'파서블',k:'가능한',t:'a',x:'Is it possible to change?',f:3},
+{c:'일상/생활',e:'impossible',p:'임파서블',k:'불가능한',t:'a',x:'Nothing is impossible.',f:2},
+{c:'일상/생활',e:'allow',p:'얼라우',k:'허락하다',t:'v',x:'Pets are not allowed here.',f:3},
+{c:'일상/생활',e:'permit',p:'퍼밋',k:'허가하다',t:'v',x:'Smoking is not permitted.',f:2},
+{c:'일상/생활',e:'require',p:'리콰이어',k:'요구하다, 필요로 하다',t:'v',x:'This job requires experience.',f:2},
+{c:'일상/생활',e:'prefer',p:'프리퍼',k:'선호하다',t:'v',x:'I prefer tea to coffee.',f:3},
+{c:'일상/생활',e:'choose',p:'추즈',k:'선택하다',t:'v',x:'Choose the correct answer.',f:2},
+{c:'일상/생활',e:'decision',p:'디시전',k:'결정',t:'n',x:'It was a difficult decision.',f:2},
+{c:'일상/생활',e:'expect',p:'익스펙트',k:'기대하다, 예상하다',t:'v',x:'I didn\'t expect this.',f:2},
+{c:'일상/생활',e:'suppose',p:'서포즈',k:'추측하다, ~해야 하다',t:'v',x:'I suppose you are right.',f:2},
+{c:'일상/생활',e:'realize',p:'리얼라이즈',k:'깨닫다',t:'v',x:'I realized my mistake.',f:2},
+{c:'일상/생활',e:'notice',p:'노티스',k:'알아차리다',t:'v',x:'Did you notice anything strange?',f:2},
+{c:'일상/생활',e:'recognize',p:'레커그나이즈',k:'인식하다, 알아보다',t:'v',x:'I didn\'t recognize her.',f:2},
+{c:'일상/생활',e:'belong',p:'빌롱',k:'~에 속하다',t:'v',x:'This book belongs to me.',f:2},
+{c:'일상/생활',e:'deliver',p:'딜리버',k:'배달하다',t:'v',x:'We deliver food to your door.',f:2},
+{c:'일상/생활',e:'repair',p:'리페어',k:'수리하다',t:'v',x:'Can you repair my phone?',f:1},
+{c:'일상/생활',e:'separate',p:'세퍼레이트',k:'분리하다, 별개의',t:'v/a',x:'Separate the recyclables.',f:1},
+{c:'일상/생활',e:'share',p:'쉐어',k:'공유하다, 나누다',t:'v',x:'Let\'s share this pizza.',f:2},
+{c:'일상/생활',e:'replace',p:'리플레이스',k:'교체하다',t:'v',x:'Replace the old batteries.',f:2},
+{c:'일상/생활',e:'include',p:'인클루드',k:'포함하다',t:'v',x:'The price includes tax.',f:2},
+{c:'일상/생활',e:'contain',p:'컨테인',k:'포함하다, 담다',t:'v',x:'This drink contains sugar.',f:2},
+{c:'일상/생활',e:'provide',p:'프로바이드',k:'제공하다',t:'v',x:'We provide free Wi-Fi.',f:2},
+{c:'일상/생활',e:'remain',p:'리메인',k:'남다, ~인 채로 있다',t:'v',x:'Please remain seated.',f:2},
+{c:'일상/생활',e:'compliment',p:'컴플리먼트',k:'칭찬',t:'n',x:'She gave me a nice compliment.',f:1},
+{c:'일상/생활',e:'advice',p:'어드바이스',k:'조언',t:'n',x:'Follow your doctor\'s advice.',f:2},
+{c:'일상/생활',e:'mistake',p:'미스테이크',k:'실수',t:'n',x:'Everyone makes mistakes.',f:2},
+
+// ── 건강/의료 (25) ──
+{c:'건강/의료',e:'symptom',p:'심텀',k:'증상',t:'n',x:'What are your symptoms?',f:2},
+{c:'건강/의료',e:'treatment',p:'트리트먼트',k:'치료',t:'n',x:'She is receiving treatment.',f:2},
+{c:'건강/의료',e:'disease',p:'디지즈',k:'질병',t:'n',x:'Heart disease is common.',f:2},
+{c:'건강/의료',e:'patient',p:'페이션트',k:'환자, 참을성 있는',t:'n/a',x:'The patient is getting better.',f:2},
+{c:'건강/의료',e:'condition',p:'컨디션',k:'상태, 조건',t:'n',x:'His condition is stable.',f:2},
+{c:'건강/의료',e:'cure',p:'큐어',k:'치료하다, 치료법',t:'v/n',x:'There is no cure yet.',f:1},
+{c:'건강/의료',e:'recover',p:'리커버',k:'회복하다',t:'v',x:'She recovered from the illness.',f:2},
+{c:'건강/의료',e:'injury',p:'인저리',k:'부상',t:'n',x:'He had a serious injury.',f:2},
+{c:'건강/의료',e:'examine',p:'이그재민',k:'검사하다, 진찰하다',t:'v',x:'The doctor examined her.',f:1},
+{c:'건강/의료',e:'affect',p:'어펙트',k:'영향을 미치다',t:'v',x:'Stress affects your health.',f:3},
+{c:'건강/의료',e:'benefit',p:'베니핏',k:'이익, 혜택',t:'n',x:'Exercise has many benefits.',f:3},
+{c:'건강/의료',e:'habit',p:'해빗',k:'습관',t:'n',x:'Develop good eating habits.',f:2},
+{c:'건강/의료',e:'diet',p:'다이어트',k:'식단, 식이요법',t:'n',x:'A balanced diet is important.',f:2},
+{c:'건강/의료',e:'physical',p:'피지컬',k:'신체의, 물리적인',t:'a',x:'Physical exercise is important.',f:2},
+{c:'건강/의료',e:'mental',p:'멘틀',k:'정신의',t:'a',x:'Mental health is also important.',f:2},
+{c:'건강/의료',e:'stress',p:'스트레스',k:'스트레스',t:'n',x:'Too much stress is bad.',f:2},
+{c:'건강/의료',e:'relax',p:'릴랙스',k:'휴식하다, 긴장을 풀다',t:'v',x:'Try to relax after work.',f:2},
+{c:'건강/의료',e:'nutrition',p:'뉴트리션',k:'영양',t:'n',x:'Good nutrition keeps you healthy.',f:1},
+{c:'건강/의료',e:'exercise',p:'엑서사이즈',k:'운동, 연습',t:'n',x:'Regular exercise is important.',f:3},
+{c:'건강/의료',e:'medicine',p:'메디슨',k:'약, 의학',t:'n',x:'Take your medicine after meals.',f:2},
+{c:'건강/의료',e:'healthy',p:'헬시',k:'건강한',t:'a',x:'Eat healthy food.',f:3},
+{c:'건강/의료',e:'harmful',p:'함풀',k:'해로운',t:'a',x:'Smoking is harmful to health.',f:2},
+{c:'건강/의료',e:'weight',p:'웨이트',k:'무게, 체중',t:'n',x:'She lost some weight.',f:2},
+{c:'건강/의료',e:'spread',p:'스프레드',k:'퍼지다, 퍼뜨리다',t:'v',x:'The virus spread quickly.',f:2},
+{c:'건강/의료',e:'vaccine',p:'백신',k:'백신',t:'n',x:'Everyone should get a vaccine.',f:2},
+
+// ── 사회/문화 (30) ──
+{c:'사회/문화',e:'society',p:'소사이어티',k:'사회',t:'n',x:'We live in a diverse society.',f:2},
+{c:'사회/문화',e:'culture',p:'컬쳐',k:'문화',t:'n',x:'Korean culture is unique.',f:3},
+{c:'사회/문화',e:'tradition',p:'트러디션',k:'전통',t:'n',x:'We should keep our traditions.',f:2},
+{c:'사회/문화',e:'community',p:'커뮤니티',k:'지역사회',t:'n',x:'Help your local community.',f:2},
+{c:'사회/문화',e:'population',p:'파퓰레이션',k:'인구',t:'n',x:'The world population is growing.',f:2},
+{c:'사회/문화',e:'influence',p:'인플루언스',k:'영향, 영향을 미치다',t:'n/v',x:'Music influences our mood.',f:2},
+{c:'사회/문화',e:'responsibility',p:'리스판서빌리티',k:'책임',t:'n',x:'It is our responsibility.',f:2},
+{c:'사회/문화',e:'respect',p:'리스펙트',k:'존경하다, 존경',t:'v/n',x:'Respect other people\'s opinions.',f:2},
+{c:'사회/문화',e:'generation',p:'제너레이션',k:'세대',t:'n',x:'The younger generation uses SNS.',f:2},
+{c:'사회/문화',e:'diversity',p:'다이버시티',k:'다양성',t:'n',x:'Diversity makes us stronger.',f:1},
+{c:'사회/문화',e:'equality',p:'이퀄리티',k:'평등',t:'n',x:'We believe in equality.',f:1},
+{c:'사회/문화',e:'government',p:'거번먼트',k:'정부',t:'n',x:'The government made a new law.',f:2},
+{c:'사회/문화',e:'citizen',p:'시티즌',k:'시민',t:'n',x:'Every citizen has rights.',f:2},
+{c:'사회/문화',e:'economy',p:'이카너미',k:'경제',t:'n',x:'The economy is improving.',f:2},
+{c:'사회/문화',e:'industry',p:'인더스트리',k:'산업',t:'n',x:'The car industry is changing.',f:2},
+{c:'사회/문화',e:'poverty',p:'파버티',k:'빈곤',t:'n',x:'Poverty is a global issue.',f:1},
+{c:'사회/문화',e:'donate',p:'도네이트',k:'기부하다',t:'v',x:'She donated money to charity.',f:2},
+{c:'사회/문화',e:'celebrate',p:'셀러브레이트',k:'축하하다, 기념하다',t:'v',x:'We celebrate Chuseok.',f:2},
+{c:'사회/문화',e:'custom',p:'커스텀',k:'관습',t:'n',x:'It is an old custom.',f:1},
+{c:'사회/문화',e:'heritage',p:'헤리티지',k:'유산',t:'n',x:'We protect cultural heritage.',f:1},
+{c:'사회/문화',e:'freedom',p:'프리덤',k:'자유',t:'n',x:'Freedom is important to everyone.',f:2},
+{c:'사회/문화',e:'peace',p:'피스',k:'평화',t:'n',x:'We all want world peace.',f:2},
+{c:'사회/문화',e:'war',p:'워',k:'전쟁',t:'n',x:'War destroys everything.',f:2},
+{c:'사회/문화',e:'solve',p:'솔브',k:'해결하다',t:'v',x:'We need to solve this problem.',f:3},
+{c:'사회/문화',e:'issue',p:'이슈',k:'문제, 쟁점',t:'n',x:'This is an important issue.',f:2},
+{c:'사회/문화',e:'law',p:'로',k:'법, 법률',t:'n',x:'We must follow the law.',f:2},
+{c:'사회/문화',e:'rule',p:'룰',k:'규칙',t:'n',x:'Follow the school rules.',f:2},
+{c:'사회/문화',e:'rights',p:'라이츠',k:'권리',t:'n',x:'Everyone has basic rights.',f:2},
+{c:'사회/문화',e:'opinion',p:'어피니언',k:'의견',t:'n',x:'Everyone has a different opinion.',f:2},
+{c:'사회/문화',e:'conflict',p:'컨플릭트',k:'갈등, 충돌',t:'n',x:'We should avoid conflict.',f:1},
+
+// ── 감정/성격 (25) ──
+{c:'감정/성격',e:'anxious',p:'앵셔스',k:'불안한',t:'a',x:'She felt anxious about the test.',f:2},
+{c:'감정/성격',e:'depressed',p:'디프레스드',k:'우울한',t:'a',x:'He has been depressed lately.',f:1},
+{c:'감정/성격',e:'frustrated',p:'프러스트레이티드',k:'좌절한',t:'a',x:'I felt frustrated with the result.',f:1},
+{c:'감정/성격',e:'embarrassed',p:'임배러스드',k:'당황한, 창피한',t:'a',x:'She was embarrassed by the mistake.',f:2},
+{c:'감정/성격',e:'disappointed',p:'디서포인티드',k:'실망한',t:'a',x:'I was disappointed with the news.',f:2},
+{c:'감정/성격',e:'satisfied',p:'새티스파이드',k:'만족한',t:'a',x:'Are you satisfied with the result?',f:2},
+{c:'감정/성격',e:'grateful',p:'그레이트풀',k:'감사하는',t:'a',x:'I am grateful for your help.',f:2},
+{c:'감정/성격',e:'curious',p:'큐리어스',k:'호기심 많은',t:'a',x:'Children are naturally curious.',f:2},
+{c:'감정/성격',e:'generous',p:'제너러스',k:'관대한, 너그러운',t:'a',x:'He is very generous.',f:1},
+{c:'감정/성격',e:'sincere',p:'신시어',k:'진심의',t:'a',x:'He gave a sincere apology.',f:1},
+{c:'감정/성격',e:'confidence',p:'컨피던스',k:'자신감',t:'n',x:'She has a lot of confidence.',f:2},
+{c:'감정/성격',e:'courage',p:'커리지',k:'용기',t:'n',x:'It takes courage to speak up.',f:2},
+{c:'감정/성격',e:'proud',p:'프라우드',k:'자랑스러운',t:'a',x:'I am proud of you.',f:2},
+{c:'감정/성격',e:'selfish',p:'셀피시',k:'이기적인',t:'a',x:'Don\'t be selfish.',f:1},
+{c:'감정/성격',e:'patient',p:'페이션트',k:'참을성 있는',t:'a',x:'Please be patient.',f:2},
+{c:'감정/성격',e:'attitude',p:'애티튜드',k:'태도',t:'n',x:'Your attitude matters.',f:2},
+{c:'감정/성격',e:'emotion',p:'이모션',k:'감정',t:'n',x:'Show your emotions freely.',f:2},
+{c:'감정/성격',e:'sympathy',p:'심퍼시',k:'동정, 공감',t:'n',x:'I feel sympathy for them.',f:1},
+{c:'감정/성격',e:'concern',p:'컨선',k:'걱정, 관심',t:'n',x:'Thank you for your concern.',f:2},
+{c:'감정/성격',e:'regret',p:'리그렛',k:'후회하다',t:'v',x:'I regret my decision.',f:2},
+{c:'감정/성격',e:'admire',p:'애드마이어',k:'감탄하다, 존경하다',t:'v',x:'I admire your courage.',f:1},
+{c:'감정/성격',e:'envy',p:'엔비',k:'부러워하다, 질투',t:'v/n',x:'I envy your talent.',f:1},
+{c:'감정/성격',e:'inspire',p:'인스파이어',k:'영감을 주다',t:'v',x:'She inspires young people.',f:2},
+{c:'감정/성격',e:'trust',p:'트러스트',k:'신뢰하다, 신뢰',t:'v/n',x:'I trust you completely.',f:2},
+{c:'감정/성격',e:'motivate',p:'모티베이트',k:'동기를 부여하다',t:'v',x:'What motivates you?',f:1},
+
+// ── 직업/경제 (25) ──
+{c:'직업/경제',e:'career',p:'커리어',k:'직업, 경력',t:'n',x:'She has a successful career.',f:2},
+{c:'직업/경제',e:'salary',p:'샐러리',k:'급여',t:'n',x:'What is your monthly salary?',f:2},
+{c:'직업/경제',e:'employee',p:'임플로이이',k:'직원',t:'n',x:'We have 50 employees.',f:2},
+{c:'직업/경제',e:'employer',p:'임플로이어',k:'고용주',t:'n',x:'The employer hired new workers.',f:1},
+{c:'직업/경제',e:'apply',p:'어플라이',k:'지원하다, 적용하다',t:'v',x:'I applied for the job.',f:3},
+{c:'직업/경제',e:'interview',p:'인터뷰',k:'면접',t:'n',x:'I have a job interview tomorrow.',f:2},
+{c:'직업/경제',e:'resume',p:'레주메이',k:'이력서',t:'n',x:'Submit your resume online.',f:1},
+{c:'직업/경제',e:'hire',p:'하이어',k:'고용하다',t:'v',x:'We plan to hire more staff.',f:2},
+{c:'직업/경제',e:'retire',p:'리타이어',k:'은퇴하다',t:'v',x:'He retired at age 65.',f:1},
+{c:'직업/경제',e:'income',p:'인컴',k:'수입',t:'n',x:'Their income has increased.',f:2},
+{c:'직업/경제',e:'profit',p:'프라핏',k:'이익',t:'n',x:'The company made a big profit.',f:2},
+{c:'직업/경제',e:'customer',p:'커스터머',k:'고객',t:'n',x:'The customer is always right.',f:2},
+{c:'직업/경제',e:'product',p:'프라덕트',k:'제품',t:'n',x:'This product is popular.',f:2},
+{c:'직업/경제',e:'advertise',p:'애드버타이즈',k:'광고하다',t:'v',x:'They advertise on TV.',f:2},
+{c:'직업/경제',e:'brand',p:'브랜드',k:'상표',t:'n',x:'This brand is well known.',f:1},
+{c:'직업/경제',e:'invest',p:'인베스트',k:'투자하다',t:'v',x:'Invest in your future.',f:1},
+{c:'직업/경제',e:'budget',p:'버짓',k:'예산',t:'n',x:'We have a limited budget.',f:1},
+{c:'직업/경제',e:'contract',p:'컨트랙트',k:'계약',t:'n',x:'Sign the contract.',f:1},
+{c:'직업/경제',e:'manage',p:'매니지',k:'관리하다',t:'v',x:'She manages the team.',f:2},
+{c:'직업/경제',e:'professional',p:'프로페셔널',k:'전문적인, 전문가',t:'a/n',x:'He is a professional.',f:2},
+{c:'직업/경제',e:'demand',p:'디맨드',k:'수요, 요구',t:'n',x:'Demand for oil is increasing.',f:2},
+{c:'직업/경제',e:'supply',p:'서플라이',k:'공급',t:'n',x:'Supply and demand affect prices.',f:2},
+{c:'직업/경제',e:'exchange',p:'익스체인지',k:'교환하다',t:'v',x:'Can I exchange this item?',f:2},
+{c:'직업/경제',e:'import',p:'임포트',k:'수입하다',t:'v',x:'Korea imports oil from abroad.',f:1},
+{c:'직업/경제',e:'export',p:'익스포트',k:'수출하다',t:'v',x:'Korea exports electronics.',f:1},
+
+// ── 핵심 동사 (35) ──
+{c:'핵심 동사',e:'consider',p:'컨시더',k:'고려하다',t:'v',x:'Consider all the options.',f:3},
+{c:'핵심 동사',e:'determine',p:'디터민',k:'결정하다',t:'v',x:'We need to determine the cause.',f:2},
+{c:'핵심 동사',e:'establish',p:'이스태블리시',k:'설립하다',t:'v',x:'The school was established in 1990.',f:1},
+{c:'핵심 동사',e:'maintain',p:'메인테인',k:'유지하다',t:'v',x:'Maintain a healthy lifestyle.',f:2},
+{c:'핵심 동사',e:'involve',p:'인발브',k:'포함하다, 관련시키다',t:'v',x:'This project involves teamwork.',f:2},
+{c:'핵심 동사',e:'occur',p:'어커',k:'발생하다',t:'v',x:'Accidents occur every day.',f:2},
+{c:'핵심 동사',e:'avoid',p:'어보이드',k:'피하다',t:'v',x:'Avoid eating too much sugar.',f:3},
+{c:'핵심 동사',e:'depend on',p:'디펜드 온',k:'~에 의존하다',t:'v',x:'It depends on the weather.',f:3},
+{c:'핵심 동사',e:'belong to',p:'빌롱 투',k:'~에 속하다',t:'v',x:'This belongs to the school.',f:2},
+{c:'핵심 동사',e:'deal with',p:'딜 위드',k:'다루다, 처리하다',t:'v',x:'How do you deal with stress?',f:2},
+{c:'핵심 동사',e:'look forward to',p:'룩 포워드 투',k:'~을 기대하다',t:'v',x:'I look forward to meeting you.',f:3},
+{c:'핵심 동사',e:'give up',p:'기브 업',k:'포기하다',t:'v',x:'Never give up on your dreams.',f:3},
+{c:'핵심 동사',e:'turn out',p:'턴 아웃',k:'~인 것으로 밝혀지다',t:'v',x:'It turned out to be true.',f:2},
+{c:'핵심 동사',e:'put off',p:'풋 오프',k:'연기하다',t:'v',x:'Don\'t put off your homework.',f:2},
+{c:'핵심 동사',e:'figure out',p:'피겨 아웃',k:'알아내다',t:'v',x:'I can\'t figure out this problem.',f:2},
+{c:'핵심 동사',e:'take care of',p:'테이크 케어 오브',k:'~을 돌보다',t:'v',x:'Take care of your health.',f:3},
+{c:'핵심 동사',e:'pick up',p:'픽 업',k:'줍다, 태우다',t:'v',x:'Pick up the phone.',f:2},
+{c:'핵심 동사',e:'run out of',p:'런 아웃 오브',k:'~이 다 떨어지다',t:'v',x:'We ran out of milk.',f:2},
+{c:'핵심 동사',e:'get along with',p:'겟 얼롱 위드',k:'~와 잘 지내다',t:'v',x:'I get along with my neighbors.',f:2},
+{c:'핵심 동사',e:'make up',p:'메이크 업',k:'화해하다, 구성하다',t:'v',x:'They made up after the fight.',f:2},
+{c:'핵심 동사',e:'carry out',p:'캐리 아웃',k:'수행하다',t:'v',x:'Carry out the plan carefully.',f:1},
+{c:'핵심 동사',e:'bring about',p:'브링 어바웃',k:'야기하다',t:'v',x:'It brought about a big change.',f:1},
+{c:'핵심 동사',e:'come up with',p:'컴 업 위드',k:'생각해 내다',t:'v',x:'She came up with a great idea.',f:2},
+{c:'핵심 동사',e:'pay attention to',p:'페이 어텐션 투',k:'~에 주의를 기울이다',t:'v',x:'Pay attention to the teacher.',f:3},
+{c:'핵심 동사',e:'keep in mind',p:'킵 인 마인드',k:'명심하다',t:'v',x:'Keep this rule in mind.',f:2},
+{c:'핵심 동사',e:'take place',p:'테이크 플레이스',k:'발생하다, 열리다',t:'v',x:'The meeting will take place at 3.',f:2},
+{c:'핵심 동사',e:'make sense',p:'메이크 센스',k:'이해가 되다',t:'v',x:'That doesn\'t make sense.',f:2},
+{c:'핵심 동사',e:'be used to',p:'비 유즈드 투',k:'~에 익숙하다',t:'v',x:'I am used to getting up early.',f:3},
+{c:'핵심 동사',e:'used to',p:'유즈드 투',k:'~하곤 했다',t:'v',x:'I used to live in Busan.',f:3},
+{c:'핵심 동사',e:'be supposed to',p:'비 서포즈드 투',k:'~하기로 되어있다',t:'v',x:'You are supposed to be here.',f:2},
+{c:'핵심 동사',e:'be likely to',p:'비 라이클리 투',k:'~할 것 같다',t:'v',x:'It is likely to rain.',f:2},
+{c:'핵심 동사',e:'be able to',p:'비 에이블 투',k:'~할 수 있다',t:'v',x:'You will be able to pass.',f:3},
+{c:'핵심 동사',e:'be willing to',p:'비 윌링 투',k:'기꺼이 ~하다',t:'v',x:'She is willing to help.',f:2},
+{c:'핵심 동사',e:'be worth',p:'비 워쓰',k:'~할 가치가 있다',t:'v',x:'It is worth trying.',f:2},
+{c:'핵심 동사',e:'be aware of',p:'비 어웨어 오브',k:'~을 알고 있다',t:'v',x:'Be aware of the danger.',f:2},
+
+// ── 핵심 형용사/부사 (35) ──
+{c:'핵심 형용사',e:'appropriate',p:'어프로프리엇',k:'적절한',t:'a',x:'Wear appropriate clothing.',f:2},
+{c:'핵심 형용사',e:'significant',p:'시그니피컨트',k:'중요한, 의미있는',t:'a',x:'This is a significant change.',f:2},
+{c:'핵심 형용사',e:'essential',p:'이센셜',k:'필수적인',t:'a',x:'Sleep is essential for health.',f:2},
+{c:'핵심 형용사',e:'particular',p:'파티큘러',k:'특정한, 특별한',t:'a',x:'This particular case is special.',f:2},
+{c:'핵심 형용사',e:'various',p:'베리어스',k:'다양한',t:'a',x:'There are various options.',f:3},
+{c:'핵심 형용사',e:'similar',p:'시밀러',k:'비슷한',t:'a',x:'They look very similar.',f:3},
+{c:'핵심 형용사',e:'obvious',p:'아비어스',k:'명백한',t:'a',x:'The answer is obvious.',f:2},
+{c:'핵심 형용사',e:'entire',p:'인타이어',k:'전체의',t:'a',x:'The entire class agreed.',f:2},
+{c:'핵심 형용사',e:'familiar',p:'퍼밀리어',k:'익숙한',t:'a',x:'This place looks familiar.',f:2},
+{c:'핵심 형용사',e:'ordinary',p:'오디너리',k:'평범한',t:'a',x:'It was an ordinary day.',f:1},
+{c:'핵심 형용사',e:'valuable',p:'밸류어블',k:'귀중한',t:'a',x:'Time is very valuable.',f:2},
+{c:'핵심 형용사',e:'reasonable',p:'리즈너블',k:'합리적인',t:'a',x:'The price is reasonable.',f:2},
+{c:'핵심 형용사',e:'plenty',p:'플렌티',k:'많은, 충분한',t:'a',x:'We have plenty of time.',f:2},
+{c:'핵심 형용사',e:'certain',p:'서튼',k:'확실한, 특정한',t:'a',x:'I am certain about this.',f:2},
+{c:'핵심 형용사',e:'effective',p:'이펙티브',k:'효과적인',t:'a',x:'This method is effective.',f:2},
+{c:'핵심 형용사',e:'positive',p:'파지티브',k:'긍정적인',t:'a',x:'Stay positive!',f:2},
+{c:'핵심 형용사',e:'negative',p:'네거티브',k:'부정적인',t:'a',x:'Don\'t be so negative.',f:2},
+{c:'핵심 형용사',e:'traditional',p:'트래디셔널',k:'전통적인',t:'a',x:'Traditional food is delicious.',f:2},
+{c:'핵심 형용사',e:'modern',p:'마던',k:'현대의',t:'a',x:'Modern technology is amazing.',f:2},
+{c:'핵심 형용사',e:'proper',p:'프라퍼',k:'적절한',t:'a',x:'Use proper language.',f:2},
+{c:'핵심 형용사',e:'common',p:'카먼',k:'흔한, 공통의',t:'a',x:'This mistake is very common.',f:3},
+{c:'핵심 형용사',e:'rare',p:'레어',k:'드문',t:'a',x:'This bird is very rare.',f:2},
+{c:'핵심 형용사',e:'independent',p:'인디펜던트',k:'독립적인',t:'a',x:'She is very independent.',f:2},
+{c:'핵심 형용사',e:'responsible',p:'리스판서블',k:'책임감 있는',t:'a',x:'Be responsible for your actions.',f:2},
+{c:'핵심 형용사',e:'popular',p:'파퓰러',k:'인기 있는',t:'a',x:'This song is very popular.',f:3},
+{c:'핵심 형용사',e:'specific',p:'스퍼시픽',k:'구체적인',t:'a',x:'Give me a specific example.',f:2},
+{c:'핵심 형용사',e:'ancient',p:'에인션트',k:'고대의',t:'a',x:'Ancient Rome was powerful.',f:1},
+{c:'핵심 형용사',e:'worth',p:'워쓰',k:'~의 가치가 있는',t:'a',x:'This book is worth reading.',f:2},
+{c:'핵심 형용사',e:'ideal',p:'아이디얼',k:'이상적인',t:'a',x:'It\'s an ideal place to live.',f:1},
+{c:'핵심 형용사',e:'typical',p:'티피컬',k:'전형적인',t:'a',x:'This is a typical example.',f:2},
+{c:'핵심 형용사',e:'frequently',p:'프리퀀틀리',k:'자주',t:'부사',x:'He frequently visits the gym.',f:2},
+{c:'핵심 형용사',e:'gradually',p:'그래주얼리',k:'점차적으로',t:'부사',x:'The weather gradually improved.',f:2},
+{c:'핵심 형용사',e:'exactly',p:'이그잭틀리',k:'정확히',t:'부사',x:'That is exactly what I meant.',f:2},
+{c:'핵심 형용사',e:'hardly',p:'하들리',k:'거의 ~않다',t:'부사',x:'I can hardly believe it.',f:2},
+{c:'핵심 형용사',e:'relatively',p:'렐러티블리',k:'비교적',t:'부사',x:'It is relatively easy.',f:1},
 ];
 
 const CATS=['전체',...new Set(WORDS.map(w=>w.c))];
 let mode='list',curCat='전체',curFlash=0,flipped=false;
-let memorized=JSON.parse(localStorage.getItem('ged_mem')||'{}');
-let starred=JSON.parse(localStorage.getItem('ged_star')||'{}');
+let memorized=JSON.parse(localStorage.getItem('ged2_mem')||'{}');
+let starred=JSON.parse(localStorage.getItem('ged2_star')||'{}');
+let wrongList=JSON.parse(localStorage.getItem('ged2_wrong')||'[]');
 let quizIdx=0,quizScore=0,quizDone=false,quizAnswered=false,searchTerm='';
+let listFilter='all'; // all, unlearned, starred
 
-function save(){localStorage.setItem('ged_mem',JSON.stringify(memorized));localStorage.setItem('ged_star',JSON.stringify(starred))}
-function filtered(){let ws=curCat==='전체'?WORDS:WORDS.filter(w=>w.c===curCat);if(curCat==='⭐ 즐겨찾기')ws=WORDS.filter(w=>starred[w.e]);if(searchTerm)ws=ws.filter(w=>w.e.includes(searchTerm.toLowerCase())||w.k.includes(searchTerm)||w.p.includes(searchTerm));return ws}
+function save(){
+  localStorage.setItem('ged2_mem',JSON.stringify(memorized));
+  localStorage.setItem('ged2_star',JSON.stringify(starred));
+  localStorage.setItem('ged2_wrong',JSON.stringify(wrongList));
+}
 
-// 카테고리 바
+function filtered(){
+  let ws=curCat==='전체'?[...WORDS]:WORDS.filter(w=>w.c===curCat);
+  if(curCat==='⭐ 즐겨찾기') ws=WORDS.filter(w=>starred[w.e]);
+  if(listFilter==='unlearned') ws=ws.filter(w=>!memorized[w.e]);
+  if(listFilter==='starred') ws=ws.filter(w=>starred[w.e]);
+  if(searchTerm){
+    const s=searchTerm.toLowerCase();
+    ws=ws.filter(w=>w.e.toLowerCase().includes(s)||w.k.includes(s)||w.p.includes(s));
+  }
+  return ws;
+}
+
 function renderCats(){
   const cats=[...CATS,'⭐ 즐겨찾기'];
-  document.getElementById('cat-bar').innerHTML=cats.map(c=>`<button class="cat-btn ${c===curCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join('');
+  document.getElementById('cat-bar').innerHTML=cats.map(c=>{
+    const cnt=c==='전체'?WORDS.length:c==='⭐ 즐겨찾기'?WORDS.filter(w=>starred[w.e]).length:WORDS.filter(w=>w.c===c).length;
+    return `<button class="cat-btn ${c===curCat?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c}<span class="cnt">${cnt}</span></button>`;
+  }).join('');
 }
 
 function setCat(c){curCat=c;curFlash=0;quizIdx=0;quizScore=0;quizDone=false;render()}
@@ -374,21 +547,38 @@ function render(){
   if(mode==='list') renderList(el,ws);
   else if(mode==='flash') renderFlash(el,ws);
   else if(mode==='quiz') renderQuiz(el,ws);
+  else if(mode==='wrong') renderWrong(el);
 }
 
 // ── 목록 모드 ──
 function renderList(el,ws){
+  const freqLabel={3:'⭐⭐⭐',2:'⭐⭐',1:'⭐'};
   el.innerHTML=`
     <div class="search-wrap"><input class="search-input" placeholder="🔍 영어·한글·발음으로 검색..." value="${searchTerm}" oninput="searchTerm=this.value;render()"></div>
-    <div class="stats-bar"><div class="stat-chip">총 <strong>${ws.length}</strong>개</div><div class="stat-chip">외운 <strong>${ws.filter(w=>memorized[w.e]).length}</strong>개</div><div class="stat-chip">즐겨찾기 <strong>${ws.filter(w=>starred[w.e]).length}</strong>개</div></div>
+    <div class="filter-bar">
+      <button class="filter-btn ${listFilter==='all'?'active':''}" onclick="listFilter='all';render()">전체</button>
+      <button class="filter-btn ${listFilter==='unlearned'?'active':''}" onclick="listFilter='unlearned';render()">안 외운 것</button>
+      <button class="filter-btn ${listFilter==='starred'?'active':''}" onclick="listFilter='starred';render()">⭐ 즐겨찾기</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-chip">총 <strong>${ws.length}</strong>개</div>
+      <div class="stat-chip">외운 <strong>${ws.filter(w=>memorized[w.e]).length}</strong>개</div>
+      <div class="stat-chip">즐겨찾기 <strong>${ws.filter(w=>starred[w.e]).length}</strong>개</div>
+    </div>
     <div class="word-list">${ws.map((w,i)=>`
-      <div class="word-item ${memorized[w.e]?'memorized':''}">
-        <div class="word-check ${memorized[w.e]?'on':''}" onclick="event.stopPropagation();toggleMem('${w.e}')">✓</div>
+      <div class="word-item ${memorized[w.e]?'memorized':''}" onclick="this.classList.toggle('expanded')">
+        <div class="word-check ${memorized[w.e]?'on':''}" onclick="event.stopPropagation();toggleMem('${w.e.replace(/'/g,"\\'")}')">✓</div>
         <div class="word-info">
-          <div><span class="word-eng">${w.e}</span><span class="word-pron">[${w.p}]</span></div>
+          <div class="word-top">
+            <span class="word-eng">${w.e}</span>
+            <span class="word-pron">[${w.p}]</span>
+            <span class="word-pos">${w.t}</span>
+          </div>
           <div class="word-kor">${w.k}</div>
+          <div class="word-ex">📝 ${w.x}</div>
         </div>
-        <button class="word-star ${starred[w.e]?'on':''}" onclick="event.stopPropagation();toggleStar('${w.e}')">★</button>
+        <span class="word-freq">${freqLabel[w.f]||''}</span>
+        <button class="word-star ${starred[w.e]?'on':''}" onclick="event.stopPropagation();toggleStar('${w.e.replace(/'/g,"\\'")}')">★</button>
       </div>
     `).join('')}</div>`;
 }
@@ -398,7 +588,7 @@ function toggleStar(e){starred[e]=!starred[e];if(!starred[e])delete starred[e];s
 
 // ── 플래시카드 모드 ──
 function renderFlash(el,ws){
-  if(!ws.length){el.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted)">이 카테고리에 단어가 없습니다</p>';return}
+  if(!ws.length){el.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted)">단어가 없습니다</p>';return}
   if(curFlash>=ws.length)curFlash=0;
   const w=ws[curFlash];flipped=false;
   el.innerHTML=`
@@ -406,41 +596,61 @@ function renderFlash(el,ws){
       <div class="flash-counter"><span>${curFlash+1}</span> / ${ws.length}</div>
       <div class="flash-card" id="fcard" onclick="flipCard()">
         <div class="flash-inner">
-          <div class="flash-front"><div class="flash-eng">${w.e}</div><div class="flash-pron">[${w.p}]</div><div class="flash-hint">탭하면 뜻이 보여요</div></div>
-          <div class="flash-back"><div class="flash-kor">${w.k}</div><div class="flash-ex">${w.e} [${w.p}]</div></div>
+          <div class="flash-front">
+            <div class="flash-eng">${w.e}</div>
+            <div class="flash-pron">[${w.p}]</div>
+            <div class="flash-pos-tag">${w.t}</div>
+            <div class="flash-hint">탭하면 뜻이 보여요</div>
+          </div>
+          <div class="flash-back">
+            <div class="flash-kor">${w.k}</div>
+            <div class="flash-ex-back">${w.x}</div>
+          </div>
         </div>
       </div>
       <div class="flash-btns">
-        <button class="flash-btn fbtn-dont" onclick="flashNext(ws,false)">❌ 모르겠어요</button>
-        <button class="flash-btn fbtn-know" onclick="flashNext(ws,true)">✅ 외웠어요</button>
+        <button class="flash-btn fbtn-dont" onclick="flashNext(false)">❌ 모르겠어요</button>
+        <button class="flash-btn fbtn-know" onclick="flashNext(true)">✅ 외웠어요</button>
       </div>
       <div class="flash-nav">
         <button class="fnav-btn" onclick="curFlash=Math.max(0,curFlash-1);render()">◀ 이전</button>
         <button class="fnav-btn" onclick="curFlash=0;render()">🔄 처음으로</button>
-        <button class="fnav-btn" onclick="shuffleFlash(ws)">🎲 섞기</button>
+        <button class="fnav-btn" onclick="shuffleFlash()">🎲 섞기</button>
       </div>
     </div>`;
 }
+
 function flipCard(){document.getElementById('fcard').classList.toggle('flipped');flipped=!flipped}
-function flashNext(ws,know){
+
+function flashNext(know){
+  const ws=filtered();
   const w=ws[curFlash];
   if(know){memorized[w.e]=true;save()}
-  curFlash=Math.min(curFlash+1,ws.length-1);
-  if(curFlash===ws.length-1&&know)curFlash=0;
+  curFlash++;
+  if(curFlash>=ws.length)curFlash=0;
   render();
 }
-function shuffleFlash(ws){WORDS.sort(()=>Math.random()-.5);curFlash=0;render()}
+
+function shuffleFlash(){
+  WORDS.sort(()=>Math.random()-.5);
+  curFlash=0;render();
+}
 
 // ── 퀴즈 모드 ──
 function renderQuiz(el,ws){
   if(!ws.length||ws.length<4){el.innerHTML='<p style="text-align:center;padding:40px;color:var(--muted)">퀴즈에 최소 4개 이상 단어가 필요합니다</p>';return}
   if(quizDone){
-    const total=Math.min(10,ws.length);const pct=Math.round(quizScore/total*100);
-    const msg=pct>=90?'🏆 완벽해요!':pct>=70?'👏 잘했어요!':pct>=50?'💪 조금만 더!':'📚 복습이 필요해요';
-    el.innerHTML=`<div class="quiz-wrap"><div class="quiz-result"><div class="quiz-score">${quizScore}<span>/${total}</span></div><div class="quiz-msg">${msg} (${pct}%)</div><button class="quiz-again" onclick="quizIdx=0;quizScore=0;quizDone=false;quizAnswered=false;render()">다시 풀기</button></div></div>`;
+    const total=Math.min(20,ws.length);
+    const pct=Math.round(quizScore/total*100);
+    const msg=pct>=90?'🏆 완벽해요!':pct>=70?'👏 잘했어요!':pct>=50?'💪 조금만 더 힘내세요!':'📚 복습이 필요해요!';
+    el.innerHTML=`<div class="quiz-wrap"><div class="quiz-result">
+      <div class="quiz-score">${quizScore}<span> / ${total}</span></div>
+      <div class="quiz-msg">${msg} (${pct}%)</div>
+      <button class="quiz-again" onclick="quizIdx=0;quizScore=0;quizDone=false;quizAnswered=false;render()">다시 풀기</button>
+    </div></div>`;
     return;
   }
-  const total=Math.min(10,ws.length);
+  const total=Math.min(20,ws.length);
   if(quizIdx>=total){quizDone=true;render();return}
   const w=ws[quizIdx];
   const wrongs=WORDS.filter(x=>x.e!==w.e).sort(()=>Math.random()-.5).slice(0,3);
@@ -450,10 +660,11 @@ function renderQuiz(el,ws){
       <div class="quiz-q">Q${quizIdx+1} / ${total}</div>
       <div class="quiz-word">${w.e}</div>
       <div class="quiz-pron">[${w.p}]</div>
-      <div class="quiz-opts">${opts.map(o=>`<button class="quiz-opt" onclick="quizAnswer(this,'${o.replace(/'/g,"\\'")}','${w.k.replace(/'/g,"\\'")}')">${o}</button>`).join('')}</div>
+      <div class="quiz-opts">${opts.map(o=>`<button class="quiz-opt" onclick="quizAnswer(this,'${o.replace(/'/g,"\\'")}','${w.k.replace(/'/g,"\\'")}','${w.e.replace(/'/g,"\\'")}')">${o}</button>`).join('')}</div>
     </div>`;
 }
-function quizAnswer(btn,sel,ans){
+
+function quizAnswer(btn,sel,ans,eng){
   if(quizAnswered)return;quizAnswered=true;
   const btns=document.querySelectorAll('.quiz-opt');
   btns.forEach(b=>{
@@ -461,8 +672,41 @@ function quizAnswer(btn,sel,ans){
     else if(b===btn&&sel!==ans)b.classList.add('wrong');
     b.style.pointerEvents='none';
   });
-  if(sel===ans)quizScore++;
+  if(sel===ans){
+    quizScore++;
+  } else {
+    const w=WORDS.find(w=>w.e===eng);
+    if(w && !wrongList.find(x=>x.e===eng)){
+      wrongList.push({e:w.e,p:w.p,k:w.k,t:w.t,x:w.x,wrong:sel});
+      save();
+    }
+  }
   setTimeout(()=>{quizIdx++;quizAnswered=false;render()},1200);
+}
+
+// ── 오답노트 모드 ──
+function renderWrong(el){
+  if(!wrongList.length){
+    el.innerHTML='<div class="wrong-wrap"><div class="wrong-title">📕 오답노트</div><div class="wrong-empty">아직 틀린 단어가 없습니다.<br>퀴즈를 풀어보세요!</div></div>';
+    return;
+  }
+  el.innerHTML=`
+    <div class="wrong-wrap">
+      <div class="wrong-title">📕 오답노트 (${wrongList.length}개)</div>
+      ${wrongList.map((w,i)=>`
+        <div class="wrong-item">
+          <div class="word-top">
+            <span class="word-eng">${w.e}</span>
+            <span class="word-pron">[${w.p}]</span>
+            <span class="word-pos">${w.t}</span>
+          </div>
+          <div class="word-kor" style="margin-top:4px">정답: <strong style="color:var(--accent2)">${w.k}</strong></div>
+          <div style="font-size:12px;color:var(--danger);margin-top:2px">내 답: ${w.wrong}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;font-style:italic">📝 ${w.x}</div>
+        </div>
+      `).join('')}
+      <button class="wrong-clear" onclick="wrongList=[];save();render()">🗑 오답노트 초기화</button>
+    </div>`;
 }
 
 render();
