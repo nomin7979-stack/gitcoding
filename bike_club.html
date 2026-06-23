@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🏍️ 바이크 동호회</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #e53e3e;
+            --primary-dark: #c53030;
+            --primary-light: #fed7d7;
+            --secondary: #2d3748;
+            --accent: #ed8936;
+            --bg: #f7fafc;
+            --card: #ffffff;
+            --text: #1a202c;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a202c 100%);
+            color: white;
+            padding: 16px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-logo {
+            font-size: 28px;
+        }
+
+        .header-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .header-btn:hover { background: rgba(255,255,255,0.25); }
+
+        /* Main Content */
+        .main-content {
+            padding: 76px 16px 90px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Section */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Home Section */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, #9b2c2c 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 28px 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::after {
+            content: '🏍️';
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+            font-size: 60px;
+            opacity: 0.3;
+        }
+
+        .welcome-banner h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .welcome-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card .stat-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .card:active { transform: scale(0.98); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-upcoming {
+            background: #ebf8ff;
+            color: #2b6cb0;
+        }
+
+        .badge-done {
+            background: #f0fff4;
+            color: #276749;
+        }
+
+        .badge-notice {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .badge-urgent {
+            background: #fff5f5;
+            color: #c53030;
+        }
+
+        .card-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .card-info span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* Member Cards */
+        .member-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .member-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .member-info { flex: 1; }
+
+        .member-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .member-role {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .role-leader {
+            background: #fefcbf;
+            color: #975a16;
+        }
+
+        .role-manager {
+            background: #e9d8fd;
+            color: #553c9a;
+        }
+
+        .role-member {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .member-details {
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            gap: 10px;
+        }
+
+        .member-bike {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            position: relative;
+        }
+
+        .gallery-item:hover { opacity: 0.8; }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            color: white;
+            padding: 8px 6px 6px;
+            font-size: 10px;
+        }
+
+        /* Route Cards */
+        .route-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .route-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .route-difficulty {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .diff-easy { background: #f0fff4; color: #276749; }
+        .diff-medium { background: #fffff0; color: #975a16; }
+        .diff-hard { background: #fff5f5; color: #c53030; }
+
+        .route-path {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .route-point {
+            background: #edf2f7;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .route-arrow { color: var(--primary); font-weight: 700; }
+
+        .route-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .route-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 12px;
+            font-family: inherit;
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .nav-item.active { color: var(--primary); }
+
+        .nav-item .nav-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .nav-item .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 90;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(229, 62, 62, 0.5);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px 20px 40px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .modal h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            outline: none;
+            background: #f7fafc;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .btn-secondary {
+            background: var(--border);
+            color: var(--text);
+            margin-top: 8px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-danger {
+            background: #fff5f5;
+            color: #c53030;
+            border: 2px solid #fed7d7;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            width: auto;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--border);
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--secondary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 300;
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Attendance */
+        .attendance-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .attendance-chip {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .attendance-chip.going {
+            background: #f0fff4;
+            color: #276749;
+            border: 1px solid #c6f6d5;
+        }
+
+        .attendance-chip.not-going {
+            background: #edf2f7;
+            color: #718096;
+            border: 1px solid var(--border);
+        }
+
+        /* Profile Section */
+        .profile-header {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-bike-info {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .profile-stat {
+            background: var(--card);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .profile-stat .p-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .profile-stat .p-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .menu-list {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover { background: #f7fafc; }
+
+        .menu-item .menu-icon { font-size: 20px; }
+        .menu-item .menu-arrow {
+            margin-left: auto;
+            color: var(--text-light);
+        }
+
+        /* Weather widget */
+        .weather-widget {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 16px 18px;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weather-left { display: flex; align-items: center; gap: 12px; }
+        .weather-icon { font-size: 36px; }
+        .weather-temp { font-size: 28px; font-weight: 700; }
+        .weather-desc { font-size: 12px; opacity: 0.9; }
+        .weather-riding {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .weather-good { background: rgba(56, 161, 105, 0.3); }
+        .weather-bad { background: rgba(229, 62, 62, 0.3); }
+
+        /* Search */
+        .search-box {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: var(--card);
+        }
+
+        .search-box input:focus { border-color: var(--primary); }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        /* Detail view */
+        .detail-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--primary);
+            cursor: pointer;
+            margin-bottom: 16px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        /* Actions row */
+        .actions-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .action-btn.joined {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Comment */
+        .comment {
+            display: flex;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .comment-content { flex: 1; }
+        .comment-name { font-size: 13px; font-weight: 600; }
+        .comment-text { font-size: 14px; margin-top: 4px; line-height: 1.5; }
+        .comment-time { font-size: 11px; color: var(--text-light); margin-top: 4px; }
+
+        .comment-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .comment-input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .comment-input-area input:focus { border-color: var(--primary); }
+
+        .comment-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <span class="header-logo">🏍️</span>
+            <h1>라이더스 클럽</h1>
+        </div>
+        <button class="header-btn" onclick="showNotifications()">🔔</button>
+    </header>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Home Section -->
+        <div class="section active" id="section-home">
+            <div class="welcome-banner">
+                <h2 id="welcomeText">안녕하세요! 👋</h2>
+                <p>오늘도 안전한 라이딩 되세요</p>
+            </div>
+
+            <div class="weather-widget">
+                <div class="weather-left">
+                    <span class="weather-icon">☀️</span>
+                    <div>
+                        <div class="weather-temp">26°</div>
+                        <div class="weather-desc">맑음 · 습도 45%</div>
+                    </div>
+                </div>
+                <span class="weather-riding weather-good">라이딩 적합 👍</span>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="memberCount">0</div>
+                    <div class="stat-label">회원 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="rideCount">0</div>
+                    <div class="stat-label">이번달 라이딩</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛣️</div>
+                    <div class="stat-value" id="routeCount">0</div>
+                    <div class="stat-label">등록 코스</div>
+                </div>
+            </div>
+
+            <div class="section-title">📢 최근 공지</div>
+            <div id="homeNotices"></div>
+
+            <div class="section-title">📅 다가오는 라이딩</div>
+            <div id="homeRides"></div>
+        </div>
+
+        <!-- Rides Section -->
+        <div class="section" id="section-rides">
+            <div class="tabs">
+                <button class="tab active" onclick="filterRides('all', this)">전체</button>
+                <button class="tab" onclick="filterRides('upcoming', this)">예정</button>
+                <button class="tab" onclick="filterRides('completed', this)">완료</button>
+            </div>
+            <div id="ridesList"></div>
+        </div>
+
+        <!-- Ride Detail -->
+        <div class="section" id="section-ride-detail"></div>
+
+        <!-- Routes Section -->
+        <div class="section" id="section-routes">
+            <div class="tabs">
+                <button class="tab active" onclick="filterRoutes('all', this)">전체</button>
+                <button class="tab" onclick="filterRoutes('easy', this)">초급</button>
+                <button class="tab" onclick="filterRoutes('medium', this)">중급</button>
+                <button class="tab" onclick="filterRoutes('hard', this)">상급</button>
+            </div>
+            <div id="routesList"></div>
+        </div>
+
+        <!-- Members Section -->
+        <div class="section" id="section-members">
+            <div class="search-box">
+                <input type="text" placeholder="회원 검색..." oninput="searchMembers(this.value)">
+            </div>
+            <div id="membersList"></div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="section" id="section-gallery">
+            <div class="tabs">
+                <button class="tab active" onclick="filterGallery('all', this)">전체</button>
+                <button class="tab" onclick="filterGallery('ride', this)">라이딩</button>
+                <button class="tab" onclick="filterGallery('meet', this)">모임</button>
+                <button class="tab" onclick="filterGallery('bike', this)">바이크</button>
+            </div>
+            <div id="galleryGrid" class="gallery-grid"></div>
+        </div>
+
+        <!-- Notices Section -->
+        <div class="section" id="section-notices">
+            <div id="noticesList"></div>
+        </div>
+
+        <!-- Notice Detail -->
+        <div class="section" id="section-notice-detail"></div>
+
+        <!-- Profile Section -->
+        <div class="section" id="section-profile">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar" style="background: var(--primary);"></div>
+                <div class="profile-name" id="profileName">-</div>
+                <div class="profile-bike-info" id="profileBike">-</div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="p-value" id="profileRides">0</div>
+                    <div class="p-label">참여 라이딩</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="p-value" id="profileDistance">0</div>
+                    <div class="p-label">총 거리(km)</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="p-value" id="profilePhotos">0</div>
+                    <div class="p-label">사진</div>
+                </div>
+            </div>
+
+            <div class="menu-list">
+                <button class="menu-item" onclick="openModal('editProfile')">
+                    <span class="menu-icon">👤</span>
+                    프로필 수정
+                    <span class="menu-arrow">›</span>
+                </button>
+                <button class="menu-item" onclick="navigate('notices')">
+                    <span class="menu-icon">📢</span>
+                    공지사항
+                    <span class="menu-arrow">›</span>
+                </button>
+                <button class="menu-item" onclick="showClubInfo()">
+                    <span class="menu-icon">ℹ️</span>
+                    동호회 정보
+                    <span class="menu-arrow">›</span>
+                </button>
+                <button class="menu-item" onclick="exportData()">
+                    <span class="menu-icon">💾</span>
+                    데이터 백업
+                    <span class="menu-arrow">›</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" id="fab" onclick="handleFab()">+</button>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="navigate('home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">홈</span>
+        </button>
+        <button class="nav-item" onclick="navigate('rides')">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">라이딩</span>
+        </button>
+        <button class="nav-item" onclick="navigate('routes')">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-label">코스</span>
+        </button>
+        <button class="nav-item" onclick="navigate('members')">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">회원</span>
+        </button>
+        <button class="nav-item" onclick="navigate('profile')">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">내정보</span>
+        </button>
+    </nav>
+
+    <script>
+        // ============ Data Store ============
+        const STORAGE_KEY = 'bikeClubData';
+        const AVATAR_COLORS = ['#e53e3e','#dd6b20','#38a169','#3182ce','#805ad5','#d53f8c','#2b6cb0','#c05621'];
+
+        function getDefaultData() {
+            return {
+                profile: {
+                    name: '',
+                    nickname: '',
+                    phone: '',
+                    bike: '',
+                    bikeYear: '',
+                    joinDate: new Date().toISOString().split('T')[0],
+                    avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)]
+                },
+                members: [
+                    { id: 1, name: '김철수', nickname: '번개', phone: '010-1234-5678', bike: 'BMW R1250GS', bikeYear: '2023', role: 'leader', avatarColor: '#e53e3e', joinDate: '2020-03-15' },
+                    { id: 2, name: '이영희', nickname: '바람', phone: '010-2345-6789', bike: 'Honda CB650R', bikeYear: '2022', role: 'manager', avatarColor: '#3182ce', joinDate: '2020-05-20' },
+                    { id: 3, name: '박민수', nickname: '독수리', phone: '010-3456-7890', bike: 'Kawasaki Z900', bikeYear: '2024', role: 'member', avatarColor: '#38a169', joinDate: '2021-01-10' },
+                    { id: 4, name: '정수진', nickname: '허니', phone: '010-4567-8901', bike: 'Yamaha MT-07', bikeYear: '2023', role: 'member', avatarColor: '#805ad5', joinDate: '2021-06-22' },
+                    { id: 5, name: '최동현', nickname: '로켓', phone: '010-5678-9012', bike: 'Ducati Monster', bikeYear: '2022', role: 'member', avatarColor: '#dd6b20', joinDate: '2022-02-14' },
+                    { id: 6, name: '한지은', nickname: '퀸', phone: '010-6789-0123', bike: 'KTM Duke 390', bikeYear: '2024', role: 'member', avatarColor: '#d53f8c', joinDate: '2022-08-30' },
+                    { id: 7, name: '윤서준', nickname: '폭풍', phone: '010-7890-1234', bike: 'Triumph Street Triple', bikeYear: '2023', role: 'member', avatarColor: '#2b6cb0', joinDate: '2023-01-05' },
+                    { id: 8, name: '송미래', nickname: '별빛', phone: '010-8901-2345', bike: 'Honda Rebel 500', bikeYear: '2024', role: 'member', avatarColor: '#c05621', joinDate: '2023-04-18' }
+                ],
+                rides: [
+                    {
+                        id: 1, title: '춘천 물레길 투어',
+                        date: '2026-06-28', time: '08:00',
+                        meetPoint: '잠실역 3번출구',
+                        destination: '춘천 물레길',
+                        distance: 180,
+                        description: '서울에서 춘천까지 왕복 라이딩입니다. 점심은 춘천 닭갈비!\n도로 상태 좋고 경치가 아름다운 코스입니다.',
+                        status: 'upcoming',
+                        participants: [1, 2, 3, 5, 7],
+                        comments: [
+                            { memberId: 1, text: '비옷 꼭 챙기세요! 산악 날씨 변덕스럽습니다.', time: '2026-06-20 14:30' },
+                            { memberId: 2, text: '점심 닭갈비 예약했습니다 🍗', time: '2026-06-21 09:15' }
+                        ]
+                    },
+                    {
+                        id: 2, title: '해안도로 정복 라이딩',
+                        date: '2026-07-05', time: '07:00',
+                        meetPoint: '인천 송도 컨벤시아',
+                        destination: '서해안 해안도로',
+                        distance: 250,
+                        description: '서해안 해안도로를 따라 달리는 장거리 코스입니다.\n바다 바람을 맞으며 달리는 최고의 코스!',
+                        status: 'upcoming',
+                        participants: [1, 3, 4, 6],
+                        comments: []
+                    },
+                    {
+                        id: 3, title: '북한산 둘레길 코스',
+                        date: '2026-06-14', time: '09:00',
+                        meetPoint: '북한산 입구',
+                        destination: '북한산 둘레길',
+                        distance: 80,
+                        description: '가벼운 단거리 라이딩 + 둘레길 트레킹',
+                        status: 'completed',
+                        participants: [1, 2, 3, 4, 5, 6, 7, 8],
+                        comments: [
+                            { memberId: 5, text: '정말 재밌었습니다! 다음에도 이런 코스 가요', time: '2026-06-14 17:30' }
+                        ]
+                    },
+                    {
+                        id: 4, title: '양평 두물머리 라이딩',
+                        date: '2026-06-07', time: '08:30',
+                        meetPoint: '팔당역',
+                        destination: '양평 두물머리',
+                        distance: 120,
+                        description: '한강 자전거도로 옆 도로를 따라 양평까지!',
+                        status: 'completed',
+                        participants: [1, 2, 5, 7, 8],
+                        comments: []
+                    }
+                ],
+                routes: [
+                    {
+                        id: 1, name: '춘천 가는 길',
+                        points: ['서울', '가평', '춘천'],
+                        distance: 90, duration: '2시간',
+                        difficulty: 'easy',
+                        description: '초보자도 편하게 갈 수 있는 코스. 도로 상태 양호.',
+                        createdBy: 1
+                    },
+                    {
+                        id: 2, name: '서해안 해안도로',
+                        points: ['인천', '안산', '화성', '서산'],
+                        distance: 180, duration: '4시간',
+                        difficulty: 'medium',
+                        description: '해안가를 따라 달리는 중급 코스. 와인딩 구간 있음.',
+                        createdBy: 2
+                    },
+                    {
+                        id: 3, name: '지리산 둘레길',
+                        points: ['남원', '함양', '산청', '하동'],
+                        distance: 220, duration: '5시간',
+                        difficulty: 'hard',
+                        description: '산악 와인딩이 많은 고급 코스. 숙련자 추천.',
+                        createdBy: 1
+                    },
+                    {
+                        id: 4, name: '동해안 해파랑길',
+                        points: ['강릉', '삼척', '울진', '영덕'],
+                        distance: 200, duration: '4.5시간',
+                        difficulty: 'medium',
+                        description: '동해 바다를 따라가는 코스. 뷰포인트 다수.',
+                        createdBy: 3
+                    },
+                    {
+                        id: 5, name: '남한강 자전거길',
+                        points: ['여주', '충주', '단양'],
+                        distance: 130, duration: '3시간',
+                        difficulty: 'easy',
+                        description: '강변을 따라 달리는 편안한 코스. 가족 라이딩 추천.',
+                        createdBy: 4
+                    }
+                ],
+                notices: [
+                    {
+                        id: 1, title: '7월 정기 모임 안내',
+                        content: '7월 정기 모임은 7월 12일(토) 저녁 7시에 강남역 근처 \"바이커스 카페\"에서 진행됩니다.\n\n안건:\n1. 하반기 라이딩 일정 논의\n2. 신규 회원 환영\n3. 동호회 회비 사용 내역 보고\n\n많은 참석 부탁드립니다!',
+                        date: '2026-06-22',
+                        author: 1,
+                        important: true,
+                        comments: []
+                    },
+                    {
+                        id: 2, title: '안전 라이딩 수칙 공지',
+                        content: '최근 사고가 증가하고 있어 안전 수칙을 다시 한번 안내드립니다.\n\n1. 헬멧, 자켓, 글러브 필수 착용\n2. 제한속도 준수\n3. 음주 라이딩 절대 금지\n4. 장거리 라이딩 시 2시간마다 휴식\n5. 우천 시 라이딩 자제\n\n안전이 최우선입니다!',
+                        date: '2026-06-18',
+                        author: 2,
+                        important: true,
+                        comments: [
+                            { memberId: 3, text: '안전 제일! 다들 조심하세요 🙏', time: '2026-06-18 15:00' }
+                        ]
+                    },
+                    {
+                        id: 3, title: '동호회 로고 티셔츠 주문',
+                        content: '동호회 로고가 들어간 라이딩 티셔츠를 제작합니다.\n\n가격: 25,000원\n색상: 블랙, 화이트\n사이즈: S~3XL\n\n주문 희망하시는 분은 이번 주 금요일까지 댓글로 사이즈와 색상을 알려주세요!',
+                        date: '2026-06-15',
+                        author: 1,
+                        important: false,
+                        comments: [
+                            { memberId: 4, text: 'L사이즈 블랙 1장이요!', time: '2026-06-15 20:00' },
+                            { memberId: 6, text: 'M사이즈 화이트 1장 주문합니다', time: '2026-06-16 09:30' },
+                            { memberId: 7, text: 'XL 블랙 부탁드려요!', time: '2026-06-16 11:00' }
+                        ]
+                    }
+                ],
+                gallery: [
+                    { id: 1, emoji: '🏍️', category: 'ride', caption: '춘천 라이딩', date: '2026-06-14' },
+                    { id: 2, emoji: '🌅', category: 'ride', caption: '해안도로 석양', date: '2026-06-07' },
+                    { id: 3, emoji: '🍖', category: 'meet', caption: '정기 모임', date: '2026-06-01' },
+                    { id: 4, emoji: '🏔️', category: 'ride', caption: '북한산 코스', date: '2026-05-28' },
+                    { id: 5, emoji: '🏍️', category: 'bike', caption: 'BMW R1250GS', date: '2026-05-25' },
+                    { id: 6, emoji: '🎉', category: 'meet', caption: '신입 환영회', date: '2026-05-20' },
+                    { id: 7, emoji: '🛣️', category: 'ride', caption: '양평 라이딩', date: '2026-05-15' },
+                    { id: 8, emoji: '🏍️', category: 'bike', caption: 'Ducati Monster', date: '2026-05-10' },
+                    { id: 9, emoji: '🌊', category: 'ride', caption: '동해안 투어', date: '2026-05-05' },
+                    { id: 10, emoji: '🍺', category: 'meet', caption: '번개 모임', date: '2026-05-01' },
+                    { id: 11, emoji: '🏍️', category: 'bike', caption: 'Honda Rebel 500', date: '2026-04-28' },
+                    { id: 12, emoji: '🗻', category: 'ride', caption: '지리산 투어', date: '2026-04-20' }
+                ],
+                nextId: { member: 9, ride: 5, route: 6, notice: 4, gallery: 13 }
+            };
+        }
+
+        let data;
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+                if (!data.nextId) data.nextId = { member: 9, ride: 5, route: 6, notice: 4, gallery: 13 };
+            } else {
+                data = getDefaultData();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // ============ Navigation ============
+        let currentSection = 'home';
+
+        function navigate(section) {
+            currentSection = section;
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navMap = { home: 0, rides: 1, routes: 2, members: 3, profile: 4, gallery: 1, notices: 4 };
+            const idx = navMap[section];
+            if (idx !== undefined) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+
+            updateFab();
+            renderSection(section);
+        }
+
+        function updateFab() {
+            const fab = document.getElementById('fab');
+            const hideSections = ['profile', 'ride-detail', 'notice-detail'];
+            fab.style.display = hideSections.includes(currentSection) ? 'none' : 'flex';
+        }
+
+        function handleFab() {
+            const modalMap = {
+                home: 'addRide',
+                rides: 'addRide',
+                routes: 'addRoute',
+                members: 'addMember',
+                gallery: 'addPhoto',
+                notices: 'addNotice'
+            };
+            openModal(modalMap[currentSection] || 'addRide');
+        }
+
+        // ============ Render ============
+        function renderSection(section) {
+            switch(section) {
+                case 'home': renderHome(); break;
+                case 'rides': renderRides(); break;
+                case 'routes': renderRoutes(); break;
+                case 'members': renderMembers(); break;
+                case 'gallery': renderGallery(); break;
+                case 'notices': renderNotices(); break;
+                case 'profile': renderProfile(); break;
+            }
+        }
+
+        function renderHome() {
+            document.getElementById('memberCount').textContent = data.members.length;
+            const now = new Date();
+            const monthRides = data.rides.filter(r => {
+                const d = new Date(r.date);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            });
+            document.getElementById('rideCount').textContent = monthRides.length;
+            document.getElementById('routeCount').textContent = data.routes.length;
+
+            if (data.profile.nickname) {
+                document.getElementById('welcomeText').textContent = `${data.profile.nickname}님, 안녕하세요! 👋`;
+            }
+
+            const notices = data.notices.slice(0, 2);
+            document.getElementById('homeNotices').innerHTML = notices.map(n => {
+                const author = data.members.find(m => m.id === n.author);
+                return `
+                    <div class="card" onclick="showNoticeDetail(${n.id})">
+                        <div class="card-header">
+                            <div class="card-title">${n.title}</div>
+                            ${n.important ? '<span class="card-badge badge-urgent">중요</span>' : ''}
+                        </div>
+                        <div class="card-info">
+                            <span>📅 ${n.date}</span>
+                            <span>👤 ${author ? author.nickname : '관리자'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const upcoming = data.rides.filter(r => r.status === 'upcoming').slice(0, 2);
+            document.getElementById('homeRides').innerHTML = upcoming.length ? upcoming.map(r => renderRideCard(r)).join('') :
+                '<div class="empty-state"><p>예정된 라이딩이 없습니다</p></div>';
+        }
+
+        function renderRideCard(ride) {
+            const badge = ride.status === 'upcoming' ? 'badge-upcoming' : 'badge-done';
+            const label = ride.status === 'upcoming' ? '예정' : '완료';
+            return `
+                <div class="card" onclick="showRideDetail(${ride.id})">
+                    <div class="card-header">
+                        <div class="card-title">${ride.title}</div>
+                        <span class="card-badge ${badge}">${label}</span>
+                    </div>
+                    <div class="card-info">
+                        <span>📅 ${ride.date}</span>
+                        <span>⏰ ${ride.time}</span>
+                        <span>📍 ${ride.meetPoint}</span>
+                    </div>
+                    <div class="card-info" style="margin-top:6px">
+                        <span>🛣️ ${ride.distance}km</span>
+                        <span>👥 ${ride.participants.length}명 참여</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        let rideFilter = 'all';
+        function filterRides(filter, btn) {
+            rideFilter = filter;
+            document.querySelectorAll('#section-rides .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderRides();
+        }
+
+        function renderRides() {
+            let rides = [...data.rides].sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (rideFilter === 'upcoming') rides = rides.filter(r => r.status === 'upcoming');
+            else if (rideFilter === 'completed') rides = rides.filter(r => r.status === 'completed');
+
+            document.getElementById('ridesList').innerHTML = rides.length ?
+                rides.map(r => renderRideCard(r)).join('') :
+                '<div class="empty-state"><div class="empty-icon">📅</div><p>라이딩 일정이 없습니다</p></div>';
+        }
+
+        function showRideDetail(id) {
+            const ride = data.rides.find(r => r.id === id);
+            if (!ride) return;
+
+            const isJoined = ride.participants.includes(data.profile.name ? 0 : -1);
+            const participants = ride.participants.map(pid => data.members.find(m => m.id === pid)).filter(Boolean);
+
+            document.getElementById('section-ride-detail').innerHTML = `
+                <button class="detail-back" onclick="navigate('rides')">← 라이딩 목록</button>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title" style="font-size:20px">${ride.title}</div>
+                        <span class="card-badge ${ride.status === 'upcoming' ? 'badge-upcoming' : 'badge-done'}">
+                            ${ride.status === 'upcoming' ? '예정' : '완료'}
+                        </span>
+                    </div>
+                    <div class="card-info" style="margin-top:12px">
+                        <span>📅 ${ride.date}</span>
+                        <span>⏰ ${ride.time}</span>
+                    </div>
+                    <div class="card-info" style="margin-top:8px">
+                        <span>📍 집합: ${ride.meetPoint}</span>
+                    </div>
+                    <div class="card-info" style="margin-top:8px">
+                        <span>🏁 목적지: ${ride.destination}</span>
+                        <span>🛣️ ${ride.distance}km</span>
+                    </div>
+                    <div class="card-desc">${ride.description.replace(/\n/g, '<br>')}</div>
+
+                    ${ride.status === 'upcoming' ? `
+                    <div class="actions-row">
+                        <button class="action-btn joined" onclick="toggleJoin(${ride.id})">
+                            ✓ 참가 중 (${ride.participants.length}명)
+                        </button>
+                        <button class="action-btn" onclick="shareRide(${ride.id})">📤 공유</button>
+                    </div>` : ''}
+                </div>
+
+                <div class="section-title">👥 참여 멤버 (${participants.length}명)</div>
+                <div class="attendance-list" style="margin-bottom:16px">
+                    ${participants.map(p => `
+                        <span class="attendance-chip going">${p.nickname}</span>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">💬 댓글 (${ride.comments.length})</div>
+                <div class="card">
+                    ${ride.comments.map(c => {
+                        const member = data.members.find(m => m.id === c.memberId);
+                        return `
+                            <div class="comment">
+                                <div class="comment-avatar" style="background:${member ? member.avatarColor : '#718096'}">${member ? member.nickname[0] : '?'}</div>
+                                <div class="comment-content">
+                                    <div class="comment-name">${member ? member.nickname : '알 수 없음'}</div>
+                                    <div class="comment-text">${c.text}</div>
+                                    <div class="comment-time">${c.time}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                    <div class="comment-input-area">
+                        <input type="text" placeholder="댓글을 입력하세요..." id="rideComment">
+                        <button class="comment-send" onclick="addRideComment(${ride.id})">↑</button>
+                    </div>
+                </div>
+
+                ${ride.status === 'upcoming' ? `
+                <div style="margin-top:16px; display:flex; gap:8px;">
+                    <button class="btn btn-outline btn-sm" onclick="editRide(${ride.id})" style="flex:1">✏️ 수정</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteRide(${ride.id})" style="flex:1">🗑️ 삭제</button>
+                </div>` : ''}
+            `;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-ride-detail').classList.add('active');
+            currentSection = 'ride-detail';
+            updateFab();
+        }
+
+        function addRideComment(rideId) {
+            const input = document.getElementById('rideComment');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const ride = data.rides.find(r => r.id === rideId);
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+            ride.comments.push({
+                memberId: 1,
+                text: text,
+                time: timeStr
+            });
+            saveData();
+            showRideDetail(rideId);
+            showToast('댓글이 등록되었습니다');
+        }
+
+        function toggleJoin(rideId) {
+            showToast('참가 상태가 변경되었습니다');
+        }
+
+        function shareRide(rideId) {
+            const ride = data.rides.find(r => r.id === rideId);
+            const shareText = `🏍️ ${ride.title}\n📅 ${ride.date} ${ride.time}\n📍 ${ride.meetPoint}\n🏁 ${ride.destination}\n🛣️ ${ride.distance}km`;
+            if (navigator.share) {
+                navigator.share({ title: ride.title, text: shareText });
+            } else {
+                navigator.clipboard.writeText(shareText);
+                showToast('라이딩 정보가 복사되었습니다');
+            }
+        }
+
+        function deleteRide(id) {
+            if (!confirm('이 라이딩 일정을 삭제하시겠습니까?')) return;
+            data.rides = data.rides.filter(r => r.id !== id);
+            saveData();
+            navigate('rides');
+            showToast('라이딩이 삭제되었습니다');
+        }
+
+        let routeFilter = 'all';
+        function filterRoutes(filter, btn) {
+            routeFilter = filter;
+            document.querySelectorAll('#section-routes .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderRoutes();
+        }
+
+        function renderRoutes() {
+            let routes = [...data.routes];
+            if (routeFilter !== 'all') routes = routes.filter(r => r.difficulty === routeFilter);
+
+            const diffMap = { easy: '초급', medium: '중급', hard: '상급' };
+            const diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
+
+            document.getElementById('routesList').innerHTML = routes.length ? routes.map(r => {
+                const creator = data.members.find(m => m.id === r.createdBy);
+                return `
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div class="route-title">${r.name}</div>
+                            <span class="route-difficulty ${diffClass[r.difficulty]}">${diffMap[r.difficulty]}</span>
+                        </div>
+                        <div class="route-path">
+                            ${r.points.map((p, i) => `
+                                <span class="route-point">${p}</span>
+                                ${i < r.points.length - 1 ? '<span class="route-arrow">→</span>' : ''}
+                            `).join('')}
+                        </div>
+                        <div class="route-stats">
+                            <span>🛣️ ${r.distance}km</span>
+                            <span>⏱️ ${r.duration}</span>
+                            <span>👤 ${creator ? creator.nickname : '알 수 없음'}</span>
+                        </div>
+                        <div class="card-desc">${r.description}</div>
+                        <div style="margin-top:12px; display:flex; gap:8px;">
+                            <button class="btn btn-outline btn-sm" onclick="editRoute(${r.id})">✏️ 수정</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteRoute(${r.id})">🗑️ 삭제</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') :
+            '<div class="empty-state"><div class="empty-icon">🗺️</div><p>등록된 코스가 없습니다</p></div>';
+        }
+
+        function deleteRoute(id) {
+            if (!confirm('이 코스를 삭제하시겠습니까?')) return;
+            data.routes = data.routes.filter(r => r.id !== id);
+            saveData();
+            renderRoutes();
+            showToast('코스가 삭제되었습니다');
+        }
+
+        function renderMembers(filter = '') {
+            let members = [...data.members].sort((a, b) => {
+                const order = { leader: 0, manager: 1, member: 2 };
+                return order[a.role] - order[b.role];
+            });
+
+            if (filter) {
+                const f = filter.toLowerCase();
+                members = members.filter(m =>
+                    m.name.toLowerCase().includes(f) ||
+                    m.nickname.toLowerCase().includes(f) ||
+                    m.bike.toLowerCase().includes(f)
+                );
+            }
+
+            const roleMap = { leader: '회장', manager: '총무', member: '회원' };
+            const roleClass = { leader: 'role-leader', manager: 'role-manager', member: 'role-member' };
+
+            document.getElementById('membersList').innerHTML = members.map(m => `
+                <div class="member-card">
+                    <div class="member-avatar" style="background:${m.avatarColor}">${m.nickname[0]}</div>
+                    <div class="member-info">
+                        <div class="member-name">
+                            ${m.nickname}
+                            <span class="member-role ${roleClass[m.role]}">${roleMap[m.role]}</span>
+                        </div>
+                        <div class="member-bike">🏍️ ${m.bike} (${m.bikeYear})</div>
+                        <div class="member-details">
+                            <span>📞 ${m.phone}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchMembers(query) {
+            renderMembers(query);
+        }
+
+        let galleryFilter = 'all';
+        function filterGallery(filter, btn) {
+            galleryFilter = filter;
+            document.querySelectorAll('#section-gallery .tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderGallery();
+        }
+
+        function renderGallery() {
+            let items = [...data.gallery];
+            if (galleryFilter !== 'all') items = items.filter(g => g.category === galleryFilter);
+
+            document.getElementById('galleryGrid').innerHTML = items.map(g => `
+                <div class="gallery-item">
+                    ${g.emoji}
+                    <div class="gallery-overlay">${g.caption}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderNotices() {
+            document.getElementById('noticesList').innerHTML = data.notices.map(n => {
+                const author = data.members.find(m => m.id === n.author);
+                return `
+                    <div class="card" onclick="showNoticeDetail(${n.id})">
+                        <div class="card-header">
+                            <div class="card-title">${n.title}</div>
+                            ${n.important ? '<span class="card-badge badge-urgent">중요</span>' : '<span class="card-badge badge-notice">일반</span>'}
+                        </div>
+                        <div class="card-info">
+                            <span>📅 ${n.date}</span>
+                            <span>👤 ${author ? author.nickname : '관리자'}</span>
+                            <span>💬 ${n.comments.length}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showNoticeDetail(id) {
+            const notice = data.notices.find(n => n.id === id);
+            if (!notice) return;
+            const author = data.members.find(m => m.id === notice.author);
+
+            document.getElementById('section-notice-detail').innerHTML = `
+                <button class="detail-back" onclick="navigate(currentSection === 'notice-detail' ? 'home' : currentSection)">← 뒤로</button>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title" style="font-size:20px">${notice.title}</div>
+                        ${notice.important ? '<span class="card-badge badge-urgent">중요</span>' : ''}
+                    </div>
+                    <div class="card-info" style="margin-top:8px">
+                        <span>📅 ${notice.date}</span>
+                        <span>👤 ${author ? author.nickname : '관리자'}</span>
+                    </div>
+                    <div class="card-desc" style="margin-top:16px; white-space:pre-line; line-height:1.8">${notice.content}</div>
+                </div>
+
+                <div class="section-title">💬 댓글 (${notice.comments.length})</div>
+                <div class="card">
+                    ${notice.comments.map(c => {
+                        const member = data.members.find(m => m.id === c.memberId);
+                        return `
+                            <div class="comment">
+                                <div class="comment-avatar" style="background:${member ? member.avatarColor : '#718096'}">${member ? member.nickname[0] : '?'}</div>
+                                <div class="comment-content">
+                                    <div class="comment-name">${member ? member.nickname : '알 수 없음'}</div>
+                                    <div class="comment-text">${c.text}</div>
+                                    <div class="comment-time">${c.time}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                    <div class="comment-input-area">
+                        <input type="text" placeholder="댓글을 입력하세요..." id="noticeComment">
+                        <button class="comment-send" onclick="addNoticeComment(${notice.id})">↑</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px; display:flex; gap:8px;">
+                    <button class="btn btn-outline btn-sm" onclick="editNotice(${notice.id})" style="flex:1">✏️ 수정</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteNotice(${notice.id})" style="flex:1">🗑️ 삭제</button>
+                </div>
+            `;
+
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-notice-detail').classList.add('active');
+            currentSection = 'notice-detail';
+            updateFab();
+        }
+
+        function addNoticeComment(noticeId) {
+            const input = document.getElementById('noticeComment');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const notice = data.notices.find(n => n.id === noticeId);
+            const now = new Date();
+            const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+            notice.comments.push({
+                memberId: 1,
+                text: text,
+                time: timeStr
+            });
+            saveData();
+            showNoticeDetail(noticeId);
+            showToast('댓글이 등록되었습니다');
+        }
+
+        function deleteNotice(id) {
+            if (!confirm('이 공지사항을 삭제하시겠습니까?')) return;
+            data.notices = data.notices.filter(n => n.id !== id);
+            saveData();
+            navigate('home');
+            showToast('공지사항이 삭제되었습니다');
+        }
+
+        function renderProfile() {
+            const p = data.profile;
+            if (p.nickname) {
+                document.getElementById('profileAvatar').textContent = p.nickname[0];
+                document.getElementById('profileAvatar').style.background = p.avatarColor;
+                document.getElementById('profileName').textContent = p.nickname;
+                document.getElementById('profileBike').textContent = p.bike ? `🏍️ ${p.bike}` : '바이크 정보를 입력해주세요';
+            } else {
+                document.getElementById('profileAvatar').textContent = '?';
+                document.getElementById('profileName').textContent = '프로필을 설정해주세요';
+                document.getElementById('profileBike').textContent = '프로필 수정에서 정보를 입력하세요';
+            }
+
+            const completedRides = data.rides.filter(r => r.status === 'completed');
+            document.getElementById('profileRides').textContent = completedRides.length;
+            const totalDist = completedRides.reduce((sum, r) => sum + r.distance, 0);
+            document.getElementById('profileDistance').textContent = totalDist;
+            document.getElementById('profilePhotos').textContent = data.gallery.length;
+        }
+
+        // ============ Modals ============
+        function openModal(type) {
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+
+            let html = '<div class="modal-handle"></div>';
+
+            switch(type) {
+                case 'addRide':
+                    html += `
+                        <h2>라이딩 일정 추가</h2>
+                        <div class="form-group">
+                            <label>라이딩 이름</label>
+                            <input type="text" id="rideName" placeholder="예: 춘천 물레길 투어">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>날짜</label>
+                                <input type="date" id="rideDate">
+                            </div>
+                            <div class="form-group">
+                                <label>시간</label>
+                                <input type="time" id="rideTime" value="08:00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>집합 장소</label>
+                            <input type="text" id="rideMeet" placeholder="예: 잠실역 3번출구">
+                        </div>
+                        <div class="form-group">
+                            <label>목적지</label>
+                            <input type="text" id="rideDest" placeholder="예: 춘천">
+                        </div>
+                        <div class="form-group">
+                            <label>거리 (km)</label>
+                            <input type="number" id="rideDistance" placeholder="예: 180">
+                        </div>
+                        <div class="form-group">
+                            <label>설명</label>
+                            <textarea id="rideDesc" placeholder="라이딩에 대한 설명을 입력하세요"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveRide()">라이딩 등록</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+
+                case 'addRoute':
+                    html += `
+                        <h2>코스 등록</h2>
+                        <div class="form-group">
+                            <label>코스 이름</label>
+                            <input type="text" id="routeName" placeholder="예: 서해안 드라이브">
+                        </div>
+                        <div class="form-group">
+                            <label>경유지 (쉼표로 구분)</label>
+                            <input type="text" id="routePoints" placeholder="예: 서울, 수원, 천안, 대전">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>거리 (km)</label>
+                                <input type="number" id="routeDistance" placeholder="예: 150">
+                            </div>
+                            <div class="form-group">
+                                <label>소요 시간</label>
+                                <input type="text" id="routeDuration" placeholder="예: 3시간">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>난이도</label>
+                            <select id="routeDifficulty">
+                                <option value="easy">초급</option>
+                                <option value="medium">중급</option>
+                                <option value="hard">상급</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>설명</label>
+                            <textarea id="routeDesc" placeholder="코스에 대한 설명"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveRoute()">코스 등록</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+
+                case 'addMember':
+                    html += `
+                        <h2>회원 추가</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>이름</label>
+                                <input type="text" id="memberName" placeholder="실명">
+                            </div>
+                            <div class="form-group">
+                                <label>닉네임</label>
+                                <input type="text" id="memberNick" placeholder="별명">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>연락처</label>
+                            <input type="tel" id="memberPhone" placeholder="010-0000-0000">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>바이크</label>
+                                <input type="text" id="memberBike" placeholder="예: Honda CB650R">
+                            </div>
+                            <div class="form-group">
+                                <label>연식</label>
+                                <input type="text" id="memberBikeYear" placeholder="예: 2024">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>직책</label>
+                            <select id="memberRole">
+                                <option value="member">회원</option>
+                                <option value="manager">총무</option>
+                                <option value="leader">회장</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveMember()">회원 등록</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+
+                case 'addNotice':
+                    html += `
+                        <h2>공지사항 작성</h2>
+                        <div class="form-group">
+                            <label>제목</label>
+                            <input type="text" id="noticeTitle" placeholder="공지 제목">
+                        </div>
+                        <div class="form-group">
+                            <label>내용</label>
+                            <textarea id="noticeContent" style="min-height:120px" placeholder="공지 내용을 입력하세요"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label style="display:flex;align-items:center;gap:8px">
+                                <input type="checkbox" id="noticeImportant"> 중요 공지
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveNotice()">공지 등록</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+
+                case 'addPhoto':
+                    html += `
+                        <h2>사진 추가</h2>
+                        <div class="form-group">
+                            <label>이모지 선택</label>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+                                ${['🏍️','🌅','🏔️','🌊','🛣️','🍖','🎉','🍺','🏁','⛽'].map(e =>
+                                    `<button onclick="document.getElementById('photoEmoji').value='${e}'" style="font-size:28px;padding:8px;border:2px solid var(--border);border-radius:12px;background:white;cursor:pointer">${e}</button>`
+                                ).join('')}
+                            </div>
+                            <input type="hidden" id="photoEmoji" value="🏍️">
+                        </div>
+                        <div class="form-group">
+                            <label>카테고리</label>
+                            <select id="photoCategory">
+                                <option value="ride">라이딩</option>
+                                <option value="meet">모임</option>
+                                <option value="bike">바이크</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>설명</label>
+                            <input type="text" id="photoCaption" placeholder="사진 설명">
+                        </div>
+                        <button class="btn btn-primary" onclick="savePhoto()">사진 추가</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+
+                case 'editProfile':
+                    const p = data.profile;
+                    html += `
+                        <h2>프로필 수정</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>이름</label>
+                                <input type="text" id="editName" value="${p.name}" placeholder="실명">
+                            </div>
+                            <div class="form-group">
+                                <label>닉네임</label>
+                                <input type="text" id="editNick" value="${p.nickname}" placeholder="별명">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>연락처</label>
+                            <input type="tel" id="editPhone" value="${p.phone}" placeholder="010-0000-0000">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>바이크</label>
+                                <input type="text" id="editBike" value="${p.bike}" placeholder="예: Honda CB650R">
+                            </div>
+                            <div class="form-group">
+                                <label>연식</label>
+                                <input type="text" id="editBikeYear" value="${p.bikeYear}" placeholder="예: 2024">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveProfile()">저장</button>
+                        <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    `;
+                    break;
+            }
+
+            content.innerHTML = html;
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function closeModalOutside(e) {
+            if (e.target === document.getElementById('modalOverlay')) closeModal();
+        }
+
+        // ============ Save Functions ============
+        function saveRide() {
+            const name = document.getElementById('rideName').value.trim();
+            const date = document.getElementById('rideDate').value;
+            const time = document.getElementById('rideTime').value;
+            const meet = document.getElementById('rideMeet').value.trim();
+            const dest = document.getElementById('rideDest').value.trim();
+            const distance = parseInt(document.getElementById('rideDistance').value) || 0;
+            const desc = document.getElementById('rideDesc').value.trim();
+
+            if (!name || !date) {
+                showToast('이름과 날짜를 입력해주세요');
+                return;
+            }
+
+            data.rides.push({
+                id: data.nextId.ride++,
+                title: name, date, time, meetPoint: meet,
+                destination: dest, distance, description: desc,
+                status: 'upcoming', participants: [1], comments: []
+            });
+            saveData();
+            closeModal();
+            renderSection(currentSection);
+            showToast('라이딩 일정이 등록되었습니다');
+        }
+
+        function saveRoute() {
+            const name = document.getElementById('routeName').value.trim();
+            const points = document.getElementById('routePoints').value.split(',').map(s => s.trim()).filter(Boolean);
+            const distance = parseInt(document.getElementById('routeDistance').value) || 0;
+            const duration = document.getElementById('routeDuration').value.trim();
+            const difficulty = document.getElementById('routeDifficulty').value;
+            const desc = document.getElementById('routeDesc').value.trim();
+
+            if (!name || points.length < 2) {
+                showToast('이름과 경유지(2개 이상)를 입력해주세요');
+                return;
+            }
+
+            data.routes.push({
+                id: data.nextId.route++,
+                name, points, distance, duration,
+                difficulty, description: desc, createdBy: 1
+            });
+            saveData();
+            closeModal();
+            renderRoutes();
+            showToast('코스가 등록되었습니다');
+        }
+
+        function saveMember() {
+            const name = document.getElementById('memberName').value.trim();
+            const nickname = document.getElementById('memberNick').value.trim();
+            const phone = document.getElementById('memberPhone').value.trim();
+            const bike = document.getElementById('memberBike').value.trim();
+            const bikeYear = document.getElementById('memberBikeYear').value.trim();
+            const role = document.getElementById('memberRole').value;
+
+            if (!name || !nickname) {
+                showToast('이름과 닉네임을 입력해주세요');
+                return;
+            }
+
+            data.members.push({
+                id: data.nextId.member++,
+                name, nickname, phone, bike, bikeYear, role,
+                avatarColor: AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
+                joinDate: new Date().toISOString().split('T')[0]
+            });
+            saveData();
+            closeModal();
+            renderMembers();
+            showToast('회원이 추가되었습니다');
+        }
+
+        function saveNotice() {
+            const title = document.getElementById('noticeTitle').value.trim();
+            const content = document.getElementById('noticeContent').value.trim();
+            const important = document.getElementById('noticeImportant').checked;
+
+            if (!title || !content) {
+                showToast('제목과 내용을 입력해주세요');
+                return;
+            }
+
+            data.notices.unshift({
+                id: data.nextId.notice++,
+                title, content,
+                date: new Date().toISOString().split('T')[0],
+                author: 1, important, comments: []
+            });
+            saveData();
+            closeModal();
+            renderSection(currentSection);
+            showToast('공지사항이 등록되었습니다');
+        }
+
+        function savePhoto() {
+            const emoji = document.getElementById('photoEmoji').value;
+            const category = document.getElementById('photoCategory').value;
+            const caption = document.getElementById('photoCaption').value.trim();
+
+            if (!caption) {
+                showToast('설명을 입력해주세요');
+                return;
+            }
+
+            data.gallery.unshift({
+                id: data.nextId.gallery++,
+                emoji, category, caption,
+                date: new Date().toISOString().split('T')[0]
+            });
+            saveData();
+            closeModal();
+            renderGallery();
+            showToast('사진이 추가되었습니다');
+        }
+
+        function saveProfile() {
+            data.profile.name = document.getElementById('editName').value.trim();
+            data.profile.nickname = document.getElementById('editNick').value.trim();
+            data.profile.phone = document.getElementById('editPhone').value.trim();
+            data.profile.bike = document.getElementById('editBike').value.trim();
+            data.profile.bikeYear = document.getElementById('editBikeYear').value.trim();
+            saveData();
+            closeModal();
+            renderProfile();
+            renderHome();
+            showToast('프로필이 저장되었습니다');
+        }
+
+        // ============ Edit Functions ============
+        function editRide(id) {
+            const ride = data.rides.find(r => r.id === id);
+            openModal('addRide');
+            setTimeout(() => {
+                document.getElementById('rideName').value = ride.title;
+                document.getElementById('rideDate').value = ride.date;
+                document.getElementById('rideTime').value = ride.time;
+                document.getElementById('rideMeet').value = ride.meetPoint;
+                document.getElementById('rideDest').value = ride.destination;
+                document.getElementById('rideDistance').value = ride.distance;
+                document.getElementById('rideDesc').value = ride.description;
+
+                const btn = document.querySelector('#modalContent .btn-primary');
+                btn.textContent = '수정 완료';
+                btn.onclick = function() {
+                    ride.title = document.getElementById('rideName').value.trim();
+                    ride.date = document.getElementById('rideDate').value;
+                    ride.time = document.getElementById('rideTime').value;
+                    ride.meetPoint = document.getElementById('rideMeet').value.trim();
+                    ride.destination = document.getElementById('rideDest').value.trim();
+                    ride.distance = parseInt(document.getElementById('rideDistance').value) || 0;
+                    ride.description = document.getElementById('rideDesc').value.trim();
+                    saveData();
+                    closeModal();
+                    showRideDetail(id);
+                    showToast('라이딩 정보가 수정되었습니다');
+                };
+            }, 100);
+        }
+
+        function editRoute(id) {
+            const route = data.routes.find(r => r.id === id);
+            openModal('addRoute');
+            setTimeout(() => {
+                document.getElementById('routeName').value = route.name;
+                document.getElementById('routePoints').value = route.points.join(', ');
+                document.getElementById('routeDistance').value = route.distance;
+                document.getElementById('routeDuration').value = route.duration;
+                document.getElementById('routeDifficulty').value = route.difficulty;
+                document.getElementById('routeDesc').value = route.description;
+
+                const btn = document.querySelector('#modalContent .btn-primary');
+                btn.textContent = '수정 완료';
+                btn.onclick = function() {
+                    route.name = document.getElementById('routeName').value.trim();
+                    route.points = document.getElementById('routePoints').value.split(',').map(s => s.trim()).filter(Boolean);
+                    route.distance = parseInt(document.getElementById('routeDistance').value) || 0;
+                    route.duration = document.getElementById('routeDuration').value.trim();
+                    route.difficulty = document.getElementById('routeDifficulty').value;
+                    route.description = document.getElementById('routeDesc').value.trim();
+                    saveData();
+                    closeModal();
+                    renderRoutes();
+                    showToast('코스가 수정되었습니다');
+                };
+            }, 100);
+        }
+
+        function editNotice(id) {
+            const notice = data.notices.find(n => n.id === id);
+            openModal('addNotice');
+            setTimeout(() => {
+                document.getElementById('noticeTitle').value = notice.title;
+                document.getElementById('noticeContent').value = notice.content;
+                document.getElementById('noticeImportant').checked = notice.important;
+
+                const btn = document.querySelector('#modalContent .btn-primary');
+                btn.textContent = '수정 완료';
+                btn.onclick = function() {
+                    notice.title = document.getElementById('noticeTitle').value.trim();
+                    notice.content = document.getElementById('noticeContent').value.trim();
+                    notice.important = document.getElementById('noticeImportant').checked;
+                    saveData();
+                    closeModal();
+                    showNoticeDetail(id);
+                    showToast('공지사항이 수정되었습니다');
+                };
+            }, 100);
+        }
+
+        // ============ Utilities ============
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function showNotifications() {
+            const upcoming = data.rides.filter(r => r.status === 'upcoming');
+            if (upcoming.length) {
+                showToast(`📅 다가오는 라이딩 ${upcoming.length}건이 있습니다`);
+            } else {
+                showToast('새로운 알림이 없습니다');
+            }
+        }
+
+        function showClubInfo() {
+            showToast('라이더스 클럽 | 설립: 2020년 3월 | 회원: ' + data.members.length + '명');
+        }
+
+        function exportData() {
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bike_club_backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('데이터가 백업되었습니다');
+        }
+
+        // ============ Init ============
+        loadData();
+        renderHome();
+    </script>
+</body>
+</html>
